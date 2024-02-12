@@ -1,0 +1,708 @@
+﻿@using Microsoft.Extensions.Configuration;
+@using Microsoft.AspNetCore.Http
+@inject IConfiguration Configuration;
+
+@{
+    ViewBag.Title = "Dashboard";
+    string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
+}
+
+<style>
+    .dark-mode .text-muted {
+        color: #943500 !important;
+    }
+    .card-body
+    {
+        box-shadow: 0px 10px 16px 0 rgb(164 164 175);
+    }
+    .dark-mode .card {
+        
+        box-shadow: 0px 10px 16px 0 rgb(164 164 175);
+    }
+    .card-body {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        margin: 0;
+        padding: 5.5rem 0.5rem;
+        position: relative;
+    }
+    h6.totalorder {
+        font-size: 19px;
+        color: #00a60a;
+    }
+
+    .dark-mode .text-muted {
+        font-size: 15px;
+    }
+    h6.mb-2 {
+        font-size: 19px;
+        margin-left: 31px;
+        color: #ff6f00;
+    }
+    span#totalUser,
+    span#activeUser,
+    span#inActiveUser, 
+    span#adminUser {
+        margin-left: 30px;
+    }
+</style>
+
+<div class="page-header">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="fe fe-home mr-1"></i> Admin Console</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+    </ol>
+</div>
+
+
+<div class="row">
+    <div class="col-xl-3 col-md-12 col-lg-6">
+        <div class="card">
+            <div class="card-body text-center">
+                <div id="totalorder">
+                    <h2 style="color:darkblue;"><b>0</b></h2>
+                </div>
+                <h6 class="totalorder"><span class="text-primary"></span>Total Orders</h6>
+                <h3 class="text-dark counter mt-0 mb-3 number-font" id="totalOrders"></h3>
+                @*<div class="progress h-1 mt-0 mb-2">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary w-70" role="progressbar"></div>
+        </div>*@
+                @*<div class="row mt-4">
+            <div class="col text-center">
+                <span class="text-muted">Today</span>
+                <h4 class="font-weight-normal mt-2 mb-0 number-font1" id="totalToadysOrder"></h4>
+            </div>
+            <div class="col text-center">
+                <span class="text-muted">Weekly</span>
+                <h4 class="font-weight-normal mt-2 mb-0 number-font2" id="totalThisWeekOrder"></h4>
+            </div>
+            <div class="col text-center">
+                <span class="text-muted">Monthly</span>
+                <h4 class="font-weight-normal mt-2 mb-0 number-font3" id="totalThisMonthOrder"></h4>
+            </div>
+        </div>*@
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-12 col-lg-6">
+        <div class="card overflow-hidden">
+            <div class="card-body text-center">
+                <div id="Current">
+                    <h2 style="color:deeppink;"><b>0</b></h2>
+                </div>
+                <h6 class="totalorder"><span class="text-secondary"></span>Current Order</h6>
+                <h3 class="text-dark counter mt-0 mb-3 number-font" id="totalExpertAssignedOrders"></h3>
+                @*<div class="progress h-1 mt-0 mb-2">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-secondary w-50" role="progressbar"></div>
+        </div>*@
+                @*<div class="row mt-4">
+            <div class="col text-center">
+                <span class="text-muted">Today</span>
+                <h4 class="font-weight-normal mt-2 mb-0 number-font1" id="totalExpertAssignedToadysOrder"></h4>
+            </div>
+            <div class="col text-center">
+                <span class="text-muted">Weekly</span>
+                <h4 class="font-weight-normal mt-2 mb-0 number-font1" id="totalExpertAssignedWeekOrder"></h4>
+            </div>
+            <div class="col text-center">
+                <span class="text-muted">Monthly</span>
+                <h4 class="font-weight-normal mt-2 mb-0 number-font1" id="totalExpertAssignedMonthOrder">
+                </h4>
+            </div>
+        </div>*@
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-12 col-lg-6">
+        <div class="card overflow-hidden">
+            <div class="card-body text-center">
+                <div id="totalsubscription">
+                    <h2 style="color:purple;"><b>0</b></h2>
+                </div>
+                <h6 class="totalorder"><span class="text-success"></span>Total Subscriptions</h6>
+                <h3 class="text-dark counter mt-0 mb-3 number-font" id="totalComplitedOrders"></h3>
+                @*<div class="progress h-1 mt-0 mb-2">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success w-100" role="progressbar"></div>
+        </div>*@
+                @*<div class="row mt-4">
+            <div class="col text-center">
+                <span class="text-muted">Today</span>
+                <h4 class="font-weight-normal mt-2 mb-0 number-font1" id="totalComplitedToadysOrder"></h4>
+            </div>
+            <div class="col text-center">
+                <span class="text-muted">Weekly</span>
+                <h4 class="font-weight-normal mt-2 mb-0 number-font1" id="totalComplitedWeekOrder"></h4>
+            </div>
+            <div class="col text-center">
+                <span class="text-muted">Monthly</span>
+                <h4 class="font-weight-normal mt-2 mb-0 number-font1" id="totalComplitedMonthOrder"></h4>
+            </div>
+        </div>*@
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-12 col-lg-6">
+        <div class="card overflow-hidden">
+            <div class="card-body text-center">
+                <div id="totalnotice">
+                    <h2 style="color: orange;"><b>0</b></h2>
+                </div>
+                <h6 class="totalorder"><span class="text-danger"></span>Cancelled Order </h6>
+                <h3 class="text-dark counter mt-0 mb-3 number-font" id="totalCanceledOrders"></h3>
+                @*<div class="progress h-1 mt-0 mb-2">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger w-40" role="progressbar"></div>
+        </div>*@
+                @*<div class="row mt-4">
+            <div class="col text-center">
+                <span class="text-muted">Today</span>
+                <h4 class="font-weight-normal mt-2 mb-0 number-font1" id="totalCanceledTodaysOrders"></h4>
+            </div>
+            <div class="col text-center">
+                <span class="text-muted">Weekly</span>
+                <h4 class="font-weight-normal mt-2 mb-0 number-font1" id="totalCanceledWeekOrder"></h4>
+            </div>
+            <div class="col text-center">
+                <span class="text-muted">Monthly</span>
+                <h4 class="font-weight-normal mt-2 mb-0 number-font1" id="totalCanceledMonthOrder"></h4>
+            </div>
+        </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body d-flex">
+                <div class="card-order">
+                    <h6 class="mb-2">Lummang Employees</h6>
+                    <h2 class="mb-1"><span class="number-font counter" id="totalUser"></span></h2>
+                    <p class="text-muted fs-12 mb-0"></p>
+                </div>
+                <div class="ml-auto">
+                    <span class="bg-primary-transparent icon-service text-primary"><i class="mdi mdi-account-multiple  fs-2"></i> </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body d-flex">
+                <div class="card-order">
+                    <h6 class="mb-2">No. of Admins</h6>
+                    <h2 class="mb-1"><span class="number-font counter" id="activeUser"></span></h2>
+                    <p class="text-muted fs-12 mb-0"></p>
+                </div>
+                <div class="ml-auto">
+                    <span class="bg-primary-transparent icon-service text-primary"><i class="mdi mdi-account-multiple  fs-2"></i> </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body d-flex">
+                <div class="card-order">
+                    <h6 class="mb-2">No. of Sellers</h6>
+                    <h2 class="mb-1"><span class="number-font counter" id="inActiveUser"><b></b></span></h2>
+                    <p class="text-muted fs-12 mb-0"></p>
+                </div>
+                <div class="ml-auto">
+                    <span class="bg-primary-transparent icon-service text-primary"><i class="mdi mdi-account-multiple  fs-2"></i> </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-body d-flex">
+                <div class="card-order">
+                    <h6 class="mb-2">No. of Buyers</h6>
+                    <h2 class="mb-1"><span class="number-font counter" id="adminUser"><b></b></span></h2>
+                    <p class="text-muted fs-12 mb-0"></p>
+                </div>
+                <div class="ml-auto">
+                    <span class="bg-primary-transparent icon-service text-primary"><i class="mdi mdi-account-multiple  fs-2"></i> </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script>
+    dashboard()
+    function dashboard() {
+        $.ajax({
+            url: "@apiUrl/api/Order/GetOrderListBySellers",
+            type: "GET",
+            success: function (data) {
+                console.log(data);
+                var x = '';
+                var recordsTotal = data.recordsTotal;
+                    x = x + '<h2 style="color:darkblue;"><b>' + recordsTotal + '</b></h2>';
+                $('#totalorder').html(x);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+
+
+
+
+   subs()
+    function subs() {
+        $.ajax({
+            url: "@apiUrl/api/SubscriptionSuccess/GetSubscriptionSuccessList",
+            type: "GET",
+            success: function (data) {
+                console.log(data);
+                var x = '';
+                var recordsTotal = data.recordsTotal;
+                x = x + '<h2 style="color:purple;"><b>' + recordsTotal + '</b></h2>';
+                $('#totalsubscription').html(x);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+
+
+
+     cuurentodr()
+    function cuurentodr() {
+        $.ajax({
+            url: "@apiUrl/api/Order/GetCurrentOrderList",
+            type: "GET",
+            success: function (data) {
+                console.log(data);
+                var x = '';
+                var recordsTotal = data.recordsTotal;
+                x = x + '<h2 style="color:deeppink;"><b>' + recordsTotal + '</b></h2>';
+                $('#Current').html(x);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+    }
+
+        Notic()
+      function Notic() {
+        $.ajax({
+            url: "@apiUrl/api/Order/GetCalcelledOrderList",
+            type: "GET",
+            success: function (data) {
+                console.log(data);
+                var x = '';
+                var recordsTotal = data.recordsTotal;
+                x = x + '<h2 style="color:orange;"><b>' + recordsTotal + '</b></h2>';
+                $('#totalnotice').html(x);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+      }
+
+          Sellercount()
+        function Sellercount() {
+        $.ajax({
+           "url": '@apiUrl/api/MarketUsers/GetMarketUserListByUserType' + "/" + 1 ,
+            type: "GET",
+            success: function (data) {
+                console.log(data);
+                var x = '';
+                var recordsTotal = data.recordTotal;
+                x = x + '<b>' + recordsTotal + '</b>';
+                $('#inActiveUser').html(x);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+        }
+
+
+         Buyercount()
+        function Buyercount() {
+        $.ajax({
+           "url": '@apiUrl/api/MarketUsers/GetMarketUserListByUserType' + "/" + 2 ,
+            type: "GET",
+            success: function (data) {
+                console.log(data);
+                var x = '';
+                var recordsTotal = data.recordTotal;
+                x = x + '<b>' + recordsTotal + '</b>';
+                $('#adminUser').html(x);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+       }
+
+
+
+
+    </script>
+
+
+    <script>
+        var dateChartData = null, pieChartData = null, monthChartData = null, yearChartData = null, dateOrderChart = null, pieOrderChartData = null;
+        $(function () {
+            if ('@Context.Session.GetString("RoleName")'== 'Admin') {
+                $('#userStatus').show();
+                loadUserStatus();
+            }
+            loadDateChart();
+            loadPieChart();
+            loadMonthChart();
+            loadYearChart();
+            getOrderSummery();
+            loadDateOrderChart();
+            loadPieOrderChart();
+            new Chart($('#dateChart'), {
+                type: 'line',
+                data: {
+                    labels: dateChartData.map(x => x.date),
+                    datasets: [
+                        {
+                            label: 'Date wise Login',
+                            backgroundColor: '#0052cc',
+                            data: dateChartData.map(x => x.count)
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            new Chart($('#dateOrderChart'), {
+                type: 'line',
+                data: {
+                    labels: dateOrderChart.map(x => x.date),
+                    datasets: [
+                        {
+                            label: 'Order',
+                            backgroundColor: '#42cd67',
+                            data: dateOrderChart.map(x => x.count)
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+            new Chart($('#pieChart'), {
+                type: 'pie',
+                data: {
+                    labels: pieChartData.map(x => x.roleName),
+                    datasets: [
+                        {
+                            backgroundColor: '#0052cc',
+                            data: pieChartData.map(x => x.count)
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+
+            new Chart($('#pieOrderChart'), {
+                type: 'pie',
+                data: {
+                    labels: pieOrderChartData.map(x => x.orderStatus),
+                    datasets: [
+                        {
+                            backgroundColor: pieOrderChartData.map(x => x.colorCode),
+                            data: pieOrderChartData.map(x => x.count)
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            new Chart($('#monthChart'), {
+                type: 'bar',
+                data: {
+                    labels: monthChartData.map(x => x.month),
+                    datasets: [
+                        {
+                            label: 'Month wise Login',
+                            backgroundColor: '#0052cc',
+                            data: monthChartData.map(x => x.count)
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+            new Chart($('#yearChart'), {
+                type: 'bar',
+                data: {
+                    labels: yearChartData.map(x => x.year),
+                    datasets: [
+                        {
+                            label: 'Year wise Login',
+                            backgroundColor: '#0052cc',
+                            data: yearChartData.map(x => x.count)
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        });
+
+
+          function getOrderSummery() {
+            $.ajax({
+                     type: "GET",
+                url: "@apiUrl/api/Order/GetAllOrdersCountForAdmin",
+
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                },
+                dataType: "json",
+                success: function (data, statusText, xhr) {
+                    if (xhr.status == 200) {
+                        $('#totalOrders').html(data["totalOrders"])
+                        $('#totalToadysOrder').html(data["totalToadysOrder"])
+                        $('#totalThisWeekOrder').html(data["totalThisWeekOrder"])
+                        $('#totalThisMonthOrder').html(data["totalThisMonthOrder"])
+
+
+                        $('#totalExpertAssignedOrders').html(data["totalExpertAssignedOrders"])
+                        $('#totalExpertAssignedToadysOrder').html(data["totalExpertAssignedToadysOrder"])
+                        $('#totalExpertAssignedWeekOrder').html(data["totalExpertAssignedWeekOrder"])
+                        $('#totalExpertAssignedMonthOrder').html(data["totalExpertAssignedMonthOrder"])
+
+                        $('#totalComplitedOrders').html(data["totalComplitedOrders"])
+                        $('#totalComplitedToadysOrder').html(data["totalComplitedToadysOrder"])
+                        $('#totalComplitedMonthOrder').html(data["totalComplitedMonthOrder"])
+                        $('#totalComplitedWeekOrder').html(data["totalComplitedWeekOrder"])
+
+
+                        $('#totalCanceledMonthOrder').html(data["totalCanceledMonthOrder"])
+                        $('#totalCanceledWeekOrder').html(data["totalCanceledWeekOrder"])
+                        $('#totalCanceledTodaysOrders').html(data["totalCanceledTodaysOrders"])
+                        $('#totalCanceledOrders').html(data["totalCanceledOrders"])
+                    }
+                },
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+
+          }
+
+
+        function loadDateOrderChart() {
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Order/GetOrderSummaryByDate",
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    //console.log(data)
+                    dateOrderChart = data;
+                },
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+
+        function loadDateChart() {
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Users/GetLogInSummaryByDate/@Context.Session.GetInt32("UserId")",
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                       "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                },
+                dataType: "json",
+                async:false,
+                success: function (data) {
+                    //console.log(data)
+                    dateChartData = data;
+                },
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+        function loadPieChart() {
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Users/GetRoleWiseUser",
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                       "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                },
+                dataType: "json",
+                async:false,
+                success: function (data) {
+                    //console.log(data)
+                    pieChartData = data;
+                },
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+
+          function loadPieOrderChart() {
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Order/GetOrderStatusWiseSummery",
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                       "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                },
+                dataType: "json",
+                async:false,
+                success: function (data) {
+                    //console.log(data)
+                    pieOrderChartData = data;
+                },
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+        function loadMonthChart() {
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Users/GetLogInSummaryByMonth/@Context.Session.GetInt32("UserId")",
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                       "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                },
+                dataType: "json",
+                async:false,
+                success: function (data) {
+                    //console.log(data)
+                    monthChartData = data;
+                },
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+        function loadYearChart() {
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Users/GetLogInSummaryByYear/@Context.Session.GetInt32("UserId")",
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                       "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                },
+                dataType: "json",
+                async:false,
+                success: function (data) {
+                    //console.log(data)
+                    yearChartData = data;
+                },
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+
+        function loadUserStatus() {
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Users/UserStatus",
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                       "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data) {
+                        $('#totalUser').text(data.totalUser);
+                        $('#activeUser').text(data.activeUser);
+                        //$('#inActiveUser').text(data.inActiveUser);
+                        //$('#adminUser').text(data.adminUser);
+                    } else {
+                        sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+                    }
+                },
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+    </script>
+
+}
