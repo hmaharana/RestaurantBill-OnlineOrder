@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AdminApi.Models.App
+namespace AdminApi.Models.App.Category
 {
     public class Category
     {

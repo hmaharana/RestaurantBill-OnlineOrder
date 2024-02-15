@@ -1,4 +1,7 @@
 ﻿using AdminApi.Models.App;
+using AdminApi.Models.App.Category;
+using AdminApi.Models.App.Item;
+using AdminApi.Models.App.Location_Master;
 using AdminApi.Models.Helper;
 using AdminApi.Models.Menu;
 using AdminApi.Models.User;
@@ -28,10 +31,12 @@ namespace AdminApi.Models
        
         public virtual DbSet<MarketUsers> MarketUsers { get; set; }
         public virtual DbSet<MarketUserLogHistory> MarketUserLogHistory { get; set; }
-       
-       
 
-
+        public virtual DbSet<Item> Items { get; set; }
+        public virtual DbSet<Country> Countries { get; set; }
+        public virtual DbSet<State> States { get; set; }
+        public virtual DbSet<City> Cities { get; set; }
+        public virtual DbSet<LocationInformation> LocationInformations { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Seed();
@@ -98,6 +103,14 @@ namespace AdminApi.Models
             .HasDefaultValue(false)
             .ValueGeneratedNever();
 
+            modelBuilder.Entity<Item>()
+            .Property(s => s.CreatedOn)
+            .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<Item>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
 
         }
 

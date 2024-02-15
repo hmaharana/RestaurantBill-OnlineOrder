@@ -1,6 +1,6 @@
 ﻿using AdminApi.DTO.App;
 using AdminApi.Models;
-using AdminApi.Models.App;
+using AdminApi.Models.App.Category;
 using AdminApi.Models.Helper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
