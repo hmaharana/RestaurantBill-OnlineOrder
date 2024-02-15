@@ -6,6 +6,9 @@ namespace AdminApi.Models.App.Location_Master
     {  
 
 
+
+
+
         public int LocationInformationId { get; set; } 
         public double Latitude { get; set; } 
         public double Longitude { get; set; }
