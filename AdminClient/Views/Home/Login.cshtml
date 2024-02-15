@@ -13,13 +13,13 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
     <meta content="Admin Console – Savhome" name="description">
     <meta content="Appman Technologies Private Limited" name="author">
-    <meta name="keywords" content="Lummang | Admin" />
+    <meta name="keywords" content="Restaurant" />
 
     <!--favicon -->
-    <link rel="icon" href="~/LummangImages/Tittel Logo.png" type="image/x-icon" />
+   @*  <link rel="icon" href="~/LummangImages/Tittel Logo.png" type="image/x-icon" /> *@
 
     <!-- TITLE -->
-    <title>Lummang | Admin</title>
+    <title>Restaurant</title>
 
     <!-- DASHBOARD CSS -->
     <link href="~/css/style.css" rel="stylesheet" />
@@ -72,17 +72,23 @@
             float: left;
             color: #011fbe;
         }
+
+        body {
+            background-image: url("../images/pic/cuisine.jpg");
+            background-repeat:no-repeat;
+            background-size:100%    
+        }
     </style>
+
+    
 </head>
 <body class="app dark-mode">
 
-    <!-- BACKGROUND-IMAGE -->
-
     <div class="login-img">
-
+        
         <!-- GLOABAL LOADER -->
         <div id="global-loader">
-            <img src="~/images/svgs/loader.svg" class="loader-img" alt="Loader">
+           @*  <img src="~/images/svgs/loader.svg" class="loader-img" alt="Loader"> *@
         </div>
 
         <div class="page h-100">
@@ -92,7 +98,7 @@
                 <div class="container-login100">
                     <div class="wrap-login100 p-6">
                         <div class="text-center">
-                            <img src="~/LummangImages/Lummang icon.png" class="header-brand-img" alt="">
+                           @*  <img src="~/LummangImages/Lummang icon.png" class="header-brand-img" alt=""> *@
                         </div>
                         <form class="login100-form validate-form" action="/" method="POST">
                             <span class="login100-form-title">
@@ -133,9 +139,6 @@
             </div>
         </div>
     </div>
-
-
-
     <script>
         function myFunction() {
             var x = document.getElementById("psw");
