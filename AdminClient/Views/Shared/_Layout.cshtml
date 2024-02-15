@@ -209,7 +209,7 @@
                         </div>*@
                         <!-- Color LOGO -->
                         <a @*class="header-desktop"*@ href="~/DashBoard/Index">
-                            <img class="logodasbord" src="~/LummangImages/Letast LOGO.png" />
+                           @*  <img class="logodasbord" src="~/LummangImages/Letast LOGO.png" /> *@
                         </a>
                         
                         @*<a href="#" data-toggle="sidebar" class="nav-link icon toggle"><i class="fe fe-align-justify"></i></a>*@
@@ -238,9 +238,7 @@
                             <div class="dropdown header-user">
                                 <a href="#" class="nav-link icon" data-toggle="dropdown">
                                     <span>
-
                                         <img src="@Context.Session.GetString("ImagePath")" alt="profile-user" class="avatar brround cover-image mb-0 ml-0">
-
                                     </span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
