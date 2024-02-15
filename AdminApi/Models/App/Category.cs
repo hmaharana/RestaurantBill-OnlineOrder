@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AdminApi.Models.App
 {
-    public class Category
+    public class Category 
     {
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
