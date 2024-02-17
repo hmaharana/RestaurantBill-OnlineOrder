@@ -1,0 +1,197 @@
+﻿@using Microsoft.Extensions.Configuration;
+@using Microsoft.AspNetCore.Http
+@inject IConfiguration Configuration;
+
+@{
+    ViewBag.Title = "Vendor";
+    string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
+}
+
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="fe fe-file-text mr-1"></i>Admin Console</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Vendor Edit</li>
+    </ol>
+    <div class="ml-auto">
+        <a href="~/Vendor/VendorList" class="btn btn-primary btn-icon btn-sm text-white mr-2">
+            <span>
+                <i class="fe fe-plus"></i>
+            </span> Vendor List
+        </a>
+
+    </div>
+</div>
+<!-- PAGE-HEADER END -->
+<div class="row">
+    <div class="col-md">
+        <div class="card overflow-hidden">
+            <div class="card-header">
+                <h3 class="card-title">Vendor Edit</h3>
+            </div>
+            <div class="card-body">
+                <form action="#" role="form" class="validate" id="formPost">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Vendor Name &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="vendorName" placeholder="Vendor Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="email" placeholder="Email" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Aadhar No &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="aadhar" placeholder="Aadhar No" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Image &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="file" class="form-control" id="logo">
+                            </div>
+                            <div class="col-md-2">
+                                <div class="text-center">
+                                    <img id="imagee" src="" width="90" class="rounded-circle" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Mobile No &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="mobile" placeholder="Mobile No" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">PAN No &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="pan" placeholder="PAN No" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Certificate &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="file" class="form-control" id="certificate">
+                            </div>
+                            <div class="col-md-2">
+                                <div class="text-center">
+                                    <img id="foodcertificate" src="" width="90" class="rounded-circle" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button type="button" id="btnupdate" class="btn btn-radius btn-success">Update</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+
+        $("#btnupdate").click(function (e) {
+            if (!document.getElementById("formPost").checkValidity()) {
+                e.preventDefault();
+            } else {
+                Logo = '';
+                var currentImageSrc = '';
+                currentImageSrc = $('#imagee').attr('src');
+
+                Logo = '';
+                var Image = document.getElementById('logo').files.length;
+                if (Image > 0) {
+                    uploadLogo();
+                }
+
+                Certificate = '';
+                var currentImageSrc = '';
+                currentImageSrc = $('#foodcertificate').attr('src');
+
+                Certificate = '';
+                var Image = document.getElementById('certificate').files.length;
+                if (Image > 0) {
+                    uploadCertificate();
+                }
+                var model = {
+                    vendorId: vendorId,
+                    vendorName: $.trim($("#hospitaname").val()),
+                    email: $.trim($("#address1").val()),
+                    mobileNo: $.trim($("#address2").val()),
+                    aadharNo: $.trim($("#contactperson").val()),
+                    panNo: $.trim($("#contacpersonno").val()),
+                    image: Logo,
+                    certificate: Certificate,
+                    updatedBy: @Context.Session.GetInt32("UserId"),
+                }
+                console.log(model)
+                $.ajax({
+                    type: "POST",
+                    url: "@apiUrl/api/Vendor/UpdateVendor",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8",
+                    headers: {
+                        "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                    },
+
+                    success: function (data, statusText, xhr) {
+                        console.log(data)
+                        if (xhr.status === 200) {
+                            $('#vendor').DataTable().ajax.reload(null, false);
+                            sweetAlert({
+                                html: true,
+                                icon: "success",
+                                title: "vendor",
+                                text: "Successfully updated!",
+                                type: "success"
+                            });
+                        } else if (data.status === "duplicate") {
+                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                        } else if (data.status === "error") {
+                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                        } else {
+                            sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        if (data.status == 401) {
+                            window.location.replace('/Message/TokenExpire');
+                        } else if (data.status == 403) {
+                            window.location.replace('/Message/Unauthorize');
+                        } else if (data.status == 400) {
+                            sweetAlert("Validation Alert!", "Please check input data!", "warning");
+                        }
+                    }
+                });
+            }
+        });
+
+        function uploadLogo() {
+            var totalFiles = document.getElementById('logo').files.length;
+            if (totalFiles > 0) {
+                var formData = new FormData();
+                var files = document.getElementById('logo').files;
+                formData.append("file", files[0]);
+                $.ajax(
+                    {
+                        url: "/Upload/ImgUpload",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        async: false,
+                        type: "POST",
+                        success: function (data) {
+                            Logo = data;
+                            $('#imagee').attr('src', Logo);
+                            resetInputFile('#userModal');
+                        },
+                        error: function (data) {
+                            window.location.replace('/Message/SessionExpire');
+                        }
+                    }
+                );
+            }
+        }
+    </script>
+}
