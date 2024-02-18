@@ -115,11 +115,11 @@
                 }
                 var model = {
                     vendorId: vendorId,
-                    vendorName: $.trim($("#hospitaname").val()),
-                    email: $.trim($("#address1").val()),
-                    mobileNo: $.trim($("#address2").val()),
-                    aadharNo: $.trim($("#contactperson").val()),
-                    panNo: $.trim($("#contacpersonno").val()),
+                    vendorName: $.trim($("#vendorName").val()),
+                    email: $.trim($("#email").val()),
+                    mobileNo: $.trim($("#mobile").val()),
+                    aadharNo: $.trim($("#aadhar").val()),
+                    panNo: $.trim($("#pan").val()),
                     image: Logo,
                     certificate: Certificate,
                     updatedBy: @Context.Session.GetInt32("UserId"),
