@@ -115,19 +115,38 @@ namespace AdminApi.Controllers
             try
             {
                 var vendor = _context.Vendors.SingleOrDefault(opt => opt.VendorId == updateVendorDTO.VendorId);
-                vendor.VendorName = updateVendorDTO.VendorName;
-                vendor.Email = updateVendorDTO.Email;
-                vendor.MobileNo = updateVendorDTO.MobileNo;
-                vendor.AadharNo = updateVendorDTO.AadharNo;
-                vendor.PANNo = updateVendorDTO.PANNo;
-                vendor.Image = updateVendorDTO.Image;
-                vendor.Certificate = updateVendorDTO.Certificate;
-                vendor.UpdatedBy = updateVendorDTO.UpdatedBy;
-                vendor.UpdatedOn = System.DateTime.Now;
 
+                if (vendor != null)
+                {
+                    vendor.VendorName = updateVendorDTO.VendorName;
+                    vendor.Email = updateVendorDTO.Email;
+                    vendor.MobileNo = updateVendorDTO.MobileNo;
+                    vendor.AadharNo = updateVendorDTO.AadharNo;
+                    vendor.PANNo = updateVendorDTO.PANNo;
 
-                _context.SaveChanges();
-                return Ok(vendor);
+                    
+                    if (!string.IsNullOrEmpty(updateVendorDTO.Image))
+                    {
+                        vendor.Image = updateVendorDTO.Image;
+                    }
+
+                   
+                    if (!string.IsNullOrEmpty(updateVendorDTO.Certificate))
+                    {
+                        vendor.Certificate = updateVendorDTO.Certificate;
+                    }
+
+                    vendor.UpdatedBy = updateVendorDTO.UpdatedBy;
+                    vendor.UpdatedOn = System.DateTime.Now;
+
+                    _context.SaveChanges();
+
+                    return Ok(vendor);
+                }
+                else
+                {
+                    return NotFound(new Confirmation { Status = "error", ResponseMsg = "Vendor not found" });
+                }
             }
             catch (Exception ex)
             {
