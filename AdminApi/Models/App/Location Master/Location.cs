@@ -2,15 +2,12 @@
 
 namespace AdminApi.Models.App.Location_Master
 {
-    public class LocationInformation
-    {  
-
-
-
-
-
-        public int LocationInformationId { get; set; } 
-        public double Latitude { get; set; } 
+    public class Location
+    {
+        public int LocationId { get; set; }
+        public string LocationName { get; set; }
+        public int VendorId { get; set; }
+        public double Latitude { get; set; }
         public double Longitude { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
