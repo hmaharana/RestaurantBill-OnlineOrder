@@ -10,7 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\NewFolder\Item Rating\" />
     <Folder Include="Data\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
