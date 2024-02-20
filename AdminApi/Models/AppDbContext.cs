@@ -34,11 +34,12 @@ namespace AdminApi.Models
         public virtual DbSet<MarketUsers> MarketUsers { get; set; }
         public virtual DbSet<MarketUserLogHistory> MarketUserLogHistory { get; set; }
 
-        public virtual DbSet<Item> Items { get; set; }
+       // public virtual DbSet<Item> Items { get; set; }
+        public virtual DbSet<ItemImage> ItemsImage { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<State> States { get; set; }
         public virtual DbSet<City> Cities { get; set; }
-        public virtual DbSet<LocationInformation> LocationInformations { get; set; }
+        public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Vendor> Vendors { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,4 +1,5 @@
 ﻿using AdminApi.DTO.App;
+using AdminApi.DTO.App.ItemDTO;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,7 @@ namespace AdminApi.Models
         T Insert(T obj);
         T Update(T obj);
         T Delete(object id);
-
-      
+        object Insert(ItemDTO itemDTO);
     }
 }
     
