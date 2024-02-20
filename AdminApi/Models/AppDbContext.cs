@@ -33,7 +33,7 @@ namespace AdminApi.Models
         public virtual DbSet<MarketUsers> MarketUsers { get; set; }
         public virtual DbSet<MarketUserLogHistory> MarketUserLogHistory { get; set; }
 
-       // public virtual DbSet<Item> Items { get; set; }
+        public virtual DbSet<Item> Items { get; set; }
         public virtual DbSet<ItemImage> ItemsImage { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<State> States { get; set; }
