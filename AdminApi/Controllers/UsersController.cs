@@ -449,7 +449,8 @@ namespace AdminApi.Controllers
                 var list = (from u in _context.Users
                             join r in _context.UserRole on
                             u.UserRoleId equals r.UserRoleId
-                            select new { u.UserId, u.UserRoleId,u.UserDesignation,u.UserReferralId, u.FullName, r.RoleName, u.Mobile, u.Email, u.DateOfBirth, u.UserName });
+                            join a in _context.Vendors on u.VendorId equals a.VendorId
+                            select new { u.UserId, u.UserRoleId,u.UserDesignation,u.UserReferralId, u.FullName, r.RoleName, u.Mobile, u.Email, u.DateOfBirth, u.UserName ,u.VendorId,a.VendorName });
 
                 var userInfoList = list.Select(s => new UserInfo
                 { UserId = s.UserId, UserRoleId = s.UserRoleId, RoleName = s.RoleName, FullName = s.FullName, Mobile = s.Mobile, Email = s.Email, DateOfBirth = s.DateOfBirth, UserName = s.UserName ,  UserDesignation = s.UserDesignation, UserReferralId=s.UserReferralId});
@@ -570,6 +571,7 @@ namespace AdminApi.Controllers
                 objUser.UserReferralId = model.UserReferralId;
 
                 objUser.Mobile = model.Mobile;
+                objUser.VendorId = model.VendorId;
                 objUser.Email = model.Email;
                 objUser.DateOfBirth = model.DateOfBirth;
                 objUser.UserName = model.UserName;

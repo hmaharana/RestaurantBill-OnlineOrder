@@ -10,6 +10,7 @@ namespace AdminApi.Models.User
 		public int UserId { get; set; }
 		[Required]
 		public int UserRoleId { get; set; }
+		public int VendorId { get; set; }
 		[Required]
 		[StringLength(100)]
 		public string FullName { get; set; }

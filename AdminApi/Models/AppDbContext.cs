@@ -1,5 +1,6 @@
 ﻿using AdminApi.Models.App;
 using AdminApi.Models.App.Category;
+using AdminApi.Models.App.Employee;
 using AdminApi.Models.App.Item;
 using AdminApi.Models.App.Location_Master;
 using AdminApi.Models.App.Vendor;
@@ -40,6 +41,7 @@ namespace AdminApi.Models
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Vendor> Vendors { get; set; }
+        public virtual DbSet<Employee> Employees { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Seed();
@@ -121,6 +123,17 @@ namespace AdminApi.Models
             .HasDefaultValue(System.DateTime.Now);
 
             modelBuilder.Entity<Vendor>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
+
+
+            //Employee
+            modelBuilder.Entity<Employee>()
+           .Property(s => s.CreatedOn)
+           .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<Employee>()
             .Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .ValueGeneratedNever();
