@@ -61,10 +61,10 @@ namespace AdminApi.Controllers
                 var user = (from u in _context.Users
                             join r in _context.UserRole on u.UserRoleId equals r.UserRoleId
                             where u.IsActive.Equals(true) && u.UserName.Equals(username) && u.Password.Equals(password)
-                            select new { u.UserId, r.UserRoleId, r.RoleName, u.FullName, u.Mobile, u.Email, u.ImagePath }).FirstOrDefault();
+                            select new { u.UserId, r.UserRoleId, r.RoleName, u.FullName, u.Mobile, u.Email, u.ImagePath,u.VendorId }).FirstOrDefault();
                 if (user != null)
                 {
-                    UserInfo userInfo = new UserInfo { UserId = user.UserId, UserRoleId = user.UserRoleId, RoleName = user.RoleName, FullName = user.FullName, Mobile = user.Mobile, Email = user.Email, ImagePath = user.ImagePath };
+                    UserInfo userInfo = new UserInfo { UserId = user.UserId, UserRoleId = user.UserRoleId, RoleName = user.RoleName, FullName = user.FullName, Mobile = user.Mobile, Email = user.Email, ImagePath = user.ImagePath, VendorId = user.VendorId };
                     var tokenString = GenerateJwtToken(userInfo);
                     return Ok(new Response { token = tokenString, Obj = userInfo });
                 }
@@ -447,13 +447,15 @@ namespace AdminApi.Controllers
             try
             {
                 var list = (from u in _context.Users
-                            join r in _context.UserRole on
-                            u.UserRoleId equals r.UserRoleId
+                            join r in _context.UserRole on u.UserRoleId equals r.UserRoleId
                             join a in _context.Vendors on u.VendorId equals a.VendorId
-                            select new { u.UserId, u.UserRoleId,u.UserDesignation,u.UserReferralId, u.FullName, r.RoleName, u.Mobile, u.Email, u.DateOfBirth, u.UserName ,u.VendorId,a.VendorName });
+                            select new { 
+                                u.UserId, 
+                                u.UserRoleId,
+                                u.UserDesignation,u.UserReferralId, u.FullName, r.RoleName, u.Mobile, u.Email, u.DateOfBirth, u.UserName ,u.VendorId,a.VendorName });
 
                 var userInfoList = list.Select(s => new UserInfo
-                { UserId = s.UserId, UserRoleId = s.UserRoleId, RoleName = s.RoleName, FullName = s.FullName, Mobile = s.Mobile, Email = s.Email, DateOfBirth = s.DateOfBirth, UserName = s.UserName ,  UserDesignation = s.UserDesignation, UserReferralId=s.UserReferralId});
+                { UserId = s.UserId, UserRoleId = s.UserRoleId, RoleName = s.RoleName, FullName = s.FullName, Mobile = s.Mobile, Email = s.Email, DateOfBirth = s.DateOfBirth, UserName = s.UserName ,  UserDesignation = s.UserDesignation, UserReferralId=s.UserReferralId,VendorId=s.VendorId,VendorName=s.VendorName });
 
                 int totalRecords = userInfoList.Count();
                 return Ok(new { data = userInfoList, recordsTotal = totalRecords, recordsFiltered = totalRecords });

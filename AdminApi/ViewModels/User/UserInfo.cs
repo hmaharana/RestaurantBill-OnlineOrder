@@ -17,5 +17,7 @@ namespace AdminApi.ViewModels.User
         public string Password { get; set; }
         public string UserDesignation { get; set; }
         public string UserReferralId { get; set; }
+        public int VendorId { get; set; }
+        public string VendorName { get; set;}
     }
 }
