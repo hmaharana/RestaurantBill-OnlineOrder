@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using AdminApi.DTO.App.ItemDTO;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -76,6 +77,11 @@ namespace AdminApi.Models
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public object Insert(ItemDTO itemDTO)
+        {
+            throw new NotImplementedException();
         }
     }
 }

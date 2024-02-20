@@ -9,6 +9,7 @@ namespace AdminApi.Models.App.Category
     {
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public int VendorId { get; set; }
         public string Alias { get; set; }
         public string Icon { get; set; }
         public int? Parent { get; set; }
