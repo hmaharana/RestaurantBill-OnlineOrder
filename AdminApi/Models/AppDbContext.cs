@@ -2,6 +2,7 @@
 using AdminApi.Models.App.Category;
 using AdminApi.Models.App.Item;
 using AdminApi.Models.App.Location_Master;
+using AdminApi.Models.App.Vendor;
 using AdminApi.Models.Helper;
 using AdminApi.Models.Menu;
 using AdminApi.Models.User;
@@ -37,6 +38,7 @@ namespace AdminApi.Models
         public virtual DbSet<State> States { get; set; }
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<LocationInformation> LocationInformations { get; set; }
+        public virtual DbSet<Vendor> Vendors { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Seed();
@@ -108,6 +110,16 @@ namespace AdminApi.Models
             .HasDefaultValue(System.DateTime.Now);
 
             modelBuilder.Entity<Item>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
+
+            //Vendor
+            modelBuilder.Entity<Vendor>()
+            .Property(s => s.CreatedOn)
+            .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<Vendor>()
             .Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .ValueGeneratedNever();
