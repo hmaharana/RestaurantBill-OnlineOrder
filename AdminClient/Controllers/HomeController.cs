@@ -27,7 +27,7 @@ namespace AdminClient.Controllers
         private readonly IConfiguration _configuration;
         private readonly string _apiBaseUrl;
         private string appMenu = "AppMenu", userLogCode = "UserLogCode", tokenTxt = "TokenTxt",
-            userId="UserId",imagePath="ImagePath",fullName="FullName",roleName="RoleName";
+            userId="UserId",imagePath="ImagePath",fullName="FullName",roleName="RoleName",vendorid= "VendorId";
         
 
         public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
@@ -77,6 +77,7 @@ namespace AdminClient.Controllers
 
                                         HttpContext.Session.SetString(appMenu, menuString);
                                         HttpContext.Session.SetInt32(userId, objUser.obj.UserId);
+                                        HttpContext.Session.SetInt32(vendorid, objUser.obj.VendorId);
                                         HttpContext.Session.SetString(userLogCode, logCode);
                                         HttpContext.Session.SetString(tokenTxt, objUser.token);
                                         HttpContext.Session.SetString(imagePath, objUser.obj.ImagePath==null? "../images/users/male/2.jpg" : objUser.obj.ImagePath);

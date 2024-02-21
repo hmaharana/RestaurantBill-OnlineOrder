@@ -14,5 +14,6 @@ namespace AdminClient.ViewModels.Users
         public string Mobile { get; set; }
         public string Email { get; set; }
         public string ImagePath { get; set; }
+        public int VendorId { get; set; }
     }
 }
