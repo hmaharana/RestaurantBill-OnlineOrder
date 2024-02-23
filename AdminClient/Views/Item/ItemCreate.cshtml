@@ -3,7 +3,7 @@
 @inject IConfiguration Configuration;
 
 @{
-    ViewBag.Title = "Location";
+    ViewBag.Title = "Item";
     string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
 }
 
@@ -109,7 +109,16 @@
                                 <input type="text" class="form-control" id="hNSCode" placeholder="Enter HNS Code" required>
                             </div>
                         </div>
-                      
+                        <div class="form-group">
+                            <label class="form-label">Image &nbsp;<span style="color: red;"><b>*</b></span></label>
+                            <input type="file" class="form-control" id="image" multiple>
+                        </div>
+                        @* <div class="col-md-3">
+                        <div class="form-group">
+                        <label class="form-label">Tax Type &nbsp;<span style="color: red;"><b>*</b></span></label>
+                        <input type="checkbox" class="form-control" id="taxType" placeholder="Enter Tax Type" required>
+                        </div>
+                        </div>*@
                        @* <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label">Tax Type &nbsp;<span style="color: red;"><b>*</b></span></label>

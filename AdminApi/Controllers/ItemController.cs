@@ -59,6 +59,20 @@ namespace AdminApi.Controllers
                     item.Description = itemDTO.Description;
                     item.CreatedBy = itemDTO.CreatedBy;
                     var obj = _itemRepo.Insert(item);
+                    if (itemDTO.itemsDTOs != null)
+                    {
+                        foreach (var items in itemDTO.itemsDTOs)
+                        {
+                            ItemImage itemImage = new ItemImage();
+                            itemImage.ItemId = obj.ItemId;
+                            itemImage.Image = items.Image;
+                            itemImage.CreatedBy = items.CreatedBy;
+
+                            _context.ItemImages.Add(itemImage);
+                        }
+
+                        _context.SaveChanges();
+                    }
                     return Ok(obj);
 
                 }

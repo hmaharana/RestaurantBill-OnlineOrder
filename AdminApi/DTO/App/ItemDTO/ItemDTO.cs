@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using AdminApi.Models.App.Item;
+using System.Collections.Generic;
 
 namespace AdminApi.DTO.App.ItemDTO
 {
@@ -18,6 +19,7 @@ namespace AdminApi.DTO.App.ItemDTO
         public string HNSCode { get; set; }
         public string Description { get; set; }
         public int CreatedBy { get; set; }
+        public List<ItemsDTO> itemsDTOs { get; set; }
     }
     public class ItemUpdateDTO
     {
@@ -38,5 +40,11 @@ namespace AdminApi.DTO.App.ItemDTO
         public int CreatedBy { get; set; }
         public int UpdatedBy { get; set; }
     }
-   
+
+    public class ItemsDTO
+    {
+        public int ItemId { get; set; }
+        public string Image { get; set; }
+        public int CreatedBy { get; set; }
+    }
 }
