@@ -1,4 +1,6 @@
-﻿namespace AdminApi.DTO.App.ItemDTO
+﻿using System.Collections.Generic;
+
+namespace AdminApi.DTO.App.ItemDTO
 {
     public class ItemDTO
     {
@@ -36,4 +38,5 @@
         public int CreatedBy { get; set; }
         public int UpdatedBy { get; set; }
     }
+   
 }
