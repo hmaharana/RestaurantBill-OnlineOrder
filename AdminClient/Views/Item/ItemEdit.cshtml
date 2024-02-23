@@ -1,0 +1,308 @@
+﻿@using Microsoft.Extensions.Configuration;
+@using Microsoft.AspNetCore.Http
+@inject IConfiguration Configuration;
+
+@{
+    ViewBag.Title = "Item";
+    string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
+}
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="fe fe-file-text mr-1"></i>Admin Consol</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Item Edit</li>
+    </ol>
+    <div class="ml-auto">
+        <a href="~/Item/ItemList" class="btn btn-primary btn-icon btn-sm text-white mr-2">
+            <span>
+                <i class="fe fe-plus"></i>
+            </span> View
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md">
+        <div class="card overflow-hidden">
+            <div class="card-header">
+                <h3 class="card-title">Item Edit</h3>
+            </div>
+            <div class="card-body">
+                <form action="#" role="form" class="validate" id="formPost">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Vendor Name &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <div class="input-box">
+                                    <select class="form-control" id="Selectvendor">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Category Name &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <div class="input-box">
+                                    <select class="form-control" id="Selectcategory">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Item Name &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="itemName" placeholder="Enter Item Name" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">MRP &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="mRP" placeholder="Enter MRP" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Discount Amount &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="discountAmount" placeholder="Enter Discount Amount" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Sale Price &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="salePrice" placeholder="Enter Sale Price" required>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">GST Id &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="gSTId" placeholder="Enter GST Id" required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">GST Amount &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="gSTAmount" placeholder="Enter GST Amount" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Color Code &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="colorCode" placeholder="Enter Color Code" required>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">HNS Code &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="hNSCode" placeholder="Enter HNS Code" required>
+                            </div>
+                        </div>
+                        @* <div class="col-md-3">
+                        <div class="form-group">
+                        <label class="form-label">Status &nbsp;<span style="color: red;"><b>*</b></span></label>
+                        <input type="checkbox" class="form-control" id="status" placeholder="Enter Status" required>
+                        </div>
+                        </div>
+                        <div class="col-md-3">
+                        <div class="form-group">
+                        <label class="form-label">Tax Type &nbsp;<span style="color: red;"><b>*</b></span></label>
+                        <input type="checkbox" class="form-control" id="taxType" placeholder="Enter Tax Type" required>
+                        </div>
+                        </div>*@
+
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="form-label">Description &nbsp;<span style="color: red;"><b>*</b></span></label>
+                            <textarea class="form-control" id="description" placeholder="Enter Description" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" id="btnupdate" class="btn btn-radius btn-success">Update</button>
+                            <a type="button" href="~/Item/ItemList" class="btn btn-radius btn-danger">Reset</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+        GetVendor()
+        async function GetVendor(Id) {
+            var opt = '';
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Vendor/GetVendorList",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var options = [];
+                    options.push(' <option value = ""> Select Vendor </option> ');
+                    for (var i = 0; i < res.data.length; i++) {
+                        if (Id == res.data[i].vendorId) {
+                            opt = 'selected'
+                        } else {
+                            opt = '';
+                        }
+                        options.push('<option value = "' + res.data[i].vendorId + '" ' + opt + ' > ' + res.data[i].vendorName + '</option>');
+                    }
+                    $("#Selectvendor").html(options.join(''));
+                },
+
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+        $(document).ready(function () {
+            Getcategory();
+        });
+
+        async function Getcategory(Id) {
+            var opt = '';
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Category/GetCategoryList",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var options = [];
+                    options.push('<option value="">Select Category</option>');
+                    for (var i = 0; i < res.length; i++) {
+                        options.push('<option value="' + res[i].categoryId + '">' + res[i].categoryName + '</option>');
+                    }
+                    $("#Selectcategory").html(options.join(''));
+                },
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+
+        var ItemId = @ViewBag.ItemId
+            loadSingleitem()
+        function loadSingleitem() {
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Item/GetSingleItem/" + ItemId,
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                },
+                dataType: "json",
+                success: function (data) {
+                    if (data) {
+                        $('#Selectvendor').val(data.vendorId);
+                        $('#Selectcategory').val(data.categoryId);
+                        $('#itemName').val(data.itemName);
+                        $('#mRP').val(data.mrp);
+                        $('#discountAmount').val(data.discountAmount);
+                        $('#salePrice').val(data.salePrice);
+                        $('#gSTId').val(data.gstId);
+                        $('#gSTAmount').val(data.gstAmount);
+                        $('#colorCode').val(data.colorCode);
+                        $('#hNSCode').val(data.hnsCode);
+                        $('#description').val(data.description);
+                    }
+                    else {
+                        sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+                    }
+                },
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+
+        $("#btnupdate").click(function (e) {
+            if (!document.getElementById("formPost").checkValidity()) {
+                e.preventDefault();
+            } else {
+
+                var model = {
+                    ItemId: ItemId,
+                    vendorId: $.trim($("#Selectvendor").val()),
+                    categoryId: $.trim($("#Selectcategory").val()),
+                    itemName: $.trim($("#itemName").val()),
+                    mrp: $.trim($("#mRP").val()),
+                    discountAmount: $.trim($("#discountAmount").val()),
+                    salePrice: $.trim($("#salePrice").val()),
+                    gstId: $.trim($("#gSTId").val()),
+                    gstAmount: $.trim($("#gSTAmount").val()),
+                    colorCode: $.trim($("#colorCode").val()),
+                    hnsCode: $.trim($("#hNSCode").val()),
+                    description: $.trim($("#description").val()),
+                    updatedBy: @Context.Session.GetInt32("UserId"),
+                }
+                console.log(model)
+                $.ajax({
+                    type: "POST",
+                    url: "@apiUrl/api/Item/UpdateItem",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8",
+                    headers: {
+                        "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                    },
+
+                    success: function (data, statusText, xhr) {
+                        console.log(data)
+                        if (xhr.status === 200) {
+                            $('#Item_Tb').DataTable().ajax.reload(null, false);
+                            sweetAlert({
+                                html: true,
+                                icon: "success",
+                                title: "Item Update Order",
+                                text: "Successfully updated!",
+                                type: "success"
+                            });
+                        } else if (data.status === "duplicate") {
+                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                        } else if (data.status === "error") {
+                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                        } else {
+                            sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        if (data.status == 401) {
+                            window.location.replace('/Message/TokenExpire');
+                        } else if (data.status == 403) {
+                            window.location.replace('/Message/Unauthorize');
+                        } else if (data.status == 400) {
+                            sweetAlert("Validation Alert!", "Please check input data!", "warning");
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+}

@@ -41,7 +41,7 @@ namespace AdminApi.Controllers
         }
 
 
-        [Authorize(Roles = "Admin,User")]
+       
         [HttpPost]
 
         public ActionResult CreateCategory(CategoryDTO categoryDTO)
@@ -54,6 +54,7 @@ namespace AdminApi.Controllers
 
                     Category category = new Category();
                     category.CategoryName = categoryDTO.name;
+                    category.VendorId = categoryDTO.VendorId;
                     category.CreatedBy = categoryDTO.createdBy;
                     category.Parent = categoryDTO.Parent;
                     category.Order = categoryDTO.Order;
@@ -105,10 +106,12 @@ namespace AdminApi.Controllers
             try
             {
                 var list = (from u in _context.Category
-
+                           join a in _context.Vendors on u.VendorId equals a.VendorId
                             select new
                             {
                                 u.CategoryId,
+                                u.VendorId,
+                                a.VendorName,
                                 u.CategoryName,
                                 u.Icon,
                                 u.IsDeleted,
@@ -147,10 +150,12 @@ namespace AdminApi.Controllers
             try
             {
                 var list = (from u in _context.Category
-
+                            join a in _context.Vendors on u.VendorId equals a.VendorId
                             select new
                             {
                                 u.CategoryId,
+                                u.VendorId,
+                                a.VendorName,
                                 u.CategoryName,
                                 u.Icon,
                                 u.IsDeleted,
@@ -279,6 +284,7 @@ namespace AdminApi.Controllers
                 var objCategory = _context.Category.SingleOrDefault(opt => opt.CategoryId == categoryUpdateDTO.CategoryId);
 
                 objCategory.CategoryName = categoryUpdateDTO.name;
+                objCategory.VendorId = categoryUpdateDTO.VendorId;
                 objCategory.Parent = categoryUpdateDTO.Parent;
                 objCategory.Order = categoryUpdateDTO.Order;
                 objCategory.UpdatedBy = categoryUpdateDTO.createdBy;

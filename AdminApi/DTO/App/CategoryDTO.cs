@@ -8,6 +8,7 @@ namespace AdminApi.DTO.App
     public class CategoryDTO
     {
         public string name { get; set; }
+        public int VendorId { get; set; }
         public string alias { get; set; }
         public string icon { get; set; }
         public int? Parent { get; set; }
@@ -30,6 +31,7 @@ namespace AdminApi.DTO.App
     public class CategoryUpdateDTO
     {
         public int CategoryId { get; set; }
+        public int VendorId { get; set; }
         public string name { get; set; }
         public string alias { get; set; }
         public string icon { get; set; }

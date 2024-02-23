@@ -1,23 +1,22 @@
-﻿
-@using Microsoft.Extensions.Configuration;
+﻿@using Microsoft.Extensions.Configuration;
 @using Microsoft.AspNetCore.Http
 @inject IConfiguration Configuration;
 
 @{
-    ViewBag.Title = "Location";
+    ViewBag.Title = "Item";
     string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
 }
 
 <div class="page-header">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#"><i class="fe fe-file-text mr-1"></i>Admin Console</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Location List</li>
+        <li class="breadcrumb-item active" aria-current="page">Item List</li>
     </ol>
     <div class="ml-auto">
-        <a href="~/Location/LocationCreate" class="btn btn-primary btn-icon btn-sm text-white mr-2">
+        <a href="~/Item/ItemCreate" class="btn btn-primary btn-icon btn-sm text-white mr-2">
             <span>
                 <i class="fe fe-plus"></i>
-            </span> Location Create
+            </span> Item Create
         </a>
     </div>
 </div>
@@ -26,17 +25,23 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">Location List</div>
+                <div class="card-title">Item List</div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="Location_Tb" class="table table-striped table-bordered nowrap dataTable no-footer dtr-inline" style="width:100%">
+                    <table id="Item_Tb" class="table table-striped table-bordered nowrap dataTable no-footer dtr-inline" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Location Name</th>
+                                
                                 <th>Vendor Name</th>
-                                <th>Latitude</th>
-                                <th>Longitude</th>
+                                <th>Category Name</th>
+                                <th>Item Name</th>
+                                <th>MRP</th>
+                                <th>Discount Amount</th>
+                                <th>Sale Price</th>
+                                <th>GST Amount</th>
+                                <th>GST</th>
+                                <th>Description</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -51,11 +56,11 @@
     <script>
 
         //List
-        loadLocation()
-        function loadLocation() {
-            var table = $('#Location_Tb').DataTable();
+        loadItem()
+        function loadItem() {
+            var table = $('#Item_Tb').DataTable();
             table.destroy();
-            table = $('#Location_Tb').dataTable({
+            table = $('#Item_Tb').dataTable({
                 "paginationType": "full_numbers",
                 "dom": 'Bfrtip',
                 "buttons": ['copy', 'csv', 'excel', 'pdf', 'print'],
@@ -64,7 +69,7 @@
                 "sort": true,
                 "info": true,
                 "ajax": {
-                    "url": '@apiUrl/api/Location/GetLocationList',
+                    "url": '@apiUrl/api/Item/AllItemList',
                     "type": "GET",
                     "dataType": "json",
                     "headers": {
@@ -80,13 +85,26 @@
                 },
                 "order": [],
                 "columns": [
-                    { "data": "locationName", "orderable": true },
                     { "data": "vendorName", "orderable": true },
-                    { "data": "latitude", "orderable": true },
-                    { "data": "longitude", "orderable": true },
+                    { "data": "categoryName", "orderable": true },
+                    { "data": "itemName", "orderable": true },
+                    { "data": "mrp", "orderable": true },
+                    { "data": "discountAmount", "orderable": true },
+                    { "data": "salePrice", "orderable": true },
+                    { "data": "gstId", "orderable": true },
+                    { "data": "gstAmount", "orderable": true },
+                    { "data": "description", "orderable": true },
+                    "render": function (data, type, row) {
+                        if (row.hoistYES == 1) {
+                            return '<p><lable style="color:#064ef9;"">1</lable></p>';
+                        }
+                        else if (row.hoistYES == 0) {
+                            return '<p><lable style="color:#f90669;">0</lable></br></p>';
+                        }
+                    }
                     {
                         "render": function (data, type, row) {
-                            return '<a class="btn btn-sm btn-primary" href="../Location/LocationEdit?locationId=' + row.locationId + '"><i class="fa fa-edit"></i></a>' + '&nbsp&nbsp<button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete" data-id="' + row.locationId + '"><i class="fa fa-trash"></i></button>';
+                            return '<a class="btn btn-sm btn-primary" href="../Item/ItemEdit?itemId=' + row.itemId + '"><i class="fa fa-edit"></i></a>' + '&nbsp&nbsp<button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete" data-id="' + row.itemId + '"><i class="fa fa-trash"></i></button>';
                         }
                     }
                 ]
@@ -94,7 +112,7 @@
         }
 
         //Delete
-        $('#Location_Tb tbody').on('click', 'button[data-target="#delete"]', function () {
+        $('#Item_Tb tbody').on('click', 'button[data-target="#delete"]', function () {
             var id = $(this).data('id');
             swal({
                 html: true,
@@ -108,7 +126,7 @@
             }, function () {
                 $.ajax({
                     type: "GET",
-                    url: "@apiUrl/api/Location/DeleteLocation/" + id + "/" + @Context.Session.GetInt32("UserId"),
+                    url: "@apiUrl/api/Item/DeleteItem/" + id + "/" + @Context.Session.GetInt32("UserId"),
                     contentType: "application/json; charset=utf-8",
                     headers: {
                         "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
@@ -116,11 +134,11 @@
                     dataType: "json",
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 200) {
-                            $('#Location_Tb').DataTable().ajax.reload(null, false);
+                            $('#Item_Tb').DataTable().ajax.reload(null, false);
                             $('#delete').modal('hide');
                             sweetAlert({
                                 html: true,
-                                title: "Location",
+                                title: "Item",
                                 text: "Successfully deleted!",
                                 type: "success"
                             });

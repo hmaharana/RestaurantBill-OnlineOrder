@@ -50,8 +50,12 @@ namespace AdminApi.Controllers
                     item.SalePrice = itemDTO.SalePrice;
                     item.MRP = itemDTO.MRP;
                     item.DiscountAmount = itemDTO.DiscountAmount;
+                    item.ColorCode = itemDTO.ColorCode;
+                    item.Status = itemDTO.Status;
+                    item.GSTAmount = itemDTO.GSTAmount;
+                    item.GSTId = itemDTO.GSTId;
                     item.TaxType = itemDTO.TaxType;
-                    item.ItemImage = itemDTO.ItemImage;
+                    item.HNSCode = itemDTO.HNSCode;
                     item.Description = itemDTO.Description;
                     item.CreatedBy = itemDTO.CreatedBy;
                     var obj = _itemRepo.Insert(item);
@@ -76,9 +80,13 @@ namespace AdminApi.Controllers
             try
             {
                 var list = (from u in _context.Items
+                            join a in _context.Vendors on u.VendorId equals a.VendorId
+                            join b in _context.Category on u.CategoryId equals b.CategoryId
                             select new
                             {
                                 u.ItemId,
+                                a.VendorName,
+                                b.CategoryName,
                                 u.ItemName,
                                 u.CreatedOn,
                                 u.IsDeleted,
@@ -88,7 +96,10 @@ namespace AdminApi.Controllers
                                 u.MRP,
                                 u.DiscountAmount,
                                 u.TaxType,
-                                u.ItemImage,
+                                u.HNSCode,
+                                u.GSTId,
+                                u.GSTAmount,
+                                u.Status,
                                 u.Description,
                             }).Where(x => x.IsDeleted == false);
                 int totalRecords = list.Count();
@@ -128,7 +139,10 @@ namespace AdminApi.Controllers
                 item.MRP = itemUpdateDTO.MRP;
                 item.DiscountAmount = itemUpdateDTO.DiscountAmount;
                 item.TaxType = itemUpdateDTO.TaxType;
-                item.ItemImage = itemUpdateDTO.ItemImage;
+                item.Status = itemUpdateDTO.Status;
+                item.ColorCode = itemUpdateDTO.ColorCode;
+                item.GSTAmount = itemUpdateDTO.GSTAmount;
+                item.GSTId = itemUpdateDTO.GSTId;
                 item.Description = itemUpdateDTO.Description;
                 item.UpdatedBy = itemUpdateDTO.UpdatedBy;
                 item.UpdatedOn = System.DateTime.Now;
@@ -158,6 +172,47 @@ namespace AdminApi.Controllers
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
             }
         }
-    }
+        //public ActionResult GetCatagoryListbyVendorid(int VendorId)
+        //{
+        //    try
+        //    {
+        //        var list = (from u in _context.Items
+        //                    join a in _context.Vendors on u.VendorId equals a.VendorId
 
+        //                    select new
+        //                    {
+        //                        u.ItemId,
+        //                        a.VendorName,
+        //                        u.ItemName,
+        //                        u.CreatedOn,
+        //                        u.IsDeleted,
+        //                        u.VendorId,
+        //                        u.CategoryId,
+        //                        u.SalePrice,
+        //                        u.MRP,
+        //                        u.DiscountAmount,
+        //                        u.TaxType,
+        //                        u.HNSCode,
+        //                        u.GSTId,
+        //                        u.GSTAmount,
+        //                        u.Status,
+        //                        u.Description,
+                               
+        //                    }).Where(x => x.IsDeleted == false && x.VendorId == VendorId).Distinct().ToList();
+
+        //        int totalRecords = list.Count();
+
+        //        return Ok(new { data = list, recordsTotal = totalRecords, recordsFiltered = totalRecords });
+        //    }
+
+        //    catch (Exception ex)
+        //    {
+        //        return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
+        //    }
+        //}
+
+
+    }
 }
+
+   
