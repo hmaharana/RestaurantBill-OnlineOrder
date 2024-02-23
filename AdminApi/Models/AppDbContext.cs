@@ -42,6 +42,7 @@ namespace AdminApi.Models
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Vendor> Vendors { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<ItemImage> ItemImages { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Seed();
@@ -134,6 +135,16 @@ namespace AdminApi.Models
            .HasDefaultValue(System.DateTime.Now);
 
             modelBuilder.Entity<Employee>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
+
+            //itemImage
+            modelBuilder.Entity<ItemImage>()
+          .Property(s => s.CreatedOn)
+          .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<ItemImage>()
             .Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .ValueGeneratedNever();
