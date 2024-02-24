@@ -184,44 +184,7 @@ namespace AdminApi.Controllers
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
             }
         }
-        //public ActionResult GetCatagoryListbyVendorid(int VendorId)
-        //{
-        //    try
-        //    {
-        //        var list = (from u in _context.Items
-        //                    join a in _context.Vendors on u.VendorId equals a.VendorId
-
-        //                    select new
-        //                    {
-        //                        u.ItemId,
-        //                        a.VendorName,
-        //                        u.ItemName,
-        //                        u.CreatedOn,
-        //                        u.IsDeleted,
-        //                        u.VendorId,
-        //                        u.CategoryId,
-        //                        u.SalePrice,
-        //                        u.MRP,
-        //                        u.DiscountAmount,
-        //                        u.TaxType,
-        //                        u.HNSCode,
-        //                        u.GSTId,
-        //                        u.GSTAmount,
-        //                        u.Status,
-        //                        u.Description,
-                               
-        //                    }).Where(x => x.IsDeleted == false && x.VendorId == VendorId).Distinct().ToList();
-
-        //        int totalRecords = list.Count();
-
-        //        return Ok(new { data = list, recordsTotal = totalRecords, recordsFiltered = totalRecords });
-        //    }
-
-        //    catch (Exception ex)
-        //    {
-        //        return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
-        //    }
-        //}
+       
 
 
     }
