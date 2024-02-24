@@ -83,7 +83,7 @@ namespace AdminApi.Controllers
         [HttpPost]
         public IActionResult CustomerCreate(CustomerLoginDTO customerLoginDTO)
         {
-            var objcheck = _context.CustomerLogins.SingleOrDefault(opt => opt.CustomerLoginId == customerLoginDTO.CustomerLoginId && opt.IsDeleted == false);
+            var objcheck = _context.CustomerLogins.SingleOrDefault(opt => opt.CustomerName == customerLoginDTO.CustomerName && opt.IsDeleted == false);
             try
             {
                 if (objcheck == null)
