@@ -10,13 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AdminApi.Data
 {
     [DbContext(typeof(AppDbContext))]
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-    [Migration("20240224092218_resturanta")]
-    partial class resturanta
-========
-    [Migration("20240224072214_citii")]
-    partial class citii
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+    [Migration("20240224093100_customerff")]
+    partial class customerff
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,11 +40,7 @@ namespace AdminApi.Data
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 14, 52, 18, 376, DateTimeKind.Local).AddTicks(165));
-========
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 12, 52, 13, 910, DateTimeKind.Local).AddTicks(8494));
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                        .HasDefaultValue(new DateTime(2024, 2, 24, 15, 0, 58, 628, DateTimeKind.Local).AddTicks(2700));
 
                     b.Property<string>("Icon")
                         .HasColumnType("nvarchar(max)");
@@ -94,9 +85,7 @@ namespace AdminApi.Data
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 14, 52, 18, 379, DateTimeKind.Local).AddTicks(6635));
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CustomerMobNo")
                         .HasColumnType("nvarchar(max)");
@@ -108,8 +97,7 @@ namespace AdminApi.Data
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasColumnType("bit");
 
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
@@ -141,11 +129,7 @@ namespace AdminApi.Data
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 14, 52, 18, 378, DateTimeKind.Local).AddTicks(5880));
-========
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 12, 52, 13, 912, DateTimeKind.Local).AddTicks(7649));
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                        .HasDefaultValue(new DateTime(2024, 2, 24, 15, 0, 58, 632, DateTimeKind.Local).AddTicks(8077));
 
                     b.Property<string>("FilterName")
                         .HasColumnType("nvarchar(max)");
@@ -181,11 +165,7 @@ namespace AdminApi.Data
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 14, 52, 18, 378, DateTimeKind.Local).AddTicks(8749));
-========
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 12, 52, 13, 912, DateTimeKind.Local).AddTicks(9622));
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                        .HasDefaultValue(new DateTime(2024, 2, 24, 15, 0, 58, 633, DateTimeKind.Local).AddTicks(3383));
 
                     b.Property<int>("FilterId")
                         .HasColumnType("int");
@@ -224,11 +204,7 @@ namespace AdminApi.Data
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 14, 52, 18, 378, DateTimeKind.Local).AddTicks(7441));
-========
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 12, 52, 13, 912, DateTimeKind.Local).AddTicks(8633));
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                        .HasDefaultValue(new DateTime(2024, 2, 24, 15, 0, 58, 633, DateTimeKind.Local).AddTicks(1038));
 
                     b.Property<int>("FilterId")
                         .HasColumnType("int");
@@ -270,11 +246,7 @@ namespace AdminApi.Data
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 14, 52, 18, 379, DateTimeKind.Local).AddTicks(1400));
-========
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 12, 52, 13, 913, DateTimeKind.Local).AddTicks(1479));
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                        .HasDefaultValue(new DateTime(2024, 2, 24, 15, 0, 58, 633, DateTimeKind.Local).AddTicks(8505));
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -337,11 +309,7 @@ namespace AdminApi.Data
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 14, 52, 18, 379, DateTimeKind.Local).AddTicks(3873));
-========
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 12, 52, 13, 913, DateTimeKind.Local).AddTicks(3136));
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                        .HasDefaultValue(new DateTime(2024, 2, 24, 15, 0, 58, 634, DateTimeKind.Local).AddTicks(3090));
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
@@ -380,11 +348,7 @@ namespace AdminApi.Data
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 14, 52, 18, 379, DateTimeKind.Local).AddTicks(5222));
-========
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 12, 52, 13, 913, DateTimeKind.Local).AddTicks(4004));
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                        .HasDefaultValue(new DateTime(2024, 2, 24, 15, 0, 58, 634, DateTimeKind.Local).AddTicks(5577));
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit")
@@ -522,20 +486,12 @@ namespace AdminApi.Data
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 14, 52, 18, 379, DateTimeKind.Local).AddTicks(228));
-========
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 12, 52, 13, 913, DateTimeKind.Local).AddTicks(675));
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                        .HasDefaultValue(new DateTime(2024, 2, 24, 15, 0, 58, 633, DateTimeKind.Local).AddTicks(6306));
 
                     b.Property<DateTime>("DateAdded")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 14, 52, 18, 378, DateTimeKind.Local).AddTicks(9986));
-========
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 12, 52, 13, 913, DateTimeKind.Local).AddTicks(502));
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                        .HasDefaultValue(new DateTime(2024, 2, 24, 15, 0, 58, 633, DateTimeKind.Local).AddTicks(5873));
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit")
@@ -596,11 +552,7 @@ namespace AdminApi.Data
                     b.Property<DateTime>("CreatedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 14, 52, 18, 379, DateTimeKind.Local).AddTicks(2685));
-========
-                        .HasDefaultValue(new DateTime(2024, 2, 24, 12, 52, 13, 913, DateTimeKind.Local).AddTicks(2279));
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                        .HasDefaultValue(new DateTime(2024, 2, 24, 15, 0, 58, 634, DateTimeKind.Local).AddTicks(908));
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -691,11 +643,7 @@ namespace AdminApi.Data
                         {
                             MenuID = 1,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 342, DateTimeKind.Local).AddTicks(2796),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(1147),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 567, DateTimeKind.Local).AddTicks(5203),
                             IconClass = "fas fa-home",
                             IsActive = true,
                             IsMigrationData = true,
@@ -710,11 +658,7 @@ namespace AdminApi.Data
                         {
                             MenuID = 2,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 342, DateTimeKind.Local).AddTicks(3486),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(1560),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 567, DateTimeKind.Local).AddTicks(6922),
                             IconClass = "fas fa-ellipsis-v",
                             IsActive = true,
                             IsMigrationData = true,
@@ -729,11 +673,7 @@ namespace AdminApi.Data
                         {
                             MenuID = 3,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 342, DateTimeKind.Local).AddTicks(3492),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(1564),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 567, DateTimeKind.Local).AddTicks(6935),
                             IconClass = "",
                             IsActive = true,
                             IsMigrationData = true,
@@ -748,11 +688,7 @@ namespace AdminApi.Data
                         {
                             MenuID = 4,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 342, DateTimeKind.Local).AddTicks(3495),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(1566),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 567, DateTimeKind.Local).AddTicks(6939),
                             IconClass = "",
                             IsActive = true,
                             IsMigrationData = true,
@@ -767,11 +703,7 @@ namespace AdminApi.Data
                         {
                             MenuID = 5,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 342, DateTimeKind.Local).AddTicks(3497),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(1568),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 567, DateTimeKind.Local).AddTicks(6943),
                             IconClass = "fas fa-user",
                             IsActive = true,
                             IsMigrationData = true,
@@ -786,11 +718,7 @@ namespace AdminApi.Data
                         {
                             MenuID = 6,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 342, DateTimeKind.Local).AddTicks(3499),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(1569),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 567, DateTimeKind.Local).AddTicks(6947),
                             IconClass = "",
                             IsActive = true,
                             IsMigrationData = true,
@@ -805,11 +733,7 @@ namespace AdminApi.Data
                         {
                             MenuID = 7,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 342, DateTimeKind.Local).AddTicks(3501),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(1572),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 567, DateTimeKind.Local).AddTicks(6950),
                             IconClass = "",
                             IsActive = true,
                             IsMigrationData = true,
@@ -824,11 +748,7 @@ namespace AdminApi.Data
                         {
                             MenuID = 8,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 342, DateTimeKind.Local).AddTicks(3503),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(1573),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 567, DateTimeKind.Local).AddTicks(6954),
                             IconClass = "",
                             IsActive = true,
                             IsMigrationData = true,
@@ -843,11 +763,7 @@ namespace AdminApi.Data
                         {
                             MenuID = 9,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 342, DateTimeKind.Local).AddTicks(3505),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(1575),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 567, DateTimeKind.Local).AddTicks(6958),
                             IconClass = "fas fa-wrench",
                             IsActive = true,
                             IsMigrationData = true,
@@ -862,11 +778,7 @@ namespace AdminApi.Data
                         {
                             MenuID = 10,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 342, DateTimeKind.Local).AddTicks(3508),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(1577),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 567, DateTimeKind.Local).AddTicks(6961),
                             IconClass = "",
                             IsActive = true,
                             IsMigrationData = true,
@@ -919,11 +831,7 @@ namespace AdminApi.Data
                         {
                             MenuGroupID = 1,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 336, DateTimeKind.Local).AddTicks(6139),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 879, DateTimeKind.Local).AddTicks(7482),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 554, DateTimeKind.Local).AddTicks(3218),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupName = "Super Admin Group"
@@ -932,11 +840,7 @@ namespace AdminApi.Data
                         {
                             MenuGroupID = 2,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 337, DateTimeKind.Local).AddTicks(7215),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 880, DateTimeKind.Local).AddTicks(5435),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 556, DateTimeKind.Local).AddTicks(9217),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupName = "User Group"
@@ -945,11 +849,7 @@ namespace AdminApi.Data
                         {
                             MenuGroupID = 3,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 337, DateTimeKind.Local).AddTicks(7241),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 880, DateTimeKind.Local).AddTicks(5455),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 556, DateTimeKind.Local).AddTicks(9255),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupName = "Franchise Group"
@@ -958,11 +858,7 @@ namespace AdminApi.Data
                         {
                             MenuGroupID = 4,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 337, DateTimeKind.Local).AddTicks(7244),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 880, DateTimeKind.Local).AddTicks(5457),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 556, DateTimeKind.Local).AddTicks(9260),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupName = "Partner Group"
@@ -1004,11 +900,7 @@ namespace AdminApi.Data
                         {
                             MenuGroupWiseMenuMappingId = 1,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 343, DateTimeKind.Local).AddTicks(5440),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(8941),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 569, DateTimeKind.Local).AddTicks(5227),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupId = 1,
@@ -1018,11 +910,7 @@ namespace AdminApi.Data
                         {
                             MenuGroupWiseMenuMappingId = 2,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 343, DateTimeKind.Local).AddTicks(6143),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(9346),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 569, DateTimeKind.Local).AddTicks(6709),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupId = 1,
@@ -1032,11 +920,7 @@ namespace AdminApi.Data
                         {
                             MenuGroupWiseMenuMappingId = 3,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 343, DateTimeKind.Local).AddTicks(6148),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(9349),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 569, DateTimeKind.Local).AddTicks(6719),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupId = 1,
@@ -1046,11 +930,7 @@ namespace AdminApi.Data
                         {
                             MenuGroupWiseMenuMappingId = 4,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 343, DateTimeKind.Local).AddTicks(6150),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(9350),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 569, DateTimeKind.Local).AddTicks(6723),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupId = 1,
@@ -1060,11 +940,7 @@ namespace AdminApi.Data
                         {
                             MenuGroupWiseMenuMappingId = 5,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 343, DateTimeKind.Local).AddTicks(6152),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(9352),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 569, DateTimeKind.Local).AddTicks(6726),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupId = 1,
@@ -1074,11 +950,7 @@ namespace AdminApi.Data
                         {
                             MenuGroupWiseMenuMappingId = 6,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 343, DateTimeKind.Local).AddTicks(6154),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(9353),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 569, DateTimeKind.Local).AddTicks(6729),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupId = 1,
@@ -1088,11 +960,7 @@ namespace AdminApi.Data
                         {
                             MenuGroupWiseMenuMappingId = 7,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 343, DateTimeKind.Local).AddTicks(6155),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(9355),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 569, DateTimeKind.Local).AddTicks(6732),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupId = 1,
@@ -1102,11 +970,7 @@ namespace AdminApi.Data
                         {
                             MenuGroupWiseMenuMappingId = 8,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 343, DateTimeKind.Local).AddTicks(6157),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(9356),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 569, DateTimeKind.Local).AddTicks(6735),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupId = 2,
@@ -1116,11 +980,7 @@ namespace AdminApi.Data
                         {
                             MenuGroupWiseMenuMappingId = 9,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 343, DateTimeKind.Local).AddTicks(6159),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(9358),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 569, DateTimeKind.Local).AddTicks(6737),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupId = 2,
@@ -1130,11 +990,7 @@ namespace AdminApi.Data
                         {
                             MenuGroupWiseMenuMappingId = 10,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 343, DateTimeKind.Local).AddTicks(6160),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 884, DateTimeKind.Local).AddTicks(9359),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 569, DateTimeKind.Local).AddTicks(6745),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupId = 2,
@@ -1243,11 +1099,7 @@ namespace AdminApi.Data
                         {
                             UserRoleId = 1,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 339, DateTimeKind.Local).AddTicks(7789),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 882, DateTimeKind.Local).AddTicks(1271),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 561, DateTimeKind.Local).AddTicks(7044),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupId = 1,
@@ -1257,11 +1109,7 @@ namespace AdminApi.Data
                         {
                             UserRoleId = 2,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 339, DateTimeKind.Local).AddTicks(8472),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 882, DateTimeKind.Local).AddTicks(1658),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 561, DateTimeKind.Local).AddTicks(8759),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupId = 2,
@@ -1271,11 +1119,7 @@ namespace AdminApi.Data
                         {
                             UserRoleId = 3,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 339, DateTimeKind.Local).AddTicks(8477),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 882, DateTimeKind.Local).AddTicks(1660),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 561, DateTimeKind.Local).AddTicks(8777),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupId = 3,
@@ -1285,11 +1129,7 @@ namespace AdminApi.Data
                         {
                             UserRoleId = 4,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 339, DateTimeKind.Local).AddTicks(8480),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 882, DateTimeKind.Local).AddTicks(1662),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 561, DateTimeKind.Local).AddTicks(8783),
                             IsActive = true,
                             IsMigrationData = true,
                             MenuGroupId = 4,
@@ -1383,11 +1223,7 @@ namespace AdminApi.Data
                         {
                             UserId = 1,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 340, DateTimeKind.Local).AddTicks(7448),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 882, DateTimeKind.Local).AddTicks(8062),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 564, DateTimeKind.Local).AddTicks(7872),
                             FullName = "Admin",
                             IsActive = true,
                             IsMigrationData = true,
@@ -1401,11 +1237,7 @@ namespace AdminApi.Data
                         {
                             UserId = 2,
                             AddedBy = 1,
-<<<<<<<< HEAD:AdminApi/Data/20240224092218_resturanta.Designer.cs
-                            DateAdded = new DateTime(2024, 2, 24, 14, 52, 18, 340, DateTimeKind.Local).AddTicks(8332),
-========
-                            DateAdded = new DateTime(2024, 2, 24, 12, 52, 13, 882, DateTimeKind.Local).AddTicks(8572),
->>>>>>>> 0847afcb972e1de995575fc4b4a6476c92c9c0a8:AdminApi/Data/20240224072214_citii.Designer.cs
+                            DateAdded = new DateTime(2024, 2, 24, 15, 0, 58, 564, DateTimeKind.Local).AddTicks(9741),
                             FullName = "Helen Smith",
                             IsActive = true,
                             IsMigrationData = true,

@@ -42,7 +42,7 @@ namespace AdminApi.Models
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Vendor> Vendors { get; set; }
         public virtual DbSet<ItemImage> ItemImages { get; set; }
-      
+        public virtual DbSet<CustomerLogin> CustomerLogins { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Seed();

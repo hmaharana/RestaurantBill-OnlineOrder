@@ -109,10 +109,10 @@
                                 <input type="text" class="form-control" id="hNSCode" placeholder="Enter HNS Code" required>
                             </div>
                         </div>
-                        <div class="form-group">
+                       @* <div class="form-group">
                             <label class="form-label">Image &nbsp;<span style="color: red;"><b>*</b></span></label>
                             <input type="file" class="form-control" id="Image" multiple>
-                        </div>
+                        </div>*@
                         @* <div class="col-md-3">
                         <div class="form-group">
                         <label class="form-label">Tax Type &nbsp;<span style="color: red;"><b>*</b></span></label>
@@ -188,11 +188,11 @@
 
             } else {
 
-                imgPath = '';
-                var totalFiles = document.getElementById('Image').files.length;
-                if (totalFiles > 0) {
-                    uploadFile();
-                }
+                //imgPath = '';
+                //var totalFiles = document.getElementById('Image').files.length;
+                //if (totalFiles > 0) {
+                //    uploadFile();
+                //}
                 var model = {
                     vendorId: parseInt($("#Selectvendor").val()),
                     categoryId: parseInt($("#Selectcategory").val()),
@@ -207,8 +207,9 @@
                     //status: parseFloat($("#status").val()),
                     hnsCode: $.trim($("#hNSCode").val()),
                     description: $.trim($("#description").val()),
-                    image: imgPath,
+                    //image: imgPath,
                     createdBy: @Context.Session.GetInt32("UserId"),
+
                 };
 
                 console.log(model);
@@ -251,32 +252,32 @@
                 });
 
 
-                function uploadFile() {
-                    var totalFiles = document.getElementById('Image').files.length;
-                    if (totalFiles > 0) {
-                        var formData = new FormData();
-                        var files = document.getElementById('Image').files;
-                        formData.append("file", files[0]);
-                        $.ajax(
-                            {
-                                url: "/Upload/ImgUpload",
-                                data: formData,
-                                processData: false,
-                                contentType: false,
-                                async: false,
-                                type: "POST",
-                                success: function (data) {
-                                    imgPath = data;
+                //function uploadFile() {
+                //    var totalFiles = document.getElementById('Image').files.length;
+                //    if (totalFiles > 0) {
+                //        var formData = new FormData();
+                //        var files = document.getElementById('Image').files;
+                //        formData.append("file", files[0]);
+                //        $.ajax(
+                //            {
+                //                url: "/Upload/ImgUpload",
+                //                data: formData,
+                //                processData: false,
+                //                contentType: false,
+                //                async: false,
+                //                type: "POST",
+                //                success: function (data) {
+                //                    imgPath = data;
 
-                                },
-                                error: function (data) {
-                                    window.location.replace('/Message/SessionExpire');
-                                }
-                            }
-                        );
-                    }
+                //                },
+                //                error: function (data) {
+                //                    window.location.replace('/Message/SessionExpire');
+                //                }
+                //            }
+                //        );
+                //    }
 
-                }
+                //}
 
             }
         });
