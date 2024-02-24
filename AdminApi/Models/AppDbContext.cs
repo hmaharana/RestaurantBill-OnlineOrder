@@ -136,6 +136,17 @@ namespace AdminApi.Models
             .HasDefaultValue(false)
             .ValueGeneratedNever();
 
+
+            //city
+            modelBuilder.Entity<City>()
+         .Property(s => s.CreatedOn)
+         .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<City>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
+
         }
 
 
