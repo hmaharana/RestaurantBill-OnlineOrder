@@ -190,8 +190,8 @@
 
                 imgPath = '';
                 var totalFiles = document.getElementById('Image').files.length;
-                if (totalFiles > 0) {
-                    uploadFile();
+                for (var i = 0; i < totalFiles.length; i++) {
+                    formData.append("files[]", totalFiles[i]); // Append each file to the FormData object
                 }
                 var model = {
                     vendorId: parseInt($("#Selectvendor").val()),
@@ -208,7 +208,8 @@
                     hnsCode: $.trim($("#hNSCode").val()),
                     description: $.trim($("#description").val()),
                     image: imgPath,
-                    createdBy: @Context.Session.GetInt32("UserId"),
+                    createdBy: @Context.Session.GetInt32("UserId")?.ToString(),
+
                 };
 
                 console.log(model);
