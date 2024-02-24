@@ -46,6 +46,7 @@ namespace AdminApi.Controllers
                     return Ok(obj);
 
                 }
+
                 else if (objCheck != null)
                 {
                     return Accepted(new Confirmation { Status = "duplicate", ResponseMsg = "Duplicate City!" });
