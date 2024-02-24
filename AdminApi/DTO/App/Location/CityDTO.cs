@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AdminApi.Models.App.Location_Master
+namespace AdminApi.DTO.App.Location
 {
-    public class City
+    public class CityDTO
+    {
+        public string CityName { get; set; }
+        public int VendorId { get; set; }
+        public int CreatedBy { get; set; }
+    }
+    public class UpdateCityDTO
     {
         public int CityId { get; set; }
         public string CityName { get; set; }
         public int VendorId { get; set; }
-        public int CreatedBy { get; set; }
-        public DateTime CreatedOn { get; set; }
         public int? UpdatedBy { get; set; }
-        public DateTime? UpdatedOn { get; set; }
-        public bool IsDeleted { get; set; }
     }
 }
