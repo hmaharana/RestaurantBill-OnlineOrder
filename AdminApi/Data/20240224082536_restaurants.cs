@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AdminApi.Data
 {
-    public partial class resturantdb : Migration
+    public partial class restaurants : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,7 +21,7 @@ namespace AdminApi.Data
                     IsActive = table.Column<bool>(nullable: false),
                     Order = table.Column<int>(nullable: false),
                     CreatedBy = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 20, 11, 56, 5, 491, DateTimeKind.Local).AddTicks(3971)),
+                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 24, 13, 55, 35, 642, DateTimeKind.Local).AddTicks(9268)),
                     UpdatedBy = table.Column<int>(nullable: true),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false, defaultValue: false)
@@ -44,12 +44,12 @@ namespace AdminApi.Data
                     CityId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CityName = table.Column<string>(nullable: true),
-                    CountryId = table.Column<int>(nullable: false),
-                    StateId = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
+                    VendorId = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<int>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 24, 13, 55, 35, 649, DateTimeKind.Local).AddTicks(6006)),
                     UpdatedBy = table.Column<int>(nullable: true),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false)
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -76,28 +76,24 @@ namespace AdminApi.Data
                 });
 
             migrationBuilder.CreateTable(
-                name: "Employees",
+                name: "CustomerLogins",
                 columns: table => new
                 {
-                    EmployeeId = table.Column<int>(nullable: false)
+                    CustomerLoginId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    VendorId = table.Column<int>(nullable: true),
-                    EmployeeName = table.Column<string>(nullable: true),
+                    CustomerName = table.Column<string>(nullable: true),
+                    CustomerMobNo = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
-                    MobNo = table.Column<string>(nullable: true),
-                    DateOfBirth = table.Column<DateTime>(nullable: false),
-                    DateOfJoining = table.Column<DateTime>(nullable: false),
-                    Address = table.Column<string>(nullable: true),
-                    Photo = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true),
                     CreatedBy = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 20, 11, 56, 5, 493, DateTimeKind.Local).AddTicks(7145)),
+                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 24, 13, 55, 35, 649, DateTimeKind.Local).AddTicks(8769)),
                     UpdatedBy = table.Column<int>(nullable: true),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employees", x => x.EmployeeId);
+                    table.PrimaryKey("PK_CustomerLogins", x => x.CustomerLoginId);
                 });
 
             migrationBuilder.CreateTable(
@@ -109,7 +105,7 @@ namespace AdminApi.Data
                     FilterName = table.Column<string>(nullable: true),
                     Alias = table.Column<string>(nullable: true),
                     CreatedBy = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 20, 11, 56, 5, 493, DateTimeKind.Local).AddTicks(2297)),
+                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 24, 13, 55, 35, 647, DateTimeKind.Local).AddTicks(6592)),
                     UpdatedBy = table.Column<int>(nullable: true),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false, defaultValue: false)
@@ -130,7 +126,7 @@ namespace AdminApi.Data
                     CategoryId = table.Column<int>(nullable: false),
                     Order = table.Column<int>(nullable: false),
                     CreatedBy = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 20, 11, 56, 5, 493, DateTimeKind.Local).AddTicks(4046)),
+                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 24, 13, 55, 35, 648, DateTimeKind.Local).AddTicks(3103)),
                     UpdatedBy = table.Column<int>(nullable: true),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false, defaultValue: false)
@@ -149,7 +145,7 @@ namespace AdminApi.Data
                     FilterId = table.Column<int>(nullable: false),
                     FilterValueName = table.Column<string>(nullable: true),
                     CreatedBy = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 20, 11, 56, 5, 493, DateTimeKind.Local).AddTicks(3292)),
+                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 24, 13, 55, 35, 648, DateTimeKind.Local).AddTicks(434)),
                     UpdatedBy = table.Column<int>(nullable: true),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false, defaultValue: false)
@@ -157,6 +153,25 @@ namespace AdminApi.Data
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FilterValues", x => x.FilterValuesId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ItemImage",
+                columns: table => new
+                {
+                    ItemImageId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ItemId = table.Column<int>(nullable: false),
+                    Image = table.Column<string>(nullable: true),
+                    CreatedBy = table.Column<int>(nullable: false),
+                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 24, 13, 55, 35, 649, DateTimeKind.Local).AddTicks(3446)),
+                    UpdatedBy = table.Column<int>(nullable: true),
+                    UpdatedOn = table.Column<DateTime>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ItemImage", x => x.ItemImageId);
                 });
 
             migrationBuilder.CreateTable(
@@ -178,9 +193,8 @@ namespace AdminApi.Data
                     TaxType = table.Column<bool>(nullable: true),
                     HNSCode = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    ItemImage = table.Column<string>(nullable: true),
                     CreatedBy = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 20, 11, 56, 5, 493, DateTimeKind.Local).AddTicks(5685)),
+                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 24, 13, 55, 35, 648, DateTimeKind.Local).AddTicks(8672)),
                     UpdatedBy = table.Column<int>(nullable: true),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false, defaultValue: false)
@@ -188,25 +202,6 @@ namespace AdminApi.Data
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Items", x => x.ItemId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ItemsImage",
-                columns: table => new
-                {
-                    ItemImageId = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ItemId = table.Column<int>(nullable: false),
-                    Image = table.Column<string>(nullable: true),
-                    CreatedBy = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false),
-                    UpdatedBy = table.Column<int>(nullable: true),
-                    UpdatedOn = table.Column<DateTime>(nullable: true),
-                    IsDeleted = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ItemsImage", x => x.ItemImageId);
                 });
 
             migrationBuilder.CreateTable(
@@ -273,14 +268,14 @@ namespace AdminApi.Data
                     UserType = table.Column<int>(nullable: false),
                     MobileNumber = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: false),
-                    DateAdded = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 20, 11, 56, 5, 493, DateTimeKind.Local).AddTicks(4756)),
+                    DateAdded = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 24, 13, 55, 35, 648, DateTimeKind.Local).AddTicks(5699)),
                     LastPasswordChangeDate = table.Column<DateTime>(nullable: true),
                     PasswordChangedBy = table.Column<int>(nullable: true),
                     IsPasswordChange = table.Column<bool>(nullable: false),
                     LastUpdatedDate = table.Column<DateTime>(nullable: true),
                     LastUpdatedBy = table.Column<int>(nullable: true),
                     CreatedBy = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 20, 11, 56, 5, 493, DateTimeKind.Local).AddTicks(4901)),
+                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 24, 13, 55, 35, 648, DateTimeKind.Local).AddTicks(6208)),
                     UpdatedBy = table.Column<int>(nullable: true),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false, defaultValue: false)
@@ -438,7 +433,7 @@ namespace AdminApi.Data
                     Image = table.Column<string>(nullable: true),
                     Certificate = table.Column<string>(nullable: true),
                     CreatedBy = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 20, 11, 56, 5, 493, DateTimeKind.Local).AddTicks(6406)),
+                    CreatedOn = table.Column<DateTime>(nullable: false, defaultValue: new DateTime(2024, 2, 24, 13, 55, 35, 649, DateTimeKind.Local).AddTicks(1004)),
                     UpdatedBy = table.Column<int>(nullable: true),
                     UpdatedOn = table.Column<DateTime>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false, defaultValue: false)
@@ -453,16 +448,16 @@ namespace AdminApi.Data
                 columns: new[] { "MenuID", "AddedBy", "DateAdded", "IconClass", "IsActive", "IsMigrationData", "IsSubMenu", "IsVisible", "LastUpdatedBy", "LastUpdatedDate", "MenuTitle", "ParentID", "SortOrder", "URL" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 2, 20, 11, 56, 5, 469, DateTimeKind.Local).AddTicks(4283), "fas fa-home", true, true, 0, true, null, null, "Dashboard", 0, 1, "/DashBoard/Index" },
-                    { 9, 1, new DateTime(2024, 2, 20, 11, 56, 5, 469, DateTimeKind.Local).AddTicks(4653), "fas fa-wrench", true, true, 1, true, null, null, "Settings", 0, 4, "" },
-                    { 8, 1, new DateTime(2024, 2, 20, 11, 56, 5, 469, DateTimeKind.Local).AddTicks(4652), "", true, true, 0, true, null, null, "Profile", 5, 0, "/User/UserProfile" },
-                    { 7, 1, new DateTime(2024, 2, 20, 11, 56, 5, 469, DateTimeKind.Local).AddTicks(4650), "", true, true, 0, true, null, null, "Role List", 5, 0, "/User/RoleList" },
-                    { 6, 1, new DateTime(2024, 2, 20, 11, 56, 5, 469, DateTimeKind.Local).AddTicks(4648), "", true, true, 0, true, null, null, "User List", 5, 0, "/User/UserList" },
-                    { 10, 1, new DateTime(2024, 2, 20, 11, 56, 5, 469, DateTimeKind.Local).AddTicks(4654), "", true, true, 0, true, null, null, "Change Password", 9, 0, "/User/ChangePassword" },
-                    { 4, 1, new DateTime(2024, 2, 20, 11, 56, 5, 469, DateTimeKind.Local).AddTicks(4645), "", true, true, 0, true, null, null, "Menu Group List", 2, 0, "/Menu/MenuGroupList" },
-                    { 3, 1, new DateTime(2024, 2, 20, 11, 56, 5, 469, DateTimeKind.Local).AddTicks(4644), "", true, true, 0, true, null, null, "Menu List", 2, 0, "/Menu/MenuList" },
-                    { 2, 1, new DateTime(2024, 2, 20, 11, 56, 5, 469, DateTimeKind.Local).AddTicks(4640), "fas fa-ellipsis-v", true, true, 1, true, null, null, "Menu", 0, 2, "" },
-                    { 5, 1, new DateTime(2024, 2, 20, 11, 56, 5, 469, DateTimeKind.Local).AddTicks(4647), "fas fa-user", true, true, 1, true, null, null, "User", 0, 3, "" }
+                    { 1, 1, new DateTime(2024, 2, 24, 13, 55, 35, 594, DateTimeKind.Local).AddTicks(8845), "fas fa-home", true, true, 0, true, null, null, "Dashboard", 0, 1, "/DashBoard/Index" },
+                    { 9, 1, new DateTime(2024, 2, 24, 13, 55, 35, 594, DateTimeKind.Local).AddTicks(9619), "fas fa-wrench", true, true, 1, true, null, null, "Settings", 0, 4, "" },
+                    { 8, 1, new DateTime(2024, 2, 24, 13, 55, 35, 594, DateTimeKind.Local).AddTicks(9617), "", true, true, 0, true, null, null, "Profile", 5, 0, "/User/UserProfile" },
+                    { 7, 1, new DateTime(2024, 2, 24, 13, 55, 35, 594, DateTimeKind.Local).AddTicks(9615), "", true, true, 0, true, null, null, "Role List", 5, 0, "/User/RoleList" },
+                    { 6, 1, new DateTime(2024, 2, 24, 13, 55, 35, 594, DateTimeKind.Local).AddTicks(9613), "", true, true, 0, true, null, null, "User List", 5, 0, "/User/UserList" },
+                    { 10, 1, new DateTime(2024, 2, 24, 13, 55, 35, 594, DateTimeKind.Local).AddTicks(9621), "", true, true, 0, true, null, null, "Change Password", 9, 0, "/User/ChangePassword" },
+                    { 4, 1, new DateTime(2024, 2, 24, 13, 55, 35, 594, DateTimeKind.Local).AddTicks(9608), "", true, true, 0, true, null, null, "Menu Group List", 2, 0, "/Menu/MenuGroupList" },
+                    { 3, 1, new DateTime(2024, 2, 24, 13, 55, 35, 594, DateTimeKind.Local).AddTicks(9606), "", true, true, 0, true, null, null, "Menu List", 2, 0, "/Menu/MenuList" },
+                    { 2, 1, new DateTime(2024, 2, 24, 13, 55, 35, 594, DateTimeKind.Local).AddTicks(9599), "fas fa-ellipsis-v", true, true, 1, true, null, null, "Menu", 0, 2, "" },
+                    { 5, 1, new DateTime(2024, 2, 24, 13, 55, 35, 594, DateTimeKind.Local).AddTicks(9610), "fas fa-user", true, true, 1, true, null, null, "User", 0, 3, "" }
                 });
 
             migrationBuilder.InsertData(
@@ -470,10 +465,10 @@ namespace AdminApi.Data
                 columns: new[] { "MenuGroupID", "AddedBy", "DateAdded", "IsActive", "IsMigrationData", "LastUpdatedBy", "LastUpdatedDate", "MenuGroupName" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 2, 20, 11, 56, 5, 465, DateTimeKind.Local).AddTicks(9836), true, true, null, null, "Super Admin Group" },
-                    { 2, 1, new DateTime(2024, 2, 20, 11, 56, 5, 466, DateTimeKind.Local).AddTicks(6093), true, true, null, null, "User Group" },
-                    { 3, 1, new DateTime(2024, 2, 20, 11, 56, 5, 466, DateTimeKind.Local).AddTicks(6108), true, true, null, null, "Franchise Group" },
-                    { 4, 1, new DateTime(2024, 2, 20, 11, 56, 5, 466, DateTimeKind.Local).AddTicks(6109), true, true, null, null, "Partner Group" }
+                    { 1, 1, new DateTime(2024, 2, 24, 13, 55, 35, 587, DateTimeKind.Local).AddTicks(6519), true, true, null, null, "Super Admin Group" },
+                    { 2, 1, new DateTime(2024, 2, 24, 13, 55, 35, 589, DateTimeKind.Local).AddTicks(1301), true, true, null, null, "User Group" },
+                    { 3, 1, new DateTime(2024, 2, 24, 13, 55, 35, 589, DateTimeKind.Local).AddTicks(1349), true, true, null, null, "Franchise Group" },
+                    { 4, 1, new DateTime(2024, 2, 24, 13, 55, 35, 589, DateTimeKind.Local).AddTicks(1354), true, true, null, null, "Partner Group" }
                 });
 
             migrationBuilder.InsertData(
@@ -481,16 +476,16 @@ namespace AdminApi.Data
                 columns: new[] { "MenuGroupWiseMenuMappingId", "AddedBy", "DateAdded", "IsActive", "IsMigrationData", "MenuGroupId", "MenuId" },
                 values: new object[,]
                 {
-                    { 7, 1, new DateTime(2024, 2, 20, 11, 56, 5, 470, DateTimeKind.Local).AddTicks(1489), true, true, 1, 10 },
-                    { 10, 1, new DateTime(2024, 2, 20, 11, 56, 5, 470, DateTimeKind.Local).AddTicks(1497), true, true, 2, 10 },
-                    { 9, 1, new DateTime(2024, 2, 20, 11, 56, 5, 470, DateTimeKind.Local).AddTicks(1492), true, true, 2, 8 },
-                    { 8, 1, new DateTime(2024, 2, 20, 11, 56, 5, 470, DateTimeKind.Local).AddTicks(1491), true, true, 2, 1 },
-                    { 6, 1, new DateTime(2024, 2, 20, 11, 56, 5, 470, DateTimeKind.Local).AddTicks(1488), true, true, 1, 8 },
-                    { 1, 1, new DateTime(2024, 2, 20, 11, 56, 5, 470, DateTimeKind.Local).AddTicks(1099), true, true, 1, 1 },
-                    { 4, 1, new DateTime(2024, 2, 20, 11, 56, 5, 470, DateTimeKind.Local).AddTicks(1486), true, true, 1, 6 },
-                    { 3, 1, new DateTime(2024, 2, 20, 11, 56, 5, 470, DateTimeKind.Local).AddTicks(1484), true, true, 1, 4 },
-                    { 2, 1, new DateTime(2024, 2, 20, 11, 56, 5, 470, DateTimeKind.Local).AddTicks(1482), true, true, 1, 3 },
-                    { 5, 1, new DateTime(2024, 2, 20, 11, 56, 5, 470, DateTimeKind.Local).AddTicks(1487), true, true, 1, 7 }
+                    { 7, 1, new DateTime(2024, 2, 24, 13, 55, 35, 596, DateTimeKind.Local).AddTicks(3808), true, true, 1, 10 },
+                    { 10, 1, new DateTime(2024, 2, 24, 13, 55, 35, 596, DateTimeKind.Local).AddTicks(3813), true, true, 2, 10 },
+                    { 9, 1, new DateTime(2024, 2, 24, 13, 55, 35, 596, DateTimeKind.Local).AddTicks(3812), true, true, 2, 8 },
+                    { 8, 1, new DateTime(2024, 2, 24, 13, 55, 35, 596, DateTimeKind.Local).AddTicks(3810), true, true, 2, 1 },
+                    { 6, 1, new DateTime(2024, 2, 24, 13, 55, 35, 596, DateTimeKind.Local).AddTicks(3806), true, true, 1, 8 },
+                    { 1, 1, new DateTime(2024, 2, 24, 13, 55, 35, 596, DateTimeKind.Local).AddTicks(3037), true, true, 1, 1 },
+                    { 4, 1, new DateTime(2024, 2, 24, 13, 55, 35, 596, DateTimeKind.Local).AddTicks(3803), true, true, 1, 6 },
+                    { 3, 1, new DateTime(2024, 2, 24, 13, 55, 35, 596, DateTimeKind.Local).AddTicks(3801), true, true, 1, 4 },
+                    { 2, 1, new DateTime(2024, 2, 24, 13, 55, 35, 596, DateTimeKind.Local).AddTicks(3795), true, true, 1, 3 },
+                    { 5, 1, new DateTime(2024, 2, 24, 13, 55, 35, 596, DateTimeKind.Local).AddTicks(3805), true, true, 1, 7 }
                 });
 
             migrationBuilder.InsertData(
@@ -498,10 +493,10 @@ namespace AdminApi.Data
                 columns: new[] { "UserRoleId", "AddedBy", "DateAdded", "IsActive", "IsMigrationData", "LastUpdatedBy", "LastUpdatedDate", "MenuGroupId", "RoleDesc", "RoleName" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 2, 20, 11, 56, 5, 467, DateTimeKind.Local).AddTicks(8901), true, true, null, null, 1, null, "Admin" },
-                    { 2, 1, new DateTime(2024, 2, 20, 11, 56, 5, 467, DateTimeKind.Local).AddTicks(9233), true, true, null, null, 2, null, "User" },
-                    { 3, 1, new DateTime(2024, 2, 20, 11, 56, 5, 467, DateTimeKind.Local).AddTicks(9235), true, true, null, null, 3, null, "Franchise" },
-                    { 4, 1, new DateTime(2024, 2, 20, 11, 56, 5, 467, DateTimeKind.Local).AddTicks(9237), true, true, null, null, 4, null, "Provider" }
+                    { 1, 1, new DateTime(2024, 2, 24, 13, 55, 35, 591, DateTimeKind.Local).AddTicks(6941), true, true, null, null, 1, null, "Admin" },
+                    { 2, 1, new DateTime(2024, 2, 24, 13, 55, 35, 591, DateTimeKind.Local).AddTicks(7834), true, true, null, null, 2, null, "User" },
+                    { 3, 1, new DateTime(2024, 2, 24, 13, 55, 35, 591, DateTimeKind.Local).AddTicks(7841), true, true, null, null, 3, null, "Franchise" },
+                    { 4, 1, new DateTime(2024, 2, 24, 13, 55, 35, 591, DateTimeKind.Local).AddTicks(7843), true, true, null, null, 4, null, "Provider" }
                 });
 
             migrationBuilder.InsertData(
@@ -509,8 +504,8 @@ namespace AdminApi.Data
                 columns: new[] { "UserId", "AddedBy", "DateAdded", "DateOfBirth", "Email", "FullName", "ImagePath", "IsActive", "IsMigrationData", "IsPasswordChange", "LastPasswordChangeDate", "LastUpdatedBy", "LastUpdatedDate", "Mobile", "Password", "PasswordChangedBy", "UserDesignation", "UserName", "UserReferralId", "UserRoleId", "VendorId" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2024, 2, 20, 11, 56, 5, 468, DateTimeKind.Local).AddTicks(5110), null, null, "Admin", null, true, true, false, null, null, null, null, "admin@2024", null, null, "Developer", null, 1, 0 },
-                    { 2, 1, new DateTime(2024, 2, 20, 11, 56, 5, 468, DateTimeKind.Local).AddTicks(5607), null, null, "Helen Smith", null, true, true, false, null, null, null, null, "user@2020", null, null, "user@2020", null, 2, 0 }
+                    { 1, 1, new DateTime(2024, 2, 24, 13, 55, 35, 592, DateTimeKind.Local).AddTicks(9713), null, null, "Admin", null, true, true, false, null, null, null, null, "admin@2024", null, null, "Developer", null, 1, 0 },
+                    { 2, 1, new DateTime(2024, 2, 24, 13, 55, 35, 593, DateTimeKind.Local).AddTicks(674), null, null, "Helen Smith", null, true, true, false, null, null, null, null, "user@2020", null, null, "user@2020", null, 2, 0 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -531,7 +526,7 @@ namespace AdminApi.Data
                 name: "Countries");
 
             migrationBuilder.DropTable(
-                name: "Employees");
+                name: "CustomerLogins");
 
             migrationBuilder.DropTable(
                 name: "Filters");
@@ -543,10 +538,10 @@ namespace AdminApi.Data
                 name: "FilterValues");
 
             migrationBuilder.DropTable(
-                name: "Items");
+                name: "ItemImage");
 
             migrationBuilder.DropTable(
-                name: "ItemsImage");
+                name: "Items");
 
             migrationBuilder.DropTable(
                 name: "Locations");

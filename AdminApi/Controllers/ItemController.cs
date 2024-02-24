@@ -79,7 +79,7 @@ namespace AdminApi.Controllers
                     return Accepted(new Confirmation { Status = "Duplicate", ResponseMsg = "Duplicate Category.." });
                 }
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = "Something unexpected!" });
-            } 
+            }
             catch (Exception ex)
             {
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });

@@ -149,6 +149,7 @@ namespace AdminApi.Models
             .HasDefaultValue(false)
             .ValueGeneratedNever();
 
+
         }
 
 
