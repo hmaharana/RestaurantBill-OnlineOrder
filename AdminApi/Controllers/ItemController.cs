@@ -22,15 +22,16 @@ namespace AdminApi.Controllers
         private readonly IConfiguration _config;
         private readonly AppDbContext _context;
         private readonly ISqlRepository<Item> _itemRepo;
-
+        private readonly ISqlRepository<ItemImage> _itemimageRepo;
         public ItemController(IConfiguration config,
                                 AppDbContext context,
                                 ISqlRepository<Item> itemRepo,
-                                IWebHostEnvironment enviorment, IConfiguration configuration)
+                                IWebHostEnvironment enviorment, IConfiguration configuration, ISqlRepository<ItemImage> itemimageRepo)
         {
             _config = config;
             _context = context;
             _itemRepo = itemRepo;
+            _itemimageRepo = itemimageRepo;
 
         }
         
@@ -59,21 +60,18 @@ namespace AdminApi.Controllers
                     item.Description = itemDTO.Description;
                     item.CreatedBy = itemDTO.CreatedBy;
                     var obj = _itemRepo.Insert(item);
-                    if (itemDTO.itemsDTOs != null)
+                    for (int i = 0; i < itemDTO.itemsDTOs.Count; i++)
                     {
-                        foreach (var items in itemDTO.itemsDTOs)
-                        {
-                            ItemImage itemImage = new ItemImage();
-                            itemImage.ItemId = obj.ItemId;
-                            itemImage.Image = items.Image;
-                            itemImage.CreatedBy = items.CreatedBy;
+                        ItemImage itemImage = new ItemImage();
+                        itemImage.ItemId = obj.ItemId;
+                        itemImage.Image = itemDTO.itemsDTOs[i].Image;
+                        itemImage.CreatedBy = itemDTO.CreatedBy;
 
-                            _context.ItemImages.Add(itemImage);
-                        }
-
-                        _context.SaveChanges();
+                        var Itemobj = _itemimageRepo.Insert(itemImage);
                     }
-                    return Ok(obj);
+
+
+                    return Ok(itemDTO);
 
                 }
                 else if (objCheck != null)
