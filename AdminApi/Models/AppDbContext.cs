@@ -1,5 +1,6 @@
 ﻿using AdminApi.Models.App;
 using AdminApi.Models.App.Category;
+using AdminApi.Models.App.CustomerLogin;
 using AdminApi.Models.App.Item;
 using AdminApi.Models.App.Location_Master;
 using AdminApi.Models.App.Vendor;
@@ -41,6 +42,7 @@ namespace AdminApi.Models
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Vendor> Vendors { get; set; }
         public virtual DbSet<ItemImage> ItemImages { get; set; }
+        public virtual DbSet<CustomerLogin> CustomerLogins { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Seed();
