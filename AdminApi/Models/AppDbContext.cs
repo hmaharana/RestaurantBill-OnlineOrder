@@ -3,6 +3,8 @@ using AdminApi.Models.App.Category;
 using AdminApi.Models.App.CustomerLogin;
 using AdminApi.Models.App.Item;
 using AdminApi.Models.App.Location_Master;
+using AdminApi.Models.App.Supplier;
+using AdminApi.Models.App.Tax;
 using AdminApi.Models.App.Vendor;
 using AdminApi.Models.Helper;
 using AdminApi.Models.Menu;
@@ -149,7 +151,25 @@ namespace AdminApi.Models
             .HasDefaultValue(false)
             .ValueGeneratedNever();
 
+            //GST
+            modelBuilder.Entity<GST>()
+        .Property(s => s.CreatedOn)
+        .HasDefaultValue(System.DateTime.Now);
 
+            modelBuilder.Entity<GST>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
+
+            //Supplier
+            modelBuilder.Entity<Supplier>()
+       .Property(s => s.CreatedOn)
+       .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<Supplier>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
         }
 
 
