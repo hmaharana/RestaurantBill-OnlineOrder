@@ -66,12 +66,11 @@ namespace AdminApi.Controllers
                         itemImage.ItemId = obj.ItemId;
                         itemImage.Image = itemDTO.itemsDTOs[i].Image;
                         itemImage.CreatedBy = itemDTO.CreatedBy;
-
                         var Itemobj = _itemimageRepo.Insert(itemImage);
                     }
 
 
-                    return Ok(itemDTO);
+                    return Ok(obj);
 
                 }
                 else if (objCheck != null)
