@@ -44,6 +44,8 @@ namespace AdminApi.Models
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Vendor> Vendors { get; set; }
         public virtual DbSet<CustomerLogin> CustomerLogins { get; set; }
+        public virtual DbSet<Supplier> Suppliers { get; set; }
+        public virtual DbSet<GST> GSTs { get; set; }
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
