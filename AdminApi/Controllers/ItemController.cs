@@ -59,24 +59,31 @@ namespace AdminApi.Controllers
                     item.HNSCode = itemDTO.HNSCode;
                     item.Description = itemDTO.Description;
                     item.CreatedBy = itemDTO.CreatedBy;
+                    item.CreatedOn =DateTime.Now;
                     var obj = _itemRepo.Insert(item);
-                    for (int i = 0; i < itemDTO.itemsDTOs.Count; i++)
+
+                    for (int i = 0; i < itemDTO.ItemImageDTOs.Count; i++)
                     {
                         ItemImage itemImage = new ItemImage();
                         itemImage.ItemId = obj.ItemId;
-                        itemImage.Image = itemDTO.itemsDTOs[i].Image;
+                        itemImage.MainImage = itemDTO.ItemImageDTOs[i].MainImage;
+                        itemImage.Image1 = itemDTO.ItemImageDTOs[i].Image1;
+                        itemImage.Image2 = itemDTO.ItemImageDTOs[i].Image2;
+                        itemImage.Image3 = itemDTO.ItemImageDTOs[i].Image3;
+                        itemImage.Image4 = itemDTO.ItemImageDTOs[i].Image4;
+                        itemImage.Image5 = itemDTO.ItemImageDTOs[i].Image5;
                         itemImage.CreatedBy = itemDTO.CreatedBy;
-
+                        itemImage.CreatedOn = DateTime.Now;
                         var Itemobj = _itemimageRepo.Insert(itemImage);
                     }
-
-
                     return Ok(itemDTO);
+                   
+
 
                 }
                 else if (objCheck != null)
                 {
-                    return Accepted(new Confirmation { Status = "Duplicate", ResponseMsg = "Duplicate Category.." });
+                    return Accepted(new Confirmation { Status = "Duplicate", ResponseMsg = "Duplicate Item.." });
                 }
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = "Something unexpected!" });
             }
@@ -94,10 +101,17 @@ namespace AdminApi.Controllers
                 var list = (from u in _context.Items
                             join a in _context.Vendors on u.VendorId equals a.VendorId
                             join b in _context.Category on u.CategoryId equals b.CategoryId
+                            join c in _context.ItemImage on u.ItemId equals c.ItemId 
                             select new
                             {
                                 u.ItemId,
                                 a.VendorName,
+                                c.MainImage,
+                                c.Image1,
+                                c.Image2,
+                                c.Image3,
+                                c.Image4,
+                                c.Image5,
                                 b.CategoryName,
                                 u.ItemName,
                                 u.CreatedOn,

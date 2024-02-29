@@ -3,6 +3,8 @@ using AdminApi.Models.App.Category;
 using AdminApi.Models.App.CustomerLogin;
 using AdminApi.Models.App.Item;
 using AdminApi.Models.App.Location_Master;
+using AdminApi.Models.App.Supplier;
+using AdminApi.Models.App.Tax;
 using AdminApi.Models.App.Vendor;
 using AdminApi.Models.Helper;
 using AdminApi.Models.Menu;
@@ -35,14 +37,16 @@ namespace AdminApi.Models
         public virtual DbSet<MarketUserLogHistory> MarketUserLogHistory { get; set; }
 
         public virtual DbSet<Item> Items { get; set; }
-        public virtual DbSet<ItemImage> ItemsImage { get; set; }
+        public virtual DbSet<ItemImage> ItemImage { get; set; }
         public virtual DbSet<Country> Countries { get; set; }
         public virtual DbSet<State> States { get; set; }
         public virtual DbSet<City> Cities { get; set; }
         public virtual DbSet<Location> Locations { get; set; }
         public virtual DbSet<Vendor> Vendors { get; set; }
-        public virtual DbSet<ItemImage> ItemImages { get; set; }
         public virtual DbSet<CustomerLogin> CustomerLogins { get; set; }
+        public virtual DbSet<Supplier> Suppliers { get; set; }
+        public virtual DbSet<GST> GSTs { get; set; }
+       
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Seed();
@@ -149,7 +153,25 @@ namespace AdminApi.Models
             .HasDefaultValue(false)
             .ValueGeneratedNever();
 
+            //GST
+            modelBuilder.Entity<GST>()
+        .Property(s => s.CreatedOn)
+        .HasDefaultValue(System.DateTime.Now);
 
+            modelBuilder.Entity<GST>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
+
+            //Supplier
+            modelBuilder.Entity<Supplier>()
+       .Property(s => s.CreatedOn)
+       .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<Supplier>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
         }
 
 

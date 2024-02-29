@@ -23,7 +23,7 @@ namespace AdminClient.Controllers
             _logger = logger;
             Configuration = configuration;
         }
-        [HttpPost]
+
         public string ImgUpload(IFormFile file)
         {
             try
@@ -43,6 +43,7 @@ namespace AdminClient.Controllers
             }
         }
 
+
         private string EnsureCorrectFilename(string filename)
         {
             if (filename.Contains("\\"))
@@ -61,6 +62,9 @@ namespace AdminClient.Controllers
             String url = await minio.PresignedGetObjectAsync("savhome", image, 60 * 60 * 24);
             return url;
         }
-
     }
+
+   
+
 }
+

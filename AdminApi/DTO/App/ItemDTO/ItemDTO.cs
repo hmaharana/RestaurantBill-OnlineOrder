@@ -1,4 +1,6 @@
 ﻿using AdminApi.Models.App.Item;
+using Microsoft.VisualBasic;
+using System;
 using System.Collections.Generic;
 
 namespace AdminApi.DTO.App.ItemDTO
@@ -20,8 +22,11 @@ namespace AdminApi.DTO.App.ItemDTO
         public string HNSCode { get; set; }
         public string Description { get; set; }
         public int CreatedBy { get; set; }
-        public List<ItemsDTO> itemsDTOs { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public List<ItemImageDTO> ItemImageDTOs { get; set; }
     }
+
+   
     public class ItemUpdateDTO
     {
         public int ItemId { get; set; }
@@ -38,14 +43,28 @@ namespace AdminApi.DTO.App.ItemDTO
         public bool? TaxType { get; set; } // In , Ex
         public string HNSCode { get; set; }
         public string Description { get; set; }
-        public int CreatedBy { get; set; }
+       
         public int UpdatedBy { get; set; }
     }
-
-    public class ItemsDTO
+    public class ItemImageDTO
     {
         public int ItemId { get; set; }
-        public string Image { get; set; }
+        public string MainImage { get; set; }
+        public string Image1 { get; set; }
+        public string Image2 { get; set; }
+        public string Image3 { get; set; }
+        public string Image4 { get; set; }
+        public string Image5 { get; set; }
+        public DateTime CreatedOn { get; set; }
         public int CreatedBy { get; set; }
+       
     }
+    public class UpdateItemImageDTO
+    {
+        public int ItemImageId { get; set; }
+        public int ItemId { get; set; }
+        public string MainImage { get; set; }
+        public int? UpdatedBy { get; set; }
+    }
+
 }

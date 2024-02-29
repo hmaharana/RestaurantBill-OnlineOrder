@@ -6,6 +6,33 @@
     ViewBag.Title = "Item";
     string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
 }
+<style>
+    #imagePreviewContainer {
+        white-space: nowrap; /* Prevent items from wrapping to the next line */
+        overflow-x: auto; /* Enable horizontal scrolling */
+        overflow-y: hidden; /* Hide vertical scrollbar */
+    }
+
+    .image-preview-item {
+        display: inline-block; /* Display items in a single row */
+        margin-right: 10px; /* Add space between images */
+        position: relative; /* Required for positioning delete icon */
+    }
+
+    .delete-image-preview {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        padding: 5px;
+        font-size: 12px;
+        line-height: 1;
+    }
+
+</style>
+
 <!-- PAGE-HEADER -->
 <div class="page-header">
     <ol class="breadcrumb">
@@ -119,6 +146,13 @@
                         <input type="checkbox" class="form-control" id="taxType" placeholder="Enter Tax Type" required>
                         </div>
                         </div>*@
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Main Image &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="file" class="form-control" id="Image" multiple>
+                                <div id="imagePreviewContainer"></div> <!-- Container to display image previews -->
+                            </div>
+                        </div>
 
                     </div>
                     <div class="row">
@@ -304,5 +338,35 @@
                 });
             }
         });
+
+
+        $("#Image").change(function () {
+            var files = $(this)[0].files;
+            $("#imagePreviewContainer").empty();
+            if (files.length > 0) {
+                for (var i = 0; i < files.length; i++) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var imagePreview = '<div class="image-preview-item">' +
+                            '<img src="' + e.target.result + '" class="img-thumbnail" style="width: 100px; height: 100px;">' +
+                            '<span class="delete-image-preview" data-index="' + i + '">&times;</span>' +
+                            '</div>';
+                        $("#imagePreviewContainer").append(imagePreview);
+                    }
+                    reader.readAsDataURL(files[i]);
+                }
+            }
+        });
+
+        // Delete image preview when delete icon is clicked
+        $(document).on("click", ".delete-image-preview", function () {
+            var index = $(this).data("index");
+            $(this).closest(".image-preview-item").remove();
+            $("#Image").val(''); // Clear the file input to remove the deleted image from the selection
+        });
+
+
+
+
     </script>
 }

@@ -6,7 +6,33 @@
     ViewBag.Title = "Item";
     string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
 }
+@*<style>
+    #imagePreviewContainer {
+        white-space: nowrap; /* Prevent items from wrapping to the next line */
+        overflow-x: auto; /* Enable horizontal scrolling */
+        overflow-y: hidden; /* Hide vertical scrollbar */
+    }
 
+    .image-preview-item {
+        display: inline-block; /* Display items in a single row */
+        margin-right: 10px; /* Add space between images */
+        position: relative; /* Required for positioning delete icon */
+    }
+
+    .delete-image-preview {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        padding: 5px;
+        font-size: 12px;
+        line-height: 1;
+    }
+
+
+</style>*@
 <!-- PAGE-HEADER -->
 <div class="page-header">
     <ol class="breadcrumb">
@@ -109,25 +135,69 @@
                                 <input type="text" class="form-control" id="hNSCode" placeholder="Enter HNS Code" required>
                             </div>
                         </div>
-                       @* <div class="form-group">
-                            <label class="form-label">Image &nbsp;<span style="color: red;"><b>*</b></span></label>
-                            <input type="file" class="form-control" id="Image" multiple>
-                        </div>*@
-                        @* <div class="col-md-3">
-                        <div class="form-group">
-                        <label class="form-label">Tax Type &nbsp;<span style="color: red;"><b>*</b></span></label>
-                        <input type="checkbox" class="form-control" id="taxType" placeholder="Enter Tax Type" required>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Main Image &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="file" class="form-control" id="Image" multiple>
+                                @*<div id="imagePreviewContainer"></div>*@ <!-- Container to display image previews -->
+                            </div>
                         </div>
-                        </div>*@
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Image1 &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="file" class="form-control" id="Image" multiple>
+                                @*<div id="imagePreviewContainer"></div>*@ <!-- Container to display image previews -->
+                            </div>
+                        </div>
+                        
                        @* <div class="col-md-3">
                             <div class="form-group">
+                                <label class="form-label">Status &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="checkbox" class="form-control" id="status">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
                                 <label class="form-label">Tax Type &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="checkbox" class="form-control" id="taxType" placeholder="Enter Tax Type" required>
+                                <input type="checkbox" class="form-control" id="taxType">
                             </div>
                         </div>*@
                         
                     </div>
                     <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Image2 &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="file" class="form-control" id="Image" multiple>
+                                @*<div id="imagePreviewContainer"></div>*@ <!-- Container to display image previews -->
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Image3 &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="file" class="form-control" id="Image" multiple>
+                                @*<div id="imagePreviewContainer"></div>*@ <!-- Container to display image previews -->
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Image4 &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="file" class="form-control" id="Image" multiple>
+                                @*<div id="imagePreviewContainer"></div>*@ <!-- Container to display image previews -->
+                            </div>
+                        </div>
+
+                       
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Image5 &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="file" class="form-control" id="Image" multiple>
+                                @*<div id="imagePreviewContainer"></div>*@ <!-- Container to display image previews -->
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="form-label">Description &nbsp;<span style="color: red;"><b>*</b></span></label>
                             <textarea class="form-control" id="description" placeholder="Enter Description" required></textarea>
@@ -146,9 +216,12 @@
 </div>
 
 @section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert@2"></script>
+
     <script>
         GetVendor()
-        async function GetVendor(Id) {
+       
+        function GetVendor(Id) {
             var opt = '';
             $.ajax({
                 type: "GET",
@@ -180,108 +253,146 @@
         }
 
 
-       
-       
         $("#btncreate").click(function (e) {
             if (!document.getElementById("formPost").checkValidity()) {
                 e.preventDefault();
-
             } else {
+                var files = document.getElementById('Image').files;
+                if (files.length > 0) {
+                    var uploadPromises = [];
+                    var imgPath = []; 
 
-                //imgPath = '';
-                //var totalFiles = document.getElementById('Image').files.length;
-                //if (totalFiles > 0) {
-                //    uploadFile();
-                //}
-                var model = {
-                    vendorId: parseInt($("#Selectvendor").val()),
-                    categoryId: parseInt($("#Selectcategory").val()),
-                    gstId: parseInt($("#gSTId").val()),
-                    itemName: $.trim($("#itemName").val()),
-                    colorCode: $.trim($("#colorCode").val()),
-                    salePrice: parseFloat($("#salePrice").val()),
-                    mrp: parseFloat($("#mRP").val()),
-                    discountAmount: parseFloat($("#discountAmount").val()),
-                    gstAmount: parseFloat($("#gSTAmount").val()),
-                    //taxType: parseFloat($("#taxType").val()),
-                    //status: parseFloat($("#status").val()),
-                    hnsCode: $.trim($("#hNSCode").val()),
-                    description: $.trim($("#description").val()),
-                    //image: imgPath,
-                    createdBy: @Context.Session.GetInt32("UserId"),
-
-                };
-
-                console.log(model);
-
-                $.ajax({
-                    type: "POST",
-                    url: "@apiUrl/api/Item/CreateItem",
-                    data: JSON.stringify(model),
-                    contentType: "application/json; charset=utf-8",
-                    headers: {
-                        "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
-                    },
-                    dataType: "json",
-                    success: function (data, statusText, xhr) {
-                        if (xhr.status === 200) {
-                            console.log(data);
-                            sweetAlert({
-                                html: true,
-                                title: "Item Add",
-                                text: "Successfully Created!",
-                                type: "success"
-                            });
-                        } else if (data.status === "duplicate") {
-                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
-                        } else if (data.status === "error") {
-                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
-                        } else {
-                            sweetAlert("Validation Alert!", "Something unexpected!", "warning");
-                        }
-                    },
-                    error: function (data) {
-                        if (data.status == 401) {
-                            window.location.replace('/Message/TokenExpire');
-                        } else if (data.status == 403) {
-                            window.location.replace('/Message/Unauthorize');
-                        } else if (data.status == 400) {
-                            sweetAlert("Validation Alert!", "Please check input data!", "warning");
-                        }
+                    for (var i = 0; i < files.length; i++) {
+                        uploadPromises.push(uploadFile(files[i], imgPath));
                     }
-                });
+                    
+                    Promise.all(uploadPromises)
+                        .then(function () {
+                            var images = [];
+                            imgPath.forEach(function (path) {
+                                images.push({
+                                    mainImage: path,
+                                    image1: path,
+                                    image2: path,
+                                    image3: path,
+                                    image4: path,
+                                    image5: path,
+                                    createdBy: @Context.Session.GetInt32("UserId"),
+                                   
+                                });
+                            });
+                            var model = {
+                                vendorId: parseInt($("#Selectvendor").val()),
+                                categoryId: parseInt($("#Selectcategory").val()),
+                                gstId: parseInt($("#gSTId").val()),
+                                itemName: $.trim($("#itemName").val()),
+                                colorCode: $.trim($("#colorCode").val()),
+                                salePrice: parseFloat($("#salePrice").val()),
+                                mrp: parseFloat($("#mRP").val()),
+                                discountAmount: parseFloat($("#discountAmount").val()),
+                                gstAmount: parseFloat($("#gSTAmount").val()),
+                                hnsCode: $.trim($("#hNSCode").val()),
+                                description: $.trim($("#description").val()),
+                                itemImageDTOs: images,
+                                createdBy: @Context.Session.GetInt32("UserId")
+                            };
+                            console.log(model);
 
-
-                //function uploadFile() {
-                //    var totalFiles = document.getElementById('Image').files.length;
-                //    if (totalFiles > 0) {
-                //        var formData = new FormData();
-                //        var files = document.getElementById('Image').files;
-                //        formData.append("file", files[0]);
-                //        $.ajax(
-                //            {
-                //                url: "/Upload/ImgUpload",
-                //                data: formData,
-                //                processData: false,
-                //                contentType: false,
-                //                async: false,
-                //                type: "POST",
-                //                success: function (data) {
-                //                    imgPath = data;
-
-                //                },
-                //                error: function (data) {
-                //                    window.location.replace('/Message/SessionExpire');
-                //                }
-                //            }
-                //        );
-                //    }
-
-                //}
-
+                            $.ajax({
+                                type: "POST",
+                                url: "@apiUrl/api/Item/CreateItem",
+                                data: JSON.stringify(model),
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                success: function (data, statusText, xhr) {
+                                    console.log(data);
+                                    if (xhr.status === 200) {
+                                        sweetAlert({
+                                            html: true,
+                                            icon: "success",
+                                            title: "Item",
+                                            text: "Successfully created!",
+                                            type: "success"
+                                        });
+                                    } else if (data.status === "duplicate") {
+                                        sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                                    } else if (data.status === "error") {
+                                        sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                                    } else {
+                                        sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+                                    }
+                                },
+                                error: function (data) {
+                                    if (data.status == 401) {
+                                        window.location.replace('/Message/TokenExpire');
+                                    } else if (data.status == 403) {
+                                        window.location.replace('/Message/Unauthorize');
+                                    } else if (data.status == 400) {
+                                        sweetAlert("Validation Alert!", "Please check input data!", "warning");
+                                    }
+                                }
+                               
+                            });
+                        })
+                       
+                }
             }
         });
 
+        function uploadFile(file, imgPath) {
+            return new Promise(function (resolve, reject) {
+                var formData = new FormData();
+                formData.append("file", file);
+
+                $.ajax({
+                    url: "/Upload/ImgUpload",
+                    data: formData,
+                    processData: false,
+                    async: false,
+                    contentType: false,
+                    type: "POST",
+                    success: function (data) {
+                        imgPath.push(data);
+                        resolve();
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        reject(errorThrown);
+                    }
+                });
+            });
+        }
+
+
+        //$("#Image").change(function () {
+        //    var files = $(this)[0].files;
+        //    $("#imagePreviewContainer").empty(); 
+        //    if (files.length > 0) {
+        //        for (var i = 0; i < files.length; i++) {
+        //            var reader = new FileReader();
+        //            reader.onload = function (e) {
+        //                var imagePreview = '<div class="image-preview-item">' +
+        //                    '<img src="' + e.target.result + '" class="img-thumbnail" style="width: 100px; height: 100px;">' +
+        //                    '<span class="delete-image-preview" data-index="' + i + '">&times;</span>' +
+        //                    '</div>';
+        //                $("#imagePreviewContainer").append(imagePreview);
+        //            }
+        //            reader.readAsDataURL(files[i]);
+        //        }
+        //    }
+        //});
+
+        // Delete image preview when delete icon is clicked
+        //$(document).on("click", ".delete-image-preview", function () {
+        //    var index = $(this).data("index");
+        //    $(this).closest(".image-preview-item").remove();
+        //    $("#Image").val(''); // Clear the file input to remove the deleted image from the selection
+        //});
+
+
+
+
+
+        
     </script>
   
     <script>
@@ -289,7 +400,7 @@
             Getcategory();
         });
 
-        async function Getcategory(Id) {
+        function Getcategory(Id) {
             var opt = '';
             $.ajax({
                 type: "GET",
