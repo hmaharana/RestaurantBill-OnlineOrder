@@ -6,7 +6,7 @@ namespace AdminApi.Models.App.Order
     {
         public Int64 POSOrderId { get; set; }
         public Int64 OrderNo { get; set; }
-        public int LocationInformationId { get; set;}
+        public int LocationId { get; set;}
         public int PaymentMethodId { get; set;}
         public string CustomerName { get; set; }
         public string CustomerPhone { get; set; }
