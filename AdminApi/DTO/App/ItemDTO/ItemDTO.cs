@@ -6,6 +6,7 @@ namespace AdminApi.DTO.App.ItemDTO
 {
     public class ItemDTO
     {
+
         public string ItemName { get; set; }
         public int VendorId { get; set; }
         public int CategoryId { get; set; }

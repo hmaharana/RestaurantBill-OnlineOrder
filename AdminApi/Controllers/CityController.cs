@@ -8,7 +8,6 @@ using System.Linq;
 using System;
 using AdminApi.DTO.App.Vendor;
 using AdminApi.Models.App.Vendor;
-using NetTopologySuite.Geometries;
 
 namespace AdminApi.Controllers
 {
@@ -46,10 +45,9 @@ namespace AdminApi.Controllers
                     return Ok(obj);
 
                 }
-
                 else if (objCheck != null)
                 {
-                    return Accepted(new Confirmation { Status = "duplicate", ResponseMsg = "Duplicate City!" });
+                    return Accepted(new Confirmation { Status = "duplicate", ResponseMsg = "Duplicate Hospital!" });
                 }
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = "Something unexpected!" });
             }
