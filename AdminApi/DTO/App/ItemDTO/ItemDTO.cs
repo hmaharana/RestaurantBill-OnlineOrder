@@ -57,7 +57,7 @@ namespace AdminApi.DTO.App.ItemDTO
         public string Image5 { get; set; }
         public DateTime CreatedOn { get; set; }
         public int CreatedBy { get; set; }
-        public DateTime CreatedOn { get; set; }
+       
     }
     public class UpdateItemImageDTO
     {
