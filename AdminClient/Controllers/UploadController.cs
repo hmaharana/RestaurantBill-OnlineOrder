@@ -30,11 +30,11 @@ namespace AdminClient.Controllers
             {
                 string filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
                 filename = EnsureCorrectFilename(filename);
-                string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "images");
+                string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "UploadImage");
                 string uniqueFileName = Guid.NewGuid().ToString() + "_" + filename;
                 string imagePath = Path.Combine(uploadsFolder, uniqueFileName);
                 file.CopyTo(new FileStream(imagePath, FileMode.Create));
-                return "/images/" + uniqueFileName;
+                return "/UploadImage/" + uniqueFileName;
             }
             catch (Exception exception)
             {
