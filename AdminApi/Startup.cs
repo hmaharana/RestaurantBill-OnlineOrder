@@ -55,7 +55,7 @@ namespace AdminApi
 
             //PostgreSql Connection String
 
-           // services.AddDbContextPool<AppDbContext>(opt=>opt.UseSqlServer
+            // services.AddDbContextPool<AppDbContext>(opt=>opt.UseSqlServer
             //(@"data source=.\sqlexpress;database=savhomeapp;user id=sa;password=Software@2016;")); 
 
             //services.AddDbContextPool<AppDbContext>(opt=>opt.UseSqlServer
@@ -77,14 +77,14 @@ namespace AdminApi
             var appSettingsSection = Configuration.GetSection("FcmNotification");
             services.Configure<FcmNotificationSetting>(appSettingsSection);
 
-            services.AddCors(options=>
+            services.AddCors(options =>
             {
-                options.AddPolicy(name:AllowSpecificOrigins,builder=>
+                options.AddPolicy(name: AllowSpecificOrigins, builder =>
                     {
 
-                        builder.WithOrigins("http://localhost:53580","http://localhost:5000","http://demo7.appman.in", "https://localhost:44341", "http://localhost:65323", "http://api.lummang.com", "http://admin.lummang.com", "http://lummang.com", "https://demo3.appman.in", "http://web.lummang.com")
+                        builder.WithOrigins("http://localhost:53580", "http://localhost:5000", "http://demo7.appman.in", "https://localhost:44341", "http://localhost:65323", "http://api.lummang.com", "http://admin.lummang.com", "http://lummang.com", "https://demo3.appman.in", "http://web.lummang.com")
 
-                       // builder.WithOrigins("http://localhost:53580","http://localhost:5000","http://demo7.appman.in", "http://localhost:65323", "https://demo7.appman.in","https://demo14.appman.in", "https://savhome.in", "https://new.savhome.in", "https://www.admin.savhome.in", "https://www.savhome.in", "https://www.new.savhome.in")
+                        // builder.WithOrigins("http://localhost:53580","http://localhost:5000","http://demo7.appman.in", "http://localhost:65323", "https://demo7.appman.in","https://demo14.appman.in", "https://savhome.in", "https://new.savhome.in", "https://www.admin.savhome.in", "https://www.savhome.in", "https://www.new.savhome.in")
 
                         .AllowAnyHeader()
                         .AllowAnyMethod();
@@ -97,20 +97,21 @@ namespace AdminApi
    );
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options=>{
-                options.RequireHttpsMetadata=false;
-                options.SaveToken=true;
-                options.TokenValidationParameters=new TokenValidationParameters
-                    {
-                        ValidateIssuer=true,
-                        ValidateAudience=true,
-                        ValidateLifetime=true,
-                        ValidateIssuerSigningKey=true,
-                        ValidIssuer=Configuration["Jwt:Issuer"],
-                        ValidAudience = Configuration["Jwt:Audience"],
-                        IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SecretKey"])),
-                        ClockSkew = TimeSpan.Zero
-                    };
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SecretKey"])),
+                    ClockSkew = TimeSpan.Zero
+                };
             });
 
             IdentityModelEventSource.ShowPII = true;
@@ -122,31 +123,31 @@ namespace AdminApi
                     Title = "Admin API v1",
                     Version = "v1",
                     Description = "API to communicate with Admin Client Project"
-                });               
-                options.AddSecurityDefinition("Bearer",new OpenApiSecurityScheme()
+                });
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
-                        Name = "Authorization",  
-                        Type = SecuritySchemeType.ApiKey,  
-                        Scheme = "Bearer",  
-                        BearerFormat = "JWT",  
-                        In = ParameterLocation.Header,  
-                        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
                 });
 
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement  
-                {  
-                    {  
-                          new OpenApiSecurityScheme  
-                            {  
-                                Reference = new OpenApiReference  
-                                {  
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "Bearer"  
-                                }  
-                            },  
-                            new string[] {}  
-  
-                    }  
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                          new OpenApiSecurityScheme
+                          {
+                              Reference = new OpenApiReference
+                              {
+                                  Type = ReferenceType.SecurityScheme,
+                                  Id = "Bearer"
+                              }
+                          },
+                          new string[] {}
+
+                    }
                 });
                 // Set the comments path for the Swagger JSON and UI.
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -160,8 +161,14 @@ namespace AdminApi
         {
             if (env.IsDevelopment())
             {
-               
+
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v2/swagger.json", "API v1");
+                options.RoutePrefix = string.Empty;
+            });
             app.UseDeveloperExceptionPage();
 
             app.UseRouting();
@@ -171,16 +178,10 @@ namespace AdminApi
             app.UseAuthentication();
 
             app.UseAuthorization();
-                
-            app.UseEndpoints(endPoints => 
+
+            app.UseEndpoints(endPoints =>
             {
                 endPoints.MapControllers();
-            });
-
-            app.UseSwagger();
-            app.UseSwaggerUI(options => {
-                options.SwaggerEndpoint("/swagger/v2/swagger.json", "API v1");
-                options.RoutePrefix=string.Empty;
             });
         }
     }
