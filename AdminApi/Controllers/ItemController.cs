@@ -36,7 +36,7 @@ namespace AdminApi.Controllers
         }
         
         [HttpPost]
-        public ActionResult CreateItem(ItemDTO itemDTO)
+        public ActionResult CreateItem(ItemDTO itemDTO , ItemImageDTO itemImageDTO)
         {
             var objCheck = _context.Items.SingleOrDefault(opt => opt.ItemName == itemDTO.ItemName && opt.IsDeleted == false);
             try
@@ -62,20 +62,23 @@ namespace AdminApi.Controllers
                     item.CreatedOn =DateTime.Now;
                     var obj = _itemRepo.Insert(item);
 
-                    for (int i = 0; i < itemDTO.ItemImageDTOs.Count; i++)
+
+                    for (int i = 0; i )
                     {
+
+                    }
                         ItemImage itemImage = new ItemImage();
-                        itemImage.ItemId = obj.ItemId;
-                        itemImage.MainImage = itemDTO.ItemImageDTOs[i].MainImage;
-                        itemImage.Image1 = itemDTO.ItemImageDTOs[i].Image1;
-                        itemImage.Image2 = itemDTO.ItemImageDTOs[i].Image2;
-                        itemImage.Image3 = itemDTO.ItemImageDTOs[i].Image3;
-                        itemImage.Image4 = itemDTO.ItemImageDTOs[i].Image4;
-                        itemImage.Image5 = itemDTO.ItemImageDTOs[i].Image5;
+                        itemImage.ItemId = itemImageDTO.ItemId;
+                        itemImage.MainImage = itemImageDTO.MainImage;
+                        itemImage.Image1 = itemImageDTO.Image1;
+                        itemImage.Image2 = itemImageDTO.Image2;
+                        itemImage.Image3 = itemImageDTO.Image3;
+                        itemImage.Image4 = itemImageDTO.Image4;
+                        itemImage.Image5 = itemImageDTO.Image5;
                         itemImage.CreatedBy = itemDTO.CreatedBy;
                         itemImage.CreatedOn = DateTime.Now;
                         var Itemobj = _itemimageRepo.Insert(itemImage);
-                    }
+                    
                     return Ok(itemDTO);
                    
 
