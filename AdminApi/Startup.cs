@@ -179,10 +179,6 @@ namespace AdminApi
 
             app.UseAuthorization();
 
-           
-
-         
-
             app.UseEndpoints(endPoints =>
             {
                 endPoints.MapControllers();
