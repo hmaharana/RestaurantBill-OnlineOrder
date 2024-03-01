@@ -1,0 +1,81 @@
+﻿@using Microsoft.Extensions.Configuration;
+@using Microsoft.AspNetCore.Http
+@inject IConfiguration Configuration;
+
+@{
+    ViewBag.Title = "Supplier";
+    string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
+}
+
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="fe fe-file-text mr-1"></i>Admin Console</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Supplier Create</li>
+    </ol>
+    <div class="ml-auto">
+        <a href="~/Supplier/SupplierList" class="btn btn-primary btn-icon btn-sm text-white mr-2">
+            <span>
+                <i class="fe fe-plus"></i>
+            </span>Supplier View
+        </a>
+    </div>
+</div>
+<!-- PAGE-HEADER END -->
+<div class="row">
+    <div class="col-md">
+        <div class="card overflow-hidden">
+            <div class="card-header">
+                <h3 class="card-title">Supplier Create</h3>
+            </div>
+            <div class="card-body">
+                <form action="#" role="form" class="validate" id="formPost">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Supplier Name &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="suppliername" placeholder="Supplier Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="email" placeholder="Email" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Mobile No &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="mobile" placeholder="Mobile No" required>
+                            </div>
+                           
+                            <div class="form-group">
+                                <label class="form-label">GST Id &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="gst" placeholder="GST Id" required>
+                            </div>
+                            
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Mobile No &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="mobile" placeholder="Mobile No" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">PAN No &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="pan" placeholder="PAN No" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Certificate &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="file" class="form-control" id="certificate">
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button type="button" id="btnSave" class="btn btn-radius btn-success">Save</button>
+                            <a type="button" href="/Vendor/VendorCreate" class="btn btn-radius btn-danger">Reset</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

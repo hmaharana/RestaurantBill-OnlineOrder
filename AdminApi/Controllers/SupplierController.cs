@@ -13,6 +13,8 @@ using AdminApi.DTO.App.Supplier;
 
 namespace AdminApi.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]/[action]")]
     public class SupplierController : Controller
     {
         private readonly IConfiguration _config;
