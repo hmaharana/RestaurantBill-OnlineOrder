@@ -40,15 +40,22 @@
                                 <label class="form-label">Email &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <input type="text" class="form-control" id="email" placeholder="Email" required>
                             </div>
+                            
                             <div class="form-group">
                                 <label class="form-label">Pay Term &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="text" class="form-control" id="payterm" placeholder="Pay Term" required>
+                                <select name="" id="payterm" class="form-control" placeholder="Select Pay Term">
+                                    <option value="" disabled selected>Select Pay Term</option>
+                                    <option value="month">Month</option>
+                                    <option value="week">Week</option>
+                                </select>
                             </div>
-                           
+
                             <div class="form-group">
-                                <label class="form-label">Vendor Id &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="text" class="form-control" id="vendorId" placeholder="Vendor Id" required>
+                                <label class="form-label">Total Amount &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="totalpurchase" placeholder="Total Purchase" required>
                             </div>
+
+                            
                             
                         </div>
                         <div class="col-md-6">
@@ -56,17 +63,29 @@
                                 <label class="form-label">Mobile No &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <input type="text" class="form-control" id="mobile" placeholder="Mobile No" required>
                             </div>
+
                             <div class="form-group">
-                                <label class="form-label">GST Id &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="text" class="form-control" id="gst" placeholder="GST Id" required>
+                                <label class="form-label">Address &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="supplierAddress" placeholder="Address" required>
                             </div>
+
                             <div class="form-group">
-                                <label class="form-label">Supplier Address &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="text" class="form-control" id="supplierAddress" placeholder="Supplier Address" required>
+                                <label class="form-label">Vendor Name &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <div class="input-box">
+                                    <select class="form-control" id="Selectvendor">
+                                    </select>
+                                </div>
                             </div>
+                            
+                            
                             <div class="form-group">
-                                <label class="form-label">Total Purchase &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="text" class="form-control" id="totalpurchase" placeholder="Total Purchase" required>
+                                <label class="form-label">GST &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="gst" placeholder="GST" required>
+                                @* <select name="" id="gst" class="form-control" placeholder="Select gst">
+                                    <option value="" disabled selected>Select gst</option>
+                                    <option value="cgst">CGST</option>
+                                    <option value="sgst">GST</option>
+                                </select> *@
                             </div>
 
                         </div>
@@ -86,15 +105,53 @@
 @section scripts{
     <script>
 
+        GetVendor()
+
+        function GetVendor(Id) {
+            var opt = '';
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Vendor/GetVendorList",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var options = [];
+                    options.push(' <option value = ""> Select Vendor </option> ');
+                    for (var i = 0; i < res.data.length; i++) {
+                        if (Id == res.data[i].vendorId) {
+                            opt = 'selected'
+                        } else {
+                            opt = '';
+                        }
+                        options.push('<option value = "' + res.data[i].vendorId + '" ' + opt + ' > ' + res.data[i].vendorName + '</option>');
+                    }
+                    $("#Selectvendor").html(options.join(''));
+                },
+
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+
+
         $("#btnSave").click(function (e) {
             if (!document.getElementById("formPost").checkValidity()) {
                 e.preventDefault();
             } else {
                 var model = {
                     vendorId: parseInt($("#Selectvendor").val()),
-                    locationName: $.trim($("#locationName").val()),
-                    latitude: parseFloat($("#latitude").val()),
-                    longitude: parseFloat($("#longitude").val()),
+                    supplierName: $.trim($("#suppliername").val()),
+                    supplierEmail: $.trim($("#email").val()),
+                    payTerm: $.trim($("#payterm").val()),
+                    totalAmount: $.trim($("#totalpurchase").val()),
+                    mobileNo: $.trim($("#mobile").val()),
+                    supplierAddress: $.trim($("#supplierAddress").val()),
+                    percentage: $.trim($("#gst").val()),
                     createdBy: @Context.Session.GetInt32("UserId"),
                 };
 
@@ -102,7 +159,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "@apiUrl/api/Location/CreateLocation",
+                    url: "@apiUrl/api/Supplier/CreateSupplier",
                     data: JSON.stringify(model),
                     contentType: "application/json; charset=utf-8",
                     headers: {
@@ -114,7 +171,7 @@
                             console.log(data);
                             sweetAlert({
                                 html: true,
-                                title: "Location Add",
+                                title: "Supplier Add",
                                 text: "Successfully Created!",
                                 type: "success"
                             });

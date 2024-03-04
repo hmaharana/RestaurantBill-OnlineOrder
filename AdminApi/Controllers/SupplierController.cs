@@ -85,6 +85,7 @@ namespace AdminApi.Controllers
                                 u.VendorId,
                                 a.VendorName,
                                 b.GSTName,
+                                b.Percentage,
                                 u.IsDeleted
                             }).Where(x => x.IsDeleted == false);
                 int totalRecords = list.Count();
@@ -145,7 +146,7 @@ namespace AdminApi.Controllers
         }
 
         [HttpGet("{supplierId}/{DeletedBy}")]
-        public ActionResult DeleteVendor(int supplierId, int DeletedBy)
+        public ActionResult DeleteSupplier(int supplierId, int DeletedBy)
         {
             try
             {

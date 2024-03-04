@@ -1,0 +1,152 @@
+﻿@using Microsoft.Extensions.Configuration;
+@using Microsoft.AspNetCore.Http
+@inject IConfiguration Configuration;
+@{
+    ViewBag.Title = "Supplier";
+    string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
+}
+
+<div class="page-header">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="fe fe-file-text mr-1"></i>Admin Console</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Supplier List</li>
+    </ol>
+    <div class="ml-auto">
+        <a href="~/Supplier/SupplierCreate" class="btn btn-primary btn-icon btn-sm text-white mr-2">
+            <span>
+                <i class="fe fe-plus"></i>
+            </span> Supplier Create
+        </a>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Supplier List</div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="supplier" class="table table-striped table-bordered nowrap dataTable no-footer dtr-inline" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Supplier Name</th>
+                                <th>Email</th>
+                                <th>Mobile No</th>
+                                <th>Address</th>
+                                <th>Pay Term</th>
+                                <th>Vendor Name</th>
+                                <th>Total Amount</th>
+                                <th>GST</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+        //List
+        loadSupplier()
+        function loadSupplier() {
+            var table = $('#supplier').DataTable();
+            table.destroy();
+            table = $('#supplier').dataTable({
+                "paginationType": "full_numbers",
+                "dom": 'Bfrtip',
+                "buttons": ['copy', 'csv', 'excel', 'pdf', 'print'],
+                "searching": true,
+                "paging": true,
+                "sort": true,
+                "info": true,
+                "ajax": {
+                    "url": '@apiUrl/api/Supplier/GetSupplierList',
+                    "type": "GET",
+                    "dataType": "json",
+                    "headers": {
+                        "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                    },
+                    "error": function (data) {
+                        if (data.status == 401) {
+                            window.location.replace('/Message/TokenExpire');
+                        } else if (data.status == 403) {
+                            window.location.replace('/Message/Unauthorize');
+                        }
+                    }
+                },
+                "order": [],
+                "columns": [
+                    { "data": "supplierName", "orderable": true },
+                    { "data": "supplierEmail", "orderable": true },
+                    { "data": "mobileNo", "orderable": true },
+                    { "data": "supplierAddress", "orderable": true },
+                    { "data": "payTerm", "orderable": true },
+                    { "data": "vendorName", "orderable": true },
+                    { "data": "totalAmount", "orderable": true },
+                    { "data": "percentage", "orderable": true },
+                    {
+                        
+                        "render": function (data, type, row) {
+                            return '<a class="btn btn-sm btn-primary" href="../supplier/SupplierEdit?supplierId=' + row.supplierId + '"><i class="fa fa-edit"></i></a>' + '&nbsp&nbsp<button class="btn btn-sm btn-danger" data-target="#delete" data-id=' + row.supplierId + ' data-title="Delete"><i class="fa fa-trash"></i></button>';
+
+                        }
+                    }
+                ]
+            });
+        }
+
+        // Delete
+        $('#supplier tbody').on('click', 'button[data-target="#delete"]', function () {
+            var id = $(this).data('id');
+            swal({
+                html: true,
+                title: "Are you sure?",
+                text: "You will not be able to recover this data!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, confirm it!",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                    type: "GET",
+                    url: "@apiUrl/api/Supplier/DeleteSupplier/" + id + "/" + @Context.Session.GetInt32("UserId"),
+                    contentType: "application/json; charset=utf-8",
+                    headers: {
+                        "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                    },
+                    dataType: "json",
+                    success: function (data, statusText, xhr) {
+                        if (xhr.status == 200) {
+                            $('#supplier').DataTable().ajax.reload(null, false);
+                            sweetAlert({
+                                html: true,
+                                title: "Supplier",
+                                text: "Successfully deleted!",
+                                type: "success"
+                            });
+                        } else if (xhr.status == 202) {
+                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                        } else {
+                            sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+                        }
+                    },
+                    error: function (data) {
+                        if (data.status == 401) {
+                            window.location.replace('/Message/TokenExpire');
+                        } else if (data.status == 403) {
+                            window.location.replace('/Message/Unauthorize');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
