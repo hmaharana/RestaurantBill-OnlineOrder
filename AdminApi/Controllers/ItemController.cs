@@ -67,7 +67,6 @@ namespace AdminApi.Controllers
                         ItemImage itemImage = new ItemImage();
                         itemImage.ItemId = obj.ItemId;
                         itemImage.MainImage = itemDTO.ItemImageDTOs[i].MainImage;
-                        itemImage.Image = itemDTO.ItemImageDTOs[i].Image;
                         itemImage.CreatedBy = itemDTO.CreatedBy;
                         itemImage.CreatedOn = DateTime.Now;
                         var Itemobj = _itemimageRepo.Insert(itemImage);
@@ -103,7 +102,6 @@ namespace AdminApi.Controllers
                                 u.ItemId,
                                 a.VendorName,
                                 c.MainImage,
-                                c.Image,
                                 b.CategoryName,
                                 u.ItemName,
                                 u.CreatedOn,

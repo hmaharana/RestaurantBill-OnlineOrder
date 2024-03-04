@@ -41,13 +41,13 @@
                                 <input type="text" class="form-control" id="email" placeholder="Email" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Mobile No &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="text" class="form-control" id="mobile" placeholder="Mobile No" required>
+                                <label class="form-label">Pay Term &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="payterm" placeholder="Pay Term" required>
                             </div>
                            
                             <div class="form-group">
-                                <label class="form-label">GST Id &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="text" class="form-control" id="gst" placeholder="GST Id" required>
+                                <label class="form-label">Vendor Id &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="vendorId" placeholder="Vendor Id" required>
                             </div>
                             
                         </div>
@@ -57,12 +57,16 @@
                                 <input type="text" class="form-control" id="mobile" placeholder="Mobile No" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">PAN No &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="text" class="form-control" id="pan" placeholder="PAN No" required>
+                                <label class="form-label">GST Id &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="gst" placeholder="GST Id" required>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Certificate &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="file" class="form-control" id="certificate">
+                                <label class="form-label">Supplier Address &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="supplierAddress" placeholder="Supplier Address" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Total Purchase &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="totalpurchase" placeholder="Total Purchase" required>
                             </div>
 
                         </div>
@@ -71,7 +75,7 @@
                     <div class="row">
                         <div class="col-md-12 text-center">
                             <button type="button" id="btnSave" class="btn btn-radius btn-success">Save</button>
-                            <a type="button" href="/Vendor/VendorCreate" class="btn btn-radius btn-danger">Reset</a>
+                            <a type="button" href="/Supplier/SupplierCreate" class="btn btn-radius btn-danger">Reset</a>
                         </div>
                     </div>
                 </form>
@@ -79,3 +83,63 @@
         </div>
     </div>
 </div>
+@section scripts{
+    <script>
+
+        $("#btnSave").click(function (e) {
+            if (!document.getElementById("formPost").checkValidity()) {
+                e.preventDefault();
+            } else {
+                var model = {
+                    vendorId: parseInt($("#Selectvendor").val()),
+                    locationName: $.trim($("#locationName").val()),
+                    latitude: parseFloat($("#latitude").val()),
+                    longitude: parseFloat($("#longitude").val()),
+                    createdBy: @Context.Session.GetInt32("UserId"),
+                };
+
+                console.log(model);
+
+                $.ajax({
+                    type: "POST",
+                    url: "@apiUrl/api/Location/CreateLocation",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8",
+                    headers: {
+                        "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                    },
+                    dataType: "json",
+                    success: function (data, statusText, xhr) {
+                        if (xhr.status === 200) {
+                            console.log(data);
+                            sweetAlert({
+                                html: true,
+                                title: "Location Add",
+                                text: "Successfully Created!",
+                                type: "success"
+                            });
+                        } else if (data.status === "duplicate") {
+                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                        } else if (data.status === "error") {
+                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                        } else {
+                            sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+                        }
+                    },
+                    error: function (data) {
+                        if (data.status == 401) {
+                            window.location.replace('/Message/TokenExpire');
+                        } else if (data.status == 403) {
+                            window.location.replace('/Message/Unauthorize');
+                        } else if (data.status == 400) {
+                            sweetAlert("Validation Alert!", "Please check input data!", "warning");
+                        }
+                    }
+                });
+
+
+            }
+        });
+
+    </script>
+}
