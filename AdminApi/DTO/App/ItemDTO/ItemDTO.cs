@@ -44,23 +44,25 @@ namespace AdminApi.DTO.App.ItemDTO
         public bool? TaxType { get; set; } // In , Ex
         public string HNSCode { get; set; }
         public string Description { get; set; }
-       
         public int UpdatedBy { get; set; }
+        public List<UpdateItemImageDTO> UpdateItemImageDTOs { get; set; }
+      
     }
     public class ItemImageDTO
     {
         public int ItemId { get; set; }
         public string MainImage { get; set; }
-        public string Image { get; set; }
+        //public string Image { get; set; }
         public DateTime CreatedOn { get; set; }
         public int CreatedBy { get; set; }
        
     }
     public class UpdateItemImageDTO
     {
-        public int ItemImageId { get; set; }
+      
         public int ItemId { get; set; }
         public string MainImage { get; set; }
+        //public string Image { get; set; }
         public int? UpdatedBy { get; set; }
     }
 

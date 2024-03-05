@@ -149,11 +149,27 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label">Main Image &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="file" class="form-control" id="Image" multiple>
-                                <div id="imagePreviewContainer"></div> <!-- Container to display image previews -->
+                                <input type="file" class="form-control" id="MainImage">
+                                
                             </div>
                         </div>
-
+                        <div class="col-md-2">
+                            <div class="text-center">
+                                <img id="mainimagee" src="" width="90" class="rounded-circle" />
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Image &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="file" class="form-control" id="Image" multiple>
+                              
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="text-center">
+                                <img id="imagee" src="" width="90" class="rounded-circle" />
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="form-group">
@@ -237,8 +253,6 @@
             });
         }
 
-        var ItemId = @ViewBag.ItemId
-            loadSingleitem()
         function loadSingleitem() {
             $.ajax({
                 type: "GET",
@@ -261,9 +275,17 @@
                         $('#colorCode').val(data.colorCode);
                         $('#hNSCode').val(data.hnsCode);
                         $('#description').val(data.description);
-                    }
-                    else {
-                        sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+
+                        // Set main image
+                        $('#mainimagee').attr('src', data.mainImage);
+
+                        //// Set other images
+                        //var images = data.images;
+                        //for (var i = 0; i < images.length; i++) {
+                        //    $('<img>').attr('src', images[i]).appendTo('#imagee');
+                        //}
+                    } else {
+                        sweetAlert("Validation Alert!", "Something unexpected happened!", "warning");
                     }
                 },
                 error: function (data) {
@@ -276,95 +298,121 @@
             });
         }
 
+
         $("#btnupdate").click(function (e) {
             if (!document.getElementById("formPost").checkValidity()) {
                 e.preventDefault();
             } else {
+                var mainFiles = document.getElementById('MainImage').files;
+                var additionalFiles = document.getElementById('Image').files;
 
-                var model = {
-                    ItemId: ItemId,
-                    vendorId: $.trim($("#Selectvendor").val()),
-                    categoryId: $.trim($("#Selectcategory").val()),
-                    itemName: $.trim($("#itemName").val()),
-                    mrp: $.trim($("#mRP").val()),
-                    discountAmount: $.trim($("#discountAmount").val()),
-                    salePrice: $.trim($("#salePrice").val()),
-                    gstId: $.trim($("#gSTId").val()),
-                    gstAmount: $.trim($("#gSTAmount").val()),
-                    colorCode: $.trim($("#colorCode").val()),
-                    hnsCode: $.trim($("#hNSCode").val()),
-                    description: $.trim($("#description").val()),
-                    updatedBy: @Context.Session.GetInt32("UserId"),
-                }
-                console.log(model)
-                $.ajax({
-                    type: "POST",
-                    url: "@apiUrl/api/Item/UpdateItem",
-                    data: JSON.stringify(model),
-                    contentType: "application/json; charset=utf-8",
-                    headers: {
-                        "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
-                    },
+                if (mainFiles.length > 0) {
+                    var mainUploadPromise = uploadFile(mainFiles[0]);
+                    var additionalUploadPromises = [];
 
-                    success: function (data, statusText, xhr) {
-                        console.log(data)
-                        if (xhr.status === 200) {
-                            $('#Item_Tb').DataTable().ajax.reload(null, false);
-                            sweetAlert({
-                                html: true,
-                                icon: "success",
-                                title: "Item Update Order",
-                                text: "Successfully updated!",
-                                type: "success"
+                    for (var i = 0; i < additionalFiles.length; i++) {
+                        additionalUploadPromises.push(uploadFile(additionalFiles[i]));
+                    }
+
+                    Promise.all([mainUploadPromise, ...additionalUploadPromises])
+                        .then(function (responses) {
+                            var mainImage = responses[0];
+                            var additionalImages = responses.slice(1);
+
+                            var model = {
+                                vendorId: parseInt($("#Selectvendor").val()),
+                                categoryId: parseInt($("#Selectcategory").val()),
+                                gstId: parseInt($("#gSTId").val()),
+                                itemName: $.trim($("#itemName").val()),
+                                colorCode: $.trim($("#colorCode").val()),
+                                salePrice: parseFloat($("#salePrice").val()),
+                                mrp: parseFloat($("#mRP").val()),
+                                discountAmount: parseFloat($("#discountAmount").val()),
+                                gstAmount: parseFloat($("#gSTAmount").val()),
+                                hnsCode: $.trim($("#hNSCode").val()),
+                                description: $.trim($("#description").val()),
+                                itemImageDTOs: [
+                                    { mainImage: mainImage, createdBy: @Context.Session.GetInt32("UserId") },
+                                    ...additionalImages.map(function (path) {
+                                        return { mainImage: path, createdBy: @Context.Session.GetInt32("UserId") };
+                                    })
+                                ],
+                                createdBy: @Context.Session.GetInt32("UserId")
+                                    };
+
+                            console.log(model);
+
+                            $.ajax({
+                                type: "POST",
+                                url: "@apiUrl/api/Item/UpdateItem",
+                                data: JSON.stringify(model),
+                                contentType: "application/json",
+                                dataType: "json",
+                                success: function (data, statusText, xhr) {
+                                    console.log(data);
+                                    if (xhr.status === 200) {
+                                        sweetAlert({
+                                            html: true,
+                                            icon: "success",
+                                            title: "Item",
+                                            text: "Successfully created!",
+                                            type: "success"
+                                        });
+                                    } else if (data.status === "duplicate") {
+                                        sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                                    } else if (data.status === "error") {
+                                        sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                                    } else {
+                                        sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+                                    }
+                                },
+                                error: function (data) {
+                                    if (data.status == 401) {
+                                        window.location.replace('/Message/TokenExpire');
+                                    } else if (data.status == 403) {
+                                        window.location.replace('/Message/Unauthorize');
+                                    } else if (data.status == 400) {
+                                        sweetAlert("Validation Alert!", "Please check input data!", "warning");
+                                    }
+                                }
                             });
-                        } else if (data.status === "duplicate") {
-                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
-                        } else if (data.status === "error") {
-                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
-                        } else {
-                            sweetAlert("Validation Alert!", "Something unexpected!", "warning");
-                        }
+                        })
+                        .catch(function (error) {
+                            console.error(error);
+                            sweetAlert("Validation Alert!", "Error occurred while uploading images!", "error");
+                        });
+                }
+            }
+        });
+
+        function uploadFile(file) {
+            return new Promise(function (resolve, reject) {
+                var formData = new FormData();
+                formData.append("file", file);
+
+                $.ajax({
+                    url: "/Upload/ImgUpload",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: "POST",
+                    success: function (data) {
+                        resolve(data);
                     },
-                    error: function (data) {
-                        console.log(data);
-                        if (data.status == 401) {
-                            window.location.replace('/Message/TokenExpire');
-                        } else if (data.status == 403) {
-                            window.location.replace('/Message/Unauthorize');
-                        } else if (data.status == 400) {
-                            sweetAlert("Validation Alert!", "Please check input data!", "warning");
-                        }
+                    error: function (xhr, textStatus, errorThrown) {
+                        reject(errorThrown);
                     }
                 });
-            }
-        });
+            });
+        }
 
 
-        $("#Image").change(function () {
-            var files = $(this)[0].files;
-            $("#imagePreviewContainer").empty();
-            if (files.length > 0) {
-                for (var i = 0; i < files.length; i++) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        var imagePreview = '<div class="image-preview-item">' +
-                            '<img src="' + e.target.result + '" class="img-thumbnail" style="width: 100px; height: 100px;">' +
-                            '<span class="delete-image-preview" data-index="' + i + '">&times;</span>' +
-                            '</div>';
-                        $("#imagePreviewContainer").append(imagePreview);
-                    }
-                    reader.readAsDataURL(files[i]);
-                }
-            }
-        });
 
-        // Delete image preview when delete icon is clicked
-        $(document).on("click", ".delete-image-preview", function () {
-            var index = $(this).data("index");
-            $(this).closest(".image-preview-item").remove();
-            $("#Image").val(''); // Clear the file input to remove the deleted image from the selection
-        });
 
+       
+
+
+       
 
 
 
