@@ -16,5 +16,11 @@ namespace AdminClient.Controllers
         {
             return View();
         }
+
+        public IActionResult SupplierEdit(int supplierId)
+        {
+            ViewBag.supplierId = supplierId;
+            return View();
+        }
     }
 }

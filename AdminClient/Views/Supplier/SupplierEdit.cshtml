@@ -11,22 +11,24 @@
 <div class="page-header">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#"><i class="fe fe-file-text mr-1"></i>Admin Console</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Supplier Create</li>
+        <li class="breadcrumb-item active" aria-current="page">Supplier Edit</li>
     </ol>
     <div class="ml-auto">
         <a href="~/Supplier/SupplierList" class="btn btn-primary btn-icon btn-sm text-white mr-2">
             <span>
                 <i class="fe fe-plus"></i>
-            </span>Supplier View
+            </span> Supplier List
         </a>
+
     </div>
 </div>
 <!-- PAGE-HEADER END -->
+
 <div class="row">
     <div class="col-md">
         <div class="card overflow-hidden">
             <div class="card-header">
-                <h3 class="card-title">Supplier Create</h3>
+                <h3 class="card-title">Supplier Edit</h3>
             </div>
             <div class="card-body">
                 <form action="#" role="form" class="validate" id="formPost">
@@ -40,22 +42,14 @@
                                 <label class="form-label">Email &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <input type="text" class="form-control" id="email" placeholder="Email" required>
                             </div>
-                            
                             <div class="form-group">
                                 <label class="form-label">Pay Term &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <select name="" id="payterm" class="form-control" placeholder="Select Pay Term">
-                                    <option value="" disabled selected>Select Pay Term</option>
-                                    <option value="month">Month</option>
-                                    <option value="week">Week</option>
-                                </select>
+                                <input type="text" class="form-control" id="payterm" placeholder="Pay Term" required>
                             </div>
-
                             <div class="form-group">
                                 <label class="form-label">Total Amount &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="text" class="form-control" id="totalpurchase" placeholder="Total Purchase" required>
+                                <input type="text" class="form-control" id="totalamount" placeholder="Total Amount" required>
                             </div>
-
-                            
                             
                         </div>
                         <div class="col-md-6">
@@ -63,12 +57,14 @@
                                 <label class="form-label">Mobile No &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <input type="text" class="form-control" id="mobile" placeholder="Mobile No" required>
                             </div>
-
                             <div class="form-group">
                                 <label class="form-label">Address &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <input type="text" class="form-control" id="supplierAddress" placeholder="Address" required>
                             </div>
-
+                            @* <div class="form-group">
+                                <label class="form-label">Vendor Name &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="vendorName" placeholder="Vendor Name" required>
+                            </div> *@
                             <div class="form-group">
                                 <label class="form-label">Vendor Name &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <div class="input-box">
@@ -76,8 +72,7 @@
                                     </select>
                                 </div>
                             </div>
-                            
-                            
+
                             <div class="form-group">
                                 <label class="form-label">GST &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <div class="input-box">
@@ -85,14 +80,12 @@
                                     </select>
                                 </div>
                             </div>
-
                         </div>
 
                     </div>
                     <div class="row">
                         <div class="col-md-12 text-center">
-                            <button type="button" id="btnSave" class="btn btn-radius btn-success">Save</button>
-                            <a type="button" href="/Supplier/SupplierCreate" class="btn btn-radius btn-danger">Reset</a>
+                            <button type="button" id="btnupdate" class="btn btn-radius btn-success">Update</button>
                         </div>
                     </div>
                 </form>
@@ -100,8 +93,10 @@
         </div>
     </div>
 </div>
+
 @section scripts{
     <script>
+
         GetVendor()
         function GetVendor(Id) {
             var opt = '';
@@ -112,7 +107,7 @@
                 dataType: "json",
                 success: function (res) {
                     var options = [];
-                    options.push(' <option value = ""> Select Vendor </option> ');
+                    // options.push(' <option value = ""> Select Vendor </option> ');
                     for (var i = 0; i < res.data.length; i++) {
                         if (Id == res.data[i].vendorId) {
                             opt = 'selected'
@@ -134,6 +129,7 @@
             });
         }
 
+
         GetGST()
         function GetGST(Id) {
             var opt = '';
@@ -144,7 +140,7 @@
                 dataType: "json",
                 success: function (res) {
                     var options = [];
-                    options.push(' <option value = ""> Select GST </option> ');
+                    // options.push(' <option value = ""> Select GST </option> ');
                     for (var i = 0; i < res.data.length; i++) {
                         if (Id == res.data[i].gstId) {
                             opt = 'selected';
@@ -168,41 +164,80 @@
         }
 
 
+        var supplierId = @ViewBag.supplierId
+            loadSingleSupplier()
+        function loadSingleSupplier() {
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Supplier/GetSingleSupplierId/" + supplierId,
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    if (data) {
+                        $('#suppliername').val(data.supplierName);
+                        $('#mobile').val(data.mobileNo);
+                        $('#email').val(data.supplierEmail);
+                        $('#payterm').val(data.payTerm);
+                        $('#supplierAddress').val(data.supplierAddress);
+                        $('#totalamount').val(data.totalAmount);
+                        $('#SelectGST').val(data.gstName.percentage);
+                        $('#Selectvendor').val(data.vendorName);
+                        // loadParent();
+                    }
+                    else {
+                        sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+                    }
+                },
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
 
-        $("#btnSave").click(function (e) {
+        $("#btnupdate").click(function (e) {
             if (!document.getElementById("formPost").checkValidity()) {
                 e.preventDefault();
             } else {
+                
                 var model = {
-                    vendorId: parseInt($("#Selectvendor").val()),
+                    supplierId: supplierId,
                     supplierName: $.trim($("#suppliername").val()),
+                    mobileNo: $.trim($("#mobile").val()),
                     supplierEmail: $.trim($("#email").val()),
                     payTerm: $.trim($("#payterm").val()),
-                    totalAmount: $.trim($("#totalpurchase").val()),
-                    mobileNo: $.trim($("#mobile").val()),
                     supplierAddress: $.trim($("#supplierAddress").val()),
+                    totalAmount: $.trim($("#totalamount").val()),
+                    vendorId: $.trim($("#Selectvendor").val()),
                     gstId: $.trim($("#SelectGST").val()),
-                    createdBy: @Context.Session.GetInt32("UserId"),
-                };
-
-                console.log(model);
-
+                    updatedBy: @Context.Session.GetInt32("UserId"),
+                }
+                console.log(model)
                 $.ajax({
                     type: "POST",
-                    url: "@apiUrl/api/Supplier/CreateSupplier",
+                    url: "@apiUrl/api/Supplier/UpdateSupplier",
                     data: JSON.stringify(model),
                     contentType: "application/json; charset=utf-8",
                     headers: {
                         "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
                     },
-                    dataType: "json",
+
                     success: function (data, statusText, xhr) {
+                        console.log(data)
                         if (xhr.status === 200) {
-                            console.log(data);
+                            $('#supplier').DataTable().ajax.reload(null, false);
                             sweetAlert({
                                 html: true,
-                                title: "Supplier Add",
-                                text: "Successfully Created!",
+                                icon: "success",
+                                title: "supplier",
+                                text: "Successfully updated!",
                                 type: "success"
                             });
                         } else if (data.status === "duplicate") {
@@ -214,6 +249,7 @@
                         }
                     },
                     error: function (data) {
+                        console.log(data);
                         if (data.status == 401) {
                             window.location.replace('/Message/TokenExpire');
                         } else if (data.status == 403) {
@@ -223,10 +259,12 @@
                         }
                     }
                 });
-
-
             }
         });
 
+        
+
+
+       
     </script>
 }
