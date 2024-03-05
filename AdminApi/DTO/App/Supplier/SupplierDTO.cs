@@ -12,7 +12,7 @@ namespace AdminApi.DTO.App.Supplier
         public int GSTId { get; set; }
         public string PayTerm { get; set; }
         public string SupplierAddress { get; set; }
-        public string TotalPurchase { get; set; }
+        public Double TotalAmount { get; set; }
         public int VendorId { get; set; }
         public int CreatedBy { get; set; }
     }
@@ -25,7 +25,7 @@ namespace AdminApi.DTO.App.Supplier
         public int GSTId { get; set; }
         public string PayTerm { get; set; }
         public string SupplierAddress { get; set; }
-        public string TotalPurchase { get; set; }
+        public Double TotalAmount { get; set; }
         public int VendorId { get; set; }
         public int? UpdatedBy { get; set; }
     }

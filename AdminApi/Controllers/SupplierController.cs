@@ -45,7 +45,7 @@ namespace AdminApi.Controllers
                     supplier.GSTId = supplierDTO.GSTId;
                     supplier.PayTerm = supplierDTO.PayTerm;
                     supplier.SupplierAddress = supplierDTO.SupplierAddress;
-                    supplier.TotalPurchase = supplierDTO.TotalPurchase;
+                    supplier.TotalAmount = supplierDTO.TotalAmount;
                     supplier.VendorId = supplierDTO.VendorId;
                     supplier.CreatedBy = supplierDTO.CreatedBy;
                     var obj = _supplierRepo.Insert(supplier);
@@ -81,10 +81,11 @@ namespace AdminApi.Controllers
                                 u.GSTId,
                                 u.PayTerm,
                                 u.SupplierAddress,
-                                u.TotalPurchase,
+                                u.TotalAmount,
                                 u.VendorId,
                                 a.VendorName,
                                 b.GSTName,
+                                b.Percentage,
                                 u.IsDeleted
                             }).Where(x => x.IsDeleted == false);
                 int totalRecords = list.Count();
@@ -124,7 +125,7 @@ namespace AdminApi.Controllers
                     supplier.GSTId = updateSupplierDTO.GSTId;
                     supplier.PayTerm = updateSupplierDTO.PayTerm;
                     supplier.SupplierAddress = updateSupplierDTO.SupplierAddress;
-                    supplier.TotalPurchase = updateSupplierDTO.TotalPurchase;
+                    supplier.TotalAmount = updateSupplierDTO.TotalAmount;
                     supplier.VendorId = updateSupplierDTO.VendorId;
                     supplier.UpdatedBy = updateSupplierDTO.UpdatedBy;
                     supplier.UpdatedOn = System.DateTime.Now;
@@ -145,7 +146,7 @@ namespace AdminApi.Controllers
         }
 
         [HttpGet("{supplierId}/{DeletedBy}")]
-        public ActionResult DeleteVendor(int supplierId, int DeletedBy)
+        public ActionResult DeleteSupplier(int supplierId, int DeletedBy)
         {
             try
             {

@@ -12,5 +12,9 @@ namespace AdminClient.Controllers
         {
             return View();
         }
+        public IActionResult SupplierList()
+        {
+            return View();
+        }
     }
 }

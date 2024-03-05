@@ -11,7 +11,7 @@ namespace AdminApi.Models.App.Supplier
         public int GSTId { get; set;}
         public string PayTerm { get; set;}
         public string SupplierAddress { get; set;}
-        public string TotalPurchase { get; set;}
+        public Double TotalAmount { get; set;}
         public int VendorId { get; set;}
         public int CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
