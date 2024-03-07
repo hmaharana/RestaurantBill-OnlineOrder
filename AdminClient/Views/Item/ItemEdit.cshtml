@@ -6,32 +6,7 @@
     ViewBag.Title = "Item";
     string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
 }
-<style>
-    #imagePreviewContainer {
-        white-space: nowrap; /* Prevent items from wrapping to the next line */
-        overflow-x: auto; /* Enable horizontal scrolling */
-        overflow-y: hidden; /* Hide vertical scrollbar */
-    }
 
-    .image-preview-item {
-        display: inline-block; /* Display items in a single row */
-        margin-right: 10px; /* Add space between images */
-        position: relative; /* Required for positioning delete icon */
-    }
-
-    .delete-image-preview {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        cursor: pointer;
-        background-color: rgba(255, 255, 255, 0.8);
-        border-radius: 50%;
-        padding: 5px;
-        font-size: 12px;
-        line-height: 1;
-    }
-
-</style>
 
 <!-- PAGE-HEADER -->
 <div class="page-header">
@@ -150,26 +125,18 @@
                             <div class="form-group">
                                 <label class="form-label">Main Image &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <input type="file" class="form-control" id="MainImage">
-                                
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="text-center">
                                 <img id="mainimagee" src="" width="90" class="rounded-circle" />
                             </div>
                         </div>
+                      
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label">Image &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <input type="file" class="form-control" id="Image" multiple>
-                              
+                                <div id="additionalImages"></div>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="text-center">
-                                <img id="imagee" src="" width="90" class="rounded-circle" />
-                            </div>
-                        </div>
+                      
                     </div>
                     <div class="row">
                         <div class="form-group">
@@ -253,39 +220,54 @@
             });
         }
 
-        function loadSingleitem() {
+
+
+
+
+        var ItemId = @ViewBag.ItemId;
+
+        $(document).ready(function () {
+            loadSingleItem();
+        });
+
+        function loadSingleItem() {
             $.ajax({
                 type: "GET",
                 url: "@apiUrl/api/Item/GetSingleItem/" + ItemId,
                 contentType: "application/json; charset=utf-8",
                 headers: {
-                    "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                    "Authorization": "Bearer @Context.Session.GetString("TokenTxt")"
                 },
                 dataType: "json",
                 success: function (data) {
-                    if (data) {
-                        $('#Selectvendor').val(data.vendorId);
-                        $('#Selectcategory').val(data.categoryId);
-                        $('#itemName').val(data.itemName);
-                        $('#mRP').val(data.mrp);
-                        $('#discountAmount').val(data.discountAmount);
-                        $('#salePrice').val(data.salePrice);
-                        $('#gSTId').val(data.gstId);
-                        $('#gSTAmount').val(data.gstAmount);
-                        $('#colorCode').val(data.colorCode);
-                        $('#hNSCode').val(data.hnsCode);
-                        $('#description').val(data.description);
+                    if (data && data.data && data.data.length > 0) {
+                        var item = data.data[0];
+                        $('#Selectvendor').val(item.vendorId);
+                        $('#Selectcategory').val(item.categoryId);
+                        $('#itemName').val(item.itemName);
+                        $('#mRP').val(item.mrp);
+                        $('#discountAmount').val(item.discountAmount);
+                        $('#salePrice').val(item.salePrice);
+                        $('#gSTId').val(item.gstId);
+                        $('#gSTAmount').val(item.gstAmount);
+                        $('#colorCode').val(item.colorCode);
+                        $('#hNSCode').val(item.hnsCode);
+                        $('#description').val(item.description);
 
-                        // Set main image
-                        $('#mainimagee').attr('src', data.mainImage);
+                       
+                        $('#mainimagee').attr('src', item.itemImages[0].mainImage);
 
-                        //// Set other images
-                        //var images = data.images;
-                        //for (var i = 0; i < images.length; i++) {
-                        //    $('<img>').attr('src', images[i]).appendTo('#imagee');
-                        //}
+                        
+                        if (item.itemImages.length > 1) {
+                            for (var i = 1; i < item.itemImages.length; i++) {
+                                var imageSrc = item.itemImages[i].mainImage;
+                                var imageElement = '<img src="' + imageSrc + '" width="90" class="rounded-circle" />';
+                                $('#additionalImages').append(imageElement);
+                            }
+                        }
+
                     } else {
-                        sweetAlert("Validation Alert!", "Something unexpected happened!", "warning");
+                        alert("Validation Alert! Something unexpected happened!");
                     }
                 },
                 error: function (data) {
@@ -298,6 +280,7 @@
             });
         }
 
+       
 
         $("#btnupdate").click(function (e) {
             if (!document.getElementById("formPost").checkValidity()) {
@@ -306,20 +289,35 @@
                 var mainFiles = document.getElementById('MainImage').files;
                 var additionalFiles = document.getElementById('Image').files;
 
-                if (mainFiles.length > 0) {
-                    var mainUploadPromise = uploadFile(mainFiles[0]);
-                    var additionalUploadPromises = [];
+               
+                var currentImageSrc = '';
+               
 
-                    for (var i = 0; i < additionalFiles.length; i++) {
-                        additionalUploadPromises.push(uploadFile(additionalFiles[i]));
+               
+                if ($('#MainImage').val() != '' && $('#MainImage').val() != 'Choose file') {
+                    mainUploadPromise = uploadFile(mainFiles[0]);
+                }
+
+                if (mainFiles.length > 0 || currentImageSrc != '') {
+
+                    var currentImageSrcadditionalFiles = '';
+                    currentImageSrcadditionalFiles = $('#additionalImages').attr('src');
+                    if ($('#Image').val() != '' && $('#Image').val() != 'Choose file') {
+                        var additionalUploadPromises = [];
+
+                        for (var i = 0; i < additionalFiles.length; i++) {
+                            additionalUploadPromises.push(uploadFile(additionalFiles[i]));
+                        }
                     }
-
+                  
                     Promise.all([mainUploadPromise, ...additionalUploadPromises])
                         .then(function (responses) {
                             var mainImage = responses[0];
                             var additionalImages = responses.slice(1);
 
                             var model = {
+                                itemId: ItemId,
+                            
                                 vendorId: parseInt($("#Selectvendor").val()),
                                 categoryId: parseInt($("#Selectcategory").val()),
                                 gstId: parseInt($("#gSTId").val()),
@@ -331,14 +329,14 @@
                                 gstAmount: parseFloat($("#gSTAmount").val()),
                                 hnsCode: $.trim($("#hNSCode").val()),
                                 description: $.trim($("#description").val()),
-                                itemImageDTOs: [
-                                    { mainImage: mainImage, createdBy: @Context.Session.GetInt32("UserId") },
+                                updateItemImageDTOs: [
+                                    { mainImage: mainImage, updatedBy: @Context.Session.GetInt32("UserId") },
                                     ...additionalImages.map(function (path) {
-                                        return { mainImage: path, createdBy: @Context.Session.GetInt32("UserId") };
+                                        return { mainImage: path, updatedBy: @Context.Session.GetInt32("UserId") };
                                     })
                                 ],
-                                createdBy: @Context.Session.GetInt32("UserId")
-                                    };
+                                updatedBy: @Context.Session.GetInt32("UserId")
+                            };
 
                             console.log(model);
 
@@ -350,12 +348,13 @@
                                 dataType: "json",
                                 success: function (data, statusText, xhr) {
                                     console.log(data);
+                                    $('#Item_Tb').DataTable().ajax.reload(null, false);
                                     if (xhr.status === 200) {
                                         sweetAlert({
                                             html: true,
                                             icon: "success",
                                             title: "Item",
-                                            text: "Successfully created!",
+                                            text: "Successfully updated!",
                                             type: "success"
                                         });
                                     } else if (data.status === "duplicate") {
@@ -385,6 +384,7 @@
             }
         });
 
+
         function uploadFile(file) {
             return new Promise(function (resolve, reject) {
                 var formData = new FormData();
@@ -397,6 +397,7 @@
                     contentType: false,
                     type: "POST",
                     success: function (data) {
+                       
                         resolve(data);
                     },
                     error: function (xhr, textStatus, errorThrown) {
@@ -407,6 +408,7 @@
         }
 
 
+        
 
 
        

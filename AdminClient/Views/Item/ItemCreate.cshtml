@@ -6,33 +6,8 @@
     ViewBag.Title = "Item";
     string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
 }
-@*<style>
-    #imagePreviewContainer {
-        white-space: nowrap; /* Prevent items from wrapping to the next line */
-        overflow-x: auto; /* Enable horizontal scrolling */
-        overflow-y: hidden; /* Hide vertical scrollbar */
-    }
-
-    .image-preview-item {
-        display: inline-block; /* Display items in a single row */
-        margin-right: 10px; /* Add space between images */
-        position: relative; /* Required for positioning delete icon */
-    }
-
-    .delete-image-preview {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        cursor: pointer;
-        background-color: rgba(255, 255, 255, 0.8);
-        border-radius: 50%;
-        padding: 5px;
-        font-size: 12px;
-        line-height: 1;
-    }
 
 
-</style>*@
 <!-- PAGE-HEADER -->
 <div class="page-header">
     <ol class="breadcrumb">
@@ -135,21 +110,25 @@
                                 <input type="text" class="form-control" id="hNSCode" placeholder="Enter HNS Code" required>
                             </div>
                         </div>
+                      
+
+
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label">Main Image &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <input type="file" class="form-control" id="MainImage" >
-
+                               
                             </div>
                         </div>
+
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label">Image &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <input type="file" class="form-control" id="Image" multiple>
-
+                               
                             </div>
                         </div>
-
+                      
                         @* <div class="col-md-3">
                         <div class="form-group">
                         <label class="form-label">Status &nbsp;<span style="color: red;"><b>*</b></span></label>
@@ -330,18 +309,6 @@
                 });
             });
         }
-
-
-
-        
-
-       
-
-        
-
-
-
-
 
 
 
