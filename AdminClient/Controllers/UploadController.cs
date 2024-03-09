@@ -23,18 +23,18 @@ namespace AdminClient.Controllers
             _logger = logger;
             Configuration = configuration;
         }
-        [HttpPost]
+
         public string ImgUpload(IFormFile file)
         {
             try
             {
                 string filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
                 filename = EnsureCorrectFilename(filename);
-                string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "images");
+                string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "UploadImage");
                 string uniqueFileName = Guid.NewGuid().ToString() + "_" + filename;
                 string imagePath = Path.Combine(uploadsFolder, uniqueFileName);
                 file.CopyTo(new FileStream(imagePath, FileMode.Create));
-                return "/images/" + uniqueFileName;
+                return "/UploadImage/" + uniqueFileName;
             }
             catch (Exception exception)
             {
@@ -42,6 +42,7 @@ namespace AdminClient.Controllers
                 return "";
             }
         }
+
 
         private string EnsureCorrectFilename(string filename)
         {
@@ -61,6 +62,9 @@ namespace AdminClient.Controllers
             String url = await minio.PresignedGetObjectAsync("savhome", image, 60 * 60 * 24);
             return url;
         }
-
     }
+
+   
+
 }
+

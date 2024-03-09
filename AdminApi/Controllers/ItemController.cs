@@ -10,7 +10,9 @@ using System.Linq;
 using System;
 using Microsoft.AspNetCore.Authorization;
 using AdminApi.DTO.App.ItemDTO;
-
+using System.Collections.Generic;
+using AdminApi.DTO.App.Vendor;
+using AdminApi.Models.App.Vendor;
 
 namespace AdminApi.Controllers
 {
@@ -59,24 +61,27 @@ namespace AdminApi.Controllers
                     item.HNSCode = itemDTO.HNSCode;
                     item.Description = itemDTO.Description;
                     item.CreatedBy = itemDTO.CreatedBy;
+                    item.CreatedOn = DateTime.Now;
                     var obj = _itemRepo.Insert(item);
-                    for (int i = 0; i < itemDTO.itemsDTOs.Count; i++)
+
+                    for (int i = 0; i < itemDTO.ItemImageDTOs.Count; i++)
                     {
                         ItemImage itemImage = new ItemImage();
                         itemImage.ItemId = obj.ItemId;
-                        itemImage.Image = itemDTO.itemsDTOs[i].Image;
+                        itemImage.MainImage = itemDTO.ItemImageDTOs[i].MainImage;
                         itemImage.CreatedBy = itemDTO.CreatedBy;
-
+                        itemImage.CreatedOn = DateTime.Now;
                         var Itemobj = _itemimageRepo.Insert(itemImage);
                     }
 
 
                     return Ok(itemDTO);
 
+
                 }
                 else if (objCheck != null)
                 {
-                    return Accepted(new Confirmation { Status = "Duplicate", ResponseMsg = "Duplicate Category.." });
+                    return Accepted(new Confirmation { Status = "Duplicate", ResponseMsg = "Duplicate Item.." });
                 }
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = "Something unexpected!" });
             }
@@ -86,7 +91,11 @@ namespace AdminApi.Controllers
             }
         }
 
+       
+
         [HttpGet]
+
+
         public ActionResult AllItemList()
         {
             try
@@ -94,6 +103,7 @@ namespace AdminApi.Controllers
                 var list = (from u in _context.Items
                             join a in _context.Vendors on u.VendorId equals a.VendorId
                             join b in _context.Category on u.CategoryId equals b.CategoryId
+                            join c in _context.ItemImage on u.ItemId equals c.ItemId
                             select new
                             {
                                 u.ItemId,
@@ -107,13 +117,24 @@ namespace AdminApi.Controllers
                                 u.SalePrice,
                                 u.MRP,
                                 u.DiscountAmount,
+                                u.ColorCode,
                                 u.TaxType,
                                 u.HNSCode,
                                 u.GSTId,
                                 u.GSTAmount,
                                 u.Status,
                                 u.Description,
-                            }).Where(x => x.IsDeleted == false);
+                                ItemImages = _context.ItemImage
+                                                    .Where(img => img.ItemId == u.ItemId)
+                                                    .Select(img => new ItemImageViewDTO
+                                                    {
+                                                        ItemId = img.ItemId,
+                                                        MainImage = img.MainImage,
+                                                        CreatedOn = img.CreatedOn,
+                                                        CreatedBy = img.CreatedBy
+                                                    }).ToList(),
+                            }).Where(x => x.IsDeleted == false).Distinct().ToList();
+
                 int totalRecords = list.Count();
                 return Ok(new { data = list, recordsTotal = totalRecords, recordsFiltered = totalRecords });
             }
@@ -123,20 +144,55 @@ namespace AdminApi.Controllers
             }
         }
 
+       
+
         [HttpGet("{ItemId}")]
         public ActionResult GetSingleItem(int ItemId)
         {
             try
             {
-                var category = _itemRepo.SelectById(ItemId);
+                var list = (from u in _context.Items
+                           
+                           
+                            join c in _context.ItemImage on u.ItemId equals c.ItemId
+                            select new
+                            {
+                                u.ItemId,
+                                u.ItemName,
+                                u.CreatedOn,
+                                u.IsDeleted,
+                                u.VendorId,
+                                u.CategoryId,
+                                u.SalePrice,
+                                u.MRP,
+                                u.DiscountAmount,
+                                u.ColorCode,
+                                u.TaxType,
+                                u.HNSCode,
+                                u.GSTId,
+                                u.GSTAmount,
+                                u.Status,
+                                u.Description,
+                                ItemImages = _context.ItemImage
+                                                    .Where(img => img.ItemId == u.ItemId)
+                                                    .Select(img => new ItemImageViewDTO
+                                                    {
+                                                        ItemId = img.ItemId,
+                                                        MainImage = img.MainImage,
+                                                        CreatedOn = img.CreatedOn,
+                                                        CreatedBy = img.CreatedBy
+                                                    }).ToList(),
+                            }).Where(x => x.IsDeleted == false).Distinct().ToList();
 
-                return Ok(category);
+                int totalRecords = list.Count();
+                return Ok(new { data = list, recordsTotal = totalRecords, recordsFiltered = totalRecords });
             }
             catch (Exception ex)
             {
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
             }
         }
+
        
         [HttpPost]
         public ActionResult UpdateItem(ItemUpdateDTO itemUpdateDTO)
@@ -144,29 +200,54 @@ namespace AdminApi.Controllers
             try
             {
                 var item = _context.Items.SingleOrDefault(opt => opt.ItemId == itemUpdateDTO.ItemId);
-                item.ItemName = itemUpdateDTO.ItemName;
-                item.VendorId = itemUpdateDTO.VendorId;
-                item.CategoryId = itemUpdateDTO.CategoryId;
-                item.SalePrice = itemUpdateDTO.SalePrice;
-                item.MRP = itemUpdateDTO.MRP;
-                item.DiscountAmount = itemUpdateDTO.DiscountAmount;
-                item.TaxType = itemUpdateDTO.TaxType;
-                item.Status = itemUpdateDTO.Status;
-                item.ColorCode = itemUpdateDTO.ColorCode;
-                item.GSTAmount = itemUpdateDTO.GSTAmount;
-                item.GSTId = itemUpdateDTO.GSTId;
-                item.Description = itemUpdateDTO.Description;
-                item.UpdatedBy = itemUpdateDTO.UpdatedBy;
-                item.UpdatedOn = System.DateTime.Now;
-                _context.SaveChanges();
-                return Ok(item);
+                if (item != null)
+                {
+                    item.ItemName = itemUpdateDTO.ItemName;
+                    item.VendorId = itemUpdateDTO.VendorId;
+                    item.CategoryId = itemUpdateDTO.CategoryId;
+                    item.SalePrice = itemUpdateDTO.SalePrice;
+                    item.MRP = itemUpdateDTO.MRP;
+                    item.DiscountAmount = itemUpdateDTO.DiscountAmount;
+                    item.TaxType = itemUpdateDTO.TaxType;
+                    item.Status = itemUpdateDTO.Status;
+                    item.ColorCode = itemUpdateDTO.ColorCode;
+                    item.GSTAmount = itemUpdateDTO.GSTAmount;
+                    item.GSTId = itemUpdateDTO.GSTId;
+                    item.Description = itemUpdateDTO.Description;
+                    item.UpdatedBy = itemUpdateDTO.UpdatedBy;
+                    item.UpdatedOn = System.DateTime.Now;
+
+                   
+                    _context.ItemImage.RemoveRange(_context.ItemImage.Where(image => image.ItemId == item.ItemId));
+                    _context.SaveChanges();
+
+                    
+                    foreach (var updateImage in itemUpdateDTO.UpdateItemImageDTOs)
+                    {
+                        var itemImage = new ItemImage
+                        {
+                            ItemId = itemUpdateDTO.ItemId,
+                            MainImage = updateImage.MainImage,
+                            UpdatedBy = itemUpdateDTO.UpdatedBy,
+                            UpdatedOn = DateTime.Now
+                        };
+                        _context.ItemImage.Add(itemImage);
+                    }
+
+                    _context.SaveChanges();
+                    return Ok(itemUpdateDTO);
+                }
+                else
+                {
+                    return NotFound(); 
+                }
             }
             catch (Exception ex)
             {
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
             }
         }
-      
+
         [HttpGet("{ItemId}/{DeletedBy}")]
         public ActionResult DeleteItem(int ItemId, int DeletedBy)
         {

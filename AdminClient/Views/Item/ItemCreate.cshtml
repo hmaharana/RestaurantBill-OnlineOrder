@@ -7,6 +7,7 @@
     string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
 }
 
+
 <!-- PAGE-HEADER -->
 <div class="page-header">
     <ol class="breadcrumb">
@@ -76,8 +77,8 @@
                                 <input type="text" class="form-control" id="salePrice" placeholder="Enter Sale Price" required>
                             </div>
                         </div>
-                       
-                        
+
+
                     </div>
                     <div class="row">
                         <div class="col-md-3">
@@ -86,7 +87,7 @@
                                 <input type="text" class="form-control" id="gSTId" placeholder="Enter GST Id" required>
                             </div>
                         </div>
-                       
+
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label">GST Amount &nbsp;<span style="color: red;"><b>*</b></span></label>
@@ -100,7 +101,7 @@
                             </div>
                         </div>
                     </div>
-                   
+
 
                     <div class="row">
                         <div class="col-md-3">
@@ -109,29 +110,50 @@
                                 <input type="text" class="form-control" id="hNSCode" placeholder="Enter HNS Code" required>
                             </div>
                         </div>
-                       @* <div class="form-group">
-                            <label class="form-label">Image &nbsp;<span style="color: red;"><b>*</b></span></label>
-                            <input type="file" class="form-control" id="Image" multiple>
-                        </div>*@
+                      
+
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Main Image &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="file" class="form-control" id="MainImage" >
+                               
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Image &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="file" class="form-control" id="Image" multiple>
+                               
+                            </div>
+                        </div>
+                      
                         @* <div class="col-md-3">
                         <div class="form-group">
-                        <label class="form-label">Tax Type &nbsp;<span style="color: red;"><b>*</b></span></label>
-                        <input type="checkbox" class="form-control" id="taxType" placeholder="Enter Tax Type" required>
+                        <label class="form-label">Status &nbsp;<span style="color: red;"><b>*</b></span></label>
+                        <input type="checkbox" class="form-control" id="status">
                         </div>
-                        </div>*@
-                       @* <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="form-label">Tax Type &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="checkbox" class="form-control" id="taxType" placeholder="Enter Tax Type" required>
-                            </div>
-                        </div>*@
-                        
-                    </div>
-                    <div class="row">
+                        </div>
+
+                        <div class="col-md-3">
                         <div class="form-group">
-                            <label class="form-label">Description &nbsp;<span style="color: red;"><b>*</b></span></label>
-                            <textarea class="form-control" id="description" placeholder="Enter Description" required></textarea>
+                        <label class="form-label">Tax Type &nbsp;<span style="color: red;"><b>*</b></span></label>
+                        <input type="checkbox" class="form-control" id="taxType">
                         </div>
+                        </div>*@
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Description &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <textarea class="form-control" id="description" placeholder="Enter Description" required></textarea>
+                            </div>
+
+                        </div>
+
                     </div>
 
                     <div class="row">
@@ -146,9 +168,12 @@
 </div>
 
 @section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert@2"></script>
+
     <script>
         GetVendor()
-        async function GetVendor(Id) {
+
+        function GetVendor(Id) {
             var opt = '';
             $.ajax({
                 type: "GET",
@@ -178,118 +203,124 @@
                 }
             });
         }
-
-
-       
-       
         $("#btncreate").click(function (e) {
             if (!document.getElementById("formPost").checkValidity()) {
                 e.preventDefault();
-
             } else {
+                var mainFiles = document.getElementById('MainImage').files;
+                var additionalFiles = document.getElementById('Image').files;
 
-                //imgPath = '';
-                //var totalFiles = document.getElementById('Image').files.length;
-                //if (totalFiles > 0) {
-                //    uploadFile();
-                //}
-                var model = {
-                    vendorId: parseInt($("#Selectvendor").val()),
-                    categoryId: parseInt($("#Selectcategory").val()),
-                    gstId: parseInt($("#gSTId").val()),
-                    itemName: $.trim($("#itemName").val()),
-                    colorCode: $.trim($("#colorCode").val()),
-                    salePrice: parseFloat($("#salePrice").val()),
-                    mrp: parseFloat($("#mRP").val()),
-                    discountAmount: parseFloat($("#discountAmount").val()),
-                    gstAmount: parseFloat($("#gSTAmount").val()),
-                    //taxType: parseFloat($("#taxType").val()),
-                    //status: parseFloat($("#status").val()),
-                    hnsCode: $.trim($("#hNSCode").val()),
-                    description: $.trim($("#description").val()),
-                    //image: imgPath,
-                    createdBy: @Context.Session.GetInt32("UserId"),
+                if (mainFiles.length > 0) {
+                    var mainUploadPromise = uploadFile(mainFiles[0]);
+                    var additionalUploadPromises = [];
 
-                };
-
-                console.log(model);
-
-                $.ajax({
-                    type: "POST",
-                    url: "@apiUrl/api/Item/CreateItem",
-                    data: JSON.stringify(model),
-                    contentType: "application/json; charset=utf-8",
-                    headers: {
-                        "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
-                    },
-                    dataType: "json",
-                    success: function (data, statusText, xhr) {
-                        if (xhr.status === 200) {
-                            console.log(data);
-                            sweetAlert({
-                                html: true,
-                                title: "Item Add",
-                                text: "Successfully Created!",
-                                type: "success"
-                            });
-                        } else if (data.status === "duplicate") {
-                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
-                        } else if (data.status === "error") {
-                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
-                        } else {
-                            sweetAlert("Validation Alert!", "Something unexpected!", "warning");
-                        }
-                    },
-                    error: function (data) {
-                        if (data.status == 401) {
-                            window.location.replace('/Message/TokenExpire');
-                        } else if (data.status == 403) {
-                            window.location.replace('/Message/Unauthorize');
-                        } else if (data.status == 400) {
-                            sweetAlert("Validation Alert!", "Please check input data!", "warning");
-                        }
+                    for (var i = 0; i < additionalFiles.length; i++) {
+                        additionalUploadPromises.push(uploadFile(additionalFiles[i]));
                     }
-                });
 
+                    Promise.all([mainUploadPromise, ...additionalUploadPromises])
+                        .then(function (responses) {
+                            var mainImage = responses[0];
+                            var additionalImages = responses.slice(1);
 
-                //function uploadFile() {
-                //    var totalFiles = document.getElementById('Image').files.length;
-                //    if (totalFiles > 0) {
-                //        var formData = new FormData();
-                //        var files = document.getElementById('Image').files;
-                //        formData.append("file", files[0]);
-                //        $.ajax(
-                //            {
-                //                url: "/Upload/ImgUpload",
-                //                data: formData,
-                //                processData: false,
-                //                contentType: false,
-                //                async: false,
-                //                type: "POST",
-                //                success: function (data) {
-                //                    imgPath = data;
+                            var model = {
+                                vendorId: parseInt($("#Selectvendor").val()),
+                                categoryId: parseInt($("#Selectcategory").val()),
+                                gstId: parseInt($("#gSTId").val()),
+                                itemName: $.trim($("#itemName").val()),
+                                colorCode: $.trim($("#colorCode").val()),
+                                salePrice: parseFloat($("#salePrice").val()),
+                                mrp: parseFloat($("#mRP").val()),
+                                discountAmount: parseFloat($("#discountAmount").val()),
+                                gstAmount: parseFloat($("#gSTAmount").val()),
+                                hnsCode: $.trim($("#hNSCode").val()),
+                                description: $.trim($("#description").val()),
+                                itemImageDTOs: [
+                                    { mainImage: mainImage, createdBy: @Context.Session.GetInt32("UserId") },
+                                    ...additionalImages.map(function (path) {
+                                        return { mainImage: path, createdBy: @Context.Session.GetInt32("UserId") };
+                                    })
+                                ],
+                                createdBy: @Context.Session.GetInt32("UserId")
+                            };
 
-                //                },
-                //                error: function (data) {
-                //                    window.location.replace('/Message/SessionExpire');
-                //                }
-                //            }
-                //        );
-                //    }
+                            console.log(model);
 
-                //}
-
+                            $.ajax({
+                                type: "POST",
+                                url: "@apiUrl/api/Item/CreateItem",
+                                data: JSON.stringify(model),
+                                contentType: "application/json",
+                                dataType: "json",
+                                success: function (data, statusText, xhr) {
+                                    console.log(data);
+                                    if (xhr.status === 200) {
+                                        sweetAlert({
+                                            html: true,
+                                            icon: "success",
+                                            title: "Item",
+                                            text: "Successfully created!",
+                                            type: "success"
+                                        });
+                                    } else if (data.status === "duplicate") {
+                                        sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                                    } else if (data.status === "error") {
+                                        sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                                    } else {
+                                        sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+                                    }
+                                },
+                                error: function (data) {
+                                    if (data.status == 401) {
+                                        window.location.replace('/Message/TokenExpire');
+                                    } else if (data.status == 403) {
+                                        window.location.replace('/Message/Unauthorize');
+                                    } else if (data.status == 400) {
+                                        sweetAlert("Validation Alert!", "Please check input data!", "warning");
+                                    }
+                                }
+                            });
+                        })
+                        .catch(function (error) {
+                            console.error(error);
+                            sweetAlert("Validation Alert!", "Error occurred while uploading images!", "error");
+                        });
+                }
             }
         });
 
+        function uploadFile(file) {
+            return new Promise(function (resolve, reject) {
+                var formData = new FormData();
+                formData.append("file", file);
+
+                $.ajax({
+                    url: "/Upload/ImgUpload",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: "POST",
+                    success: function (data) {
+                        resolve(data);
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        reject(errorThrown);
+                    }
+                });
+            });
+        }
+
+
+
+
     </script>
-  
+
     <script>
         $(document).ready(function () {
             Getcategory();
         });
 
-        async function Getcategory(Id) {
+        function Getcategory(Id) {
             var opt = '';
             $.ajax({
                 type: "GET",
@@ -298,8 +329,8 @@
                 dataType: "json",
                 success: function (res) {
                     var options = [];
-                    options.push('<option value="">Select Category</option>'); 
-                    for (var i = 0; i < res.length; i++) { 
+                    options.push('<option value="">Select Category</option>');
+                    for (var i = 0; i < res.length; i++) {
                         options.push('<option value="' + res[i].categoryId + '">' + res[i].categoryName + '</option>');
                     }
                     $("#Selectcategory").html(options.join(''));
@@ -314,7 +345,10 @@
             });
         }
 
-        
+
     </script>
-  
+
+
+
+
 }

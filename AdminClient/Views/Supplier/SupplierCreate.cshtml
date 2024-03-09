@@ -1,0 +1,232 @@
+﻿@using Microsoft.Extensions.Configuration;
+@using Microsoft.AspNetCore.Http
+@inject IConfiguration Configuration;
+
+@{
+    ViewBag.Title = "Supplier";
+    string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
+}
+
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="fe fe-file-text mr-1"></i>Admin Console</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Supplier Create</li>
+    </ol>
+    <div class="ml-auto">
+        <a href="~/Supplier/SupplierList" class="btn btn-primary btn-icon btn-sm text-white mr-2">
+            <span>
+                <i class="fe fe-plus"></i>
+            </span>Supplier View
+        </a>
+    </div>
+</div>
+<!-- PAGE-HEADER END -->
+<div class="row">
+    <div class="col-md">
+        <div class="card overflow-hidden">
+            <div class="card-header">
+                <h3 class="card-title">Supplier Create</h3>
+            </div>
+            <div class="card-body">
+                <form action="#" role="form" class="validate" id="formPost">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Supplier Name &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="suppliername" placeholder="Supplier Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="email" placeholder="Email" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Pay Term &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <select name="" id="payterm" class="form-control" placeholder="Select Pay Term">
+                                    <option value="" disabled selected>Select Pay Term</option>
+                                    <option value="month">Month</option>
+                                    <option value="week">Week</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Total Amount &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="totalpurchase" placeholder="Total Purchase" required>
+                            </div>
+
+                            
+                            
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Mobile No &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="mobile" placeholder="Mobile No" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Address &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="supplierAddress" placeholder="Address" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Vendor Name &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <div class="input-box">
+                                    <select class="form-control" id="Selectvendor">
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            
+                            <div class="form-group">
+                                <label class="form-label">GST &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <div class="input-box">
+                                    <select class="form-control" id="SelectGST">
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button type="button" id="btnSave" class="btn btn-radius btn-success">Save</button>
+                            <a type="button" href="/Supplier/SupplierCreate" class="btn btn-radius btn-danger">Reset</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        GetVendor()
+        function GetVendor(Id) {
+            var opt = '';
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Vendor/GetVendorList",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var options = [];
+                    options.push(' <option value = ""> Select Vendor </option> ');
+                    for (var i = 0; i < res.data.length; i++) {
+                        if (Id == res.data[i].vendorId) {
+                            opt = 'selected'
+                        } else {
+                            opt = '';
+                        }
+                        options.push('<option value = "' + res.data[i].vendorId + '" ' + opt + ' > ' + res.data[i].vendorName + '</option>');
+                    }
+                    $("#Selectvendor").html(options.join(''));
+                },
+
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+
+        GetGST()
+        function GetGST(Id) {
+            var opt = '';
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/GST/GetGstList",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var options = [];
+                    options.push(' <option value = ""> Select GST </option> ');
+                    for (var i = 0; i < res.data.length; i++) {
+                        if (Id == res.data[i].gstId) {
+                            opt = 'selected';
+                        } else {
+                            opt = '';
+                        }
+                        options.push('<option value="' + res.data[i].gstId + '" ' + opt + ' >' + res.data[i].gstName + ' - ' + res.data[i].percentage + '%</option>');
+                    }
+                    $("#SelectGST").html(options.join(''));
+
+                },
+
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+
+
+
+        $("#btnSave").click(function (e) {
+            if (!document.getElementById("formPost").checkValidity()) {
+                e.preventDefault();
+            } else {
+                var model = {
+                    vendorId: parseInt($("#Selectvendor").val()),
+                    supplierName: $.trim($("#suppliername").val()),
+                    supplierEmail: $.trim($("#email").val()),
+                    payTerm: $.trim($("#payterm").val()),
+                    totalAmount: $.trim($("#totalpurchase").val()),
+                    mobileNo: $.trim($("#mobile").val()),
+                    supplierAddress: $.trim($("#supplierAddress").val()),
+                    gstId: $.trim($("#SelectGST").val()),
+                    createdBy: @Context.Session.GetInt32("UserId"),
+                };
+
+                console.log(model);
+
+                $.ajax({
+                    type: "POST",
+                    url: "@apiUrl/api/Supplier/CreateSupplier",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8",
+                    headers: {
+                        "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                    },
+                    dataType: "json",
+                    success: function (data, statusText, xhr) {
+                        if (xhr.status === 200) {
+                            console.log(data);
+                            sweetAlert({
+                                html: true,
+                                title: "Supplier Add",
+                                text: "Successfully Created!",
+                                type: "success"
+                            });
+                        } else if (data.status === "duplicate") {
+                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                        } else if (data.status === "error") {
+                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                        } else {
+                            sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+                        }
+                    },
+                    error: function (data) {
+                        if (data.status == 401) {
+                            window.location.replace('/Message/TokenExpire');
+                        } else if (data.status == 403) {
+                            window.location.replace('/Message/Unauthorize');
+                        } else if (data.status == 400) {
+                            sweetAlert("Validation Alert!", "Please check input data!", "warning");
+                        }
+                    }
+                });
+
+
+            }
+        });
+
+    </script>
+}

@@ -8,5 +8,14 @@ namespace AdminClient.Controllers
         {
             return View();
         }
+        public IActionResult CityList()
+        {
+            return View();
+        }
+        public IActionResult CityEdit(int cityId)
+        {
+            ViewBag.cityId = cityId;
+            return View();
+        }
     }
 }

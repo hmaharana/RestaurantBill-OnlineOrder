@@ -41,6 +41,7 @@ namespace AdminApi.Controllers
                     location.VendorId = locationDTO.VendorId;
                     location.Latitude = locationDTO.Latitude;
                     location.Longitude = locationDTO.Longitude;
+                    location.Pincode = locationDTO.Pincode;
                     location.CreatedBy = locationDTO.CreatedBy;
                     var obj = _locationRepo.Insert(location);
                     return Ok(obj);
@@ -72,6 +73,7 @@ namespace AdminApi.Controllers
                                 u.LocationName,
                                 u.Longitude,
                                 u.Latitude,
+                                u.Pincode,
                                 u.IsDeleted
                             }).Where(x => x.IsDeleted == false);
                 int totalRecords = list.Count();
@@ -109,6 +111,7 @@ namespace AdminApi.Controllers
                     location.VendorId = updateLocationDTO.VendorId;
                     location.Longitude = updateLocationDTO.Longitude;
                     location.Latitude = updateLocationDTO.Latitude;
+                    location.Pincode = updateLocationDTO.Pincode;
                     location.UpdatedBy = updateLocationDTO.UpdatedBy;
                     location.UpdatedOn = System.DateTime.Now;
 
