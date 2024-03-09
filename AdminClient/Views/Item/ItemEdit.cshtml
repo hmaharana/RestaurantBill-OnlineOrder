@@ -258,14 +258,22 @@
                         $('#mainimagee').attr('src', item.itemImages[0].mainImage);
 
                         
+                        //if (item.itemImages.length > 1) {
+                        //    for (var i = 1; i < item.itemImages.length; i++) {
+                        //        var imageSrc = item.itemImages[i].mainImage;
+                        //        var imageElement = '<img src="' + imageSrc + '" width="90" class="rounded-circle" />';
+                        //        $('#additionalImages').append(imageElement);
+                        //    }
+                        //}
+                        var additionalImagesContainer = $('#additionalImages');
+                        additionalImagesContainer.empty(); // Clear previous images
                         if (item.itemImages.length > 1) {
                             for (var i = 1; i < item.itemImages.length; i++) {
                                 var imageSrc = item.itemImages[i].mainImage;
                                 var imageElement = '<img src="' + imageSrc + '" width="90" class="rounded-circle" />';
-                                $('#additionalImages').append(imageElement);
+                                additionalImagesContainer.append(imageElement);
                             }
                         }
-
                     } else {
                         alert("Validation Alert! Something unexpected happened!");
                     }

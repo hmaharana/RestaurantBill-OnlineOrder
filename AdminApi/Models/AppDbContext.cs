@@ -3,6 +3,7 @@ using AdminApi.Models.App.Category;
 using AdminApi.Models.App.CustomerLogin;
 using AdminApi.Models.App.Item;
 using AdminApi.Models.App.Location_Master;
+using AdminApi.Models.App.Payment_Method;
 using AdminApi.Models.App.Supplier;
 using AdminApi.Models.App.Tax;
 using AdminApi.Models.App.Vendor;
@@ -46,6 +47,7 @@ namespace AdminApi.Models
         public virtual DbSet<CustomerLogin> CustomerLogins { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<GST> GSTs { get; set; }
+        public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
