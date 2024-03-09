@@ -1,0 +1,382 @@
+﻿@using Microsoft.Extensions.Configuration;
+@using Microsoft.AspNetCore.Http
+@inject IConfiguration Configuration;
+
+
+@{
+    ViewBag.Title = "POS";
+    string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
+}
+<style>
+    @@media (min-width: 768px) {
+        .app-content {
+            margin-left: 0px;
+        }
+
+        .footer.left-footer {
+            margin-left: 0px;
+        }
+    }
+</style>
+<style>
+    p, ul, ol, blockquote {
+        margin-bottom: 0em;
+        margin-left: 18px;
+    }
+
+    @@media (min-width: 1280px) .col-xl-3 {
+        max-width: 20%;
+    }
+
+    .card.item-card img {
+        height: 85px;
+        object-fit: cover;
+        width: 95%;
+       
+        margin-top: -7px;
+    }
+
+    .card.item-card {
+        max-height: 170px; 
+        overflow: hidden;
+    }
+    .product-content {
+        height: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }   
+
+    h4, .h4 {
+        font-size:small
+    }
+
+    .card-body > :last-child {
+        margin-bottom: 0px;
+        margin-top: 10px;
+        height: 65%;
+        
+    }
+</style>
+
+
+
+
+
+<div class="col-md-12 col-lg-12">
+    <form class="shop__filter card">
+        <div class="card-header">
+            <div class="col-sm-2">
+                @*  <h3 class="card-title">
+                <b> Point Of Sale </b>
+                </h3> *@
+                <p>
+                    <strong>Location:- &nbsp;</strong>
+                    Embassy<br />
+                    &nbsp; <span class="curr_datetime">03/06/2024 00:08</span>
+                </p>
+            </div>
+
+            <div class="col-sm-4">
+                <select class="select2" style="width: 100%;">
+                    <option value="--Select--">--Category--</option>
+                    <option value="option1">Option 1</option>
+                    <option value="option2">Option 2</option>
+                    <option value="option2">Option 3</option>
+                    <option value="option2">Option 4</option>
+                    <option value="option2">Option 5</option>
+                    <option value="option2">Option 6</option>
+                    <option value="option2">Option 7</option>
+
+                </select>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search ...">
+                    <span class="input-group-append">
+                        <button class="btn btn-primary" type="button">Search</button>
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+
+
+<div class="row">
+
+    <div class="col-lg-6">
+        <div class="row">
+            <div class="col-sm-3 col-md3 col-lg-3 col-xl-3">
+                <div class="card item-card">
+                    <div class="card-body">
+                        <div>
+                            <a href="#">
+                                <img class="img-fluid" src="~/images/products/popcorn-chicken.webp" alt="img">
+                            </a>
+                        </div>
+                        <div class="product-content text-center">
+
+                            <h4 class="title"><a href="#"> Chicken Popcorn</a></h4>
+                            <div class="price">₹477</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md3 col-lg-3 col-xl-3">
+                <div class="card item-card">
+                    <div class="card-body">
+                        <div>
+                            <a href="#">
+                                <img class="img-fluid" src="~/images/products/starbucks macchiato.webp" alt="img">
+                            </a>
+                        </div>
+                        <div class="product-content text-center">
+
+                            <h4 class="title"><a href="#">Starbucks Macchiato</a></h4>
+                            <div class="price">₹567</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md3 col-lg-3 col-xl-3">
+                <div class="card item-card">
+                    <div class="card-body">
+                        <div>
+                            <a href="#">
+                                <img class="img-fluid" src="~/images/products/starbucks macchiato.webp" alt="img">
+                            </a>
+                        </div>
+                        <div class="product-content text-center">
+
+                            <h4 class="title"><a href="#">Subway Chicken </a></h4>
+                            <div class="price">₹455</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md3 col-lg-3 col-xl-3">
+                <div class="card item-card">
+                    <div class="card-body">
+                        <div>
+                            <a href="#">
+                                <img class="img-fluid" src="~/images/products/starbucks macchiato.webp" alt="img">
+                            </a>
+                        </div>
+                        <div class="product-content text-center">
+
+                            <h4 class="title"><a href="#">Panera Flatbreads</a></h4>
+                            <div class="price">₹345</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3 col-md3 col-lg-3 col-xl-3">
+                <div class="card item-card">
+                    <div class="card-body">
+                        <div>
+                            <a href="#">
+                                <img class="img-fluid" src="~/images/products/popcorn-chicken.webp" alt="img">
+                            </a>
+                        </div>
+                        <div class="product-content text-center">
+
+                            <h4 class="title"><a href="#"> Chicken Popcorn</a></h4>
+                            <div class="price">₹477</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md3 col-lg-3 col-xl-3">
+                <div class="card item-card">
+                    <div class="card-body">
+                        <div>
+                            <a href="#">
+                                <img class="img-fluid" src="~/images/products/starbucks macchiato.webp" alt="img">
+                            </a>
+                        </div>
+                        <div class="product-content text-center">
+
+                            <h4 class="title"><a href="#">Starbucks Macchiato</a></h4>
+                            <div class="price">₹567</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md3 col-lg-3 col-xl-3">
+                <div class="card item-card">
+                    <div class="card-body">
+                        <div>
+                            <a href="#">
+                                <img class="img-fluid" src="~/images/products/starbucks macchiato.webp" alt="img">
+                            </a>
+                        </div>
+                        <div class="product-content text-center">
+
+                            <h4 class="title"><a href="#">Subway Chicken </a></h4>
+                            <div class="price">₹455</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md3 col-lg-3 col-xl-3">
+                <div class="card item-card">
+                    <div class="card-body">
+                        <div>
+                            <a href="#">
+                                <img class="img-fluid" src="~/images/products/starbucks macchiato.webp" alt="img">
+                            </a>
+                        </div>
+                        <div class="product-content text-center">
+
+                            <h4 class="title"><a href="#">Panera Flatbreads</a></h4>
+                            <div class="price">₹345</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="col-lg-6">
+        <div class="card cart">
+            <div class="card-header">
+                <div class="card-title">Shopping Cart</div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-vcenter text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th class="w-25">Quantity</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <img src="~/images/products/starbucks macchiato.webp" alt="" class="h-8">
+                                </td>
+                                <td>Subway Chicken</td>
+                                <td class="font-weight-semibold number-font1">$568</td>
+                                <td>
+                                    <div class="input-group input-indec">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="quantity-left-minus btn btn-light btn-number" data-type="minus" data-field="">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </span>
+                                        <input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="1">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="quantity-right-plus btn btn-light btn-number" data-type="plus" data-field="">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-info  btn-sm mr-3" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="icon icon-trash  fs-16"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="~/images/products/starbucks macchiato.webp" alt="" class="h-8">
+                                </td>
+                                <td>Starbucks Macchiato</td>
+                                <td class="font-weight-semibold  number-font1">$1,027</td>
+                                <td>
+                                    <div class="input-group input-indec">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="quantity-left-minus btn btn-light btn-number" data-type="minus" data-field="">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </span>
+                                        <input type="text" id="quantity1" name="quantity" class="form-control input-number text-center" value="1">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="quantity-right-plus btn btn-light btn-number" data-type="plus" data-field="">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+
+                                    <a href="#" class="btn btn-info  btn-sm mr-3" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="icon icon-trash  fs-16"></i></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <img src="~/images/products/starbucks macchiato.webp" alt="" class="h-8">
+                                </td>
+                                <td>Chicken Popcorn</td>
+                                <td class="font-weight-semibold number-font1">$1,589</td>
+                                <td>
+                                    <div class="input-group input-indec">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="quantity-left-minus btn btn-light btn-number" data-type="minus" data-field="">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </span>
+                                        <input type="text" id="quantity2" name="quantity" class="form-control input-number text-center" value="1">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="quantity-right-plus btn btn-light btn-number" data-type="plus" data-field="">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+
+                                    <a href="#" class="btn btn-info  btn-sm mr-3" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove"><i class="icon icon-trash  fs-16"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div><br>
+
+                <div class="mt-3">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            Sub Total
+                            <span class="badgetext h4  mb-0 number-font1">₹4,360</span>
+                        </li>
+                        <li class="list-group-item">
+                            Discount
+                            <span class="badgetext h4  mb-0 number-font1">5%</span>
+                        </li>
+                        <li class="list-group-item">
+                            Shipping
+                            <span class="badgetext h4  mb-0 number-font1">Free</span>
+                        </li>
+                        <li class="list-group-item">
+                            Total
+                            <span class="badgetext h4  mb-0 number-font1">₹3,976</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-footer text-right">
+                <a href="#" class="btn btn-primary"><i class="fa fa-arrow-left mr-1"></i>Continue Shopping</a>
+                <a href="#" class="btn btn-success">Check out<i class="fa fa-arrow-right ml-1"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

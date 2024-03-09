@@ -228,6 +228,13 @@
                                     <i class="fe fe-search"></i>
                                 </a>
                             </div>
+
+                            <div>
+                                <a href="#" onclick="openPOSPage()" title="Point of Sale (POS)" data-toggle="tooltip" data-placement="bottom" class="btn btn-flat pull-left btn-success" data-original->
+                                    <strong><i class="fa fa-th-large"></i> &nbsp; POS</strong>
+                                </a>
+                            </div>
+
                             <div class="dropdown  header-fullscreen">
                                 <a class="nav-link icon full-screen-link nav-link-bg" id="fullscreen-button">
                                     <i class="fe fe-minimize"></i>
@@ -274,22 +281,27 @@
             </div>
             <!-- HEADER END -->
             <!-- APP SIDEBAR -->
-            <aside class="app-sidebar">
-                <div class="app-sidebar__user">
-                    <div class="dropdown user-pro-body text-center">
-                        <div class="user-pic">
+            @{
+                var hideSidebar = ViewBag.HideSidebar as bool? ?? false;
+            }
 
-                            <img src="@Context.Session.GetString("ImagePath")" class="avatar-xl rounded-circle mb-1">
-                        </div>
-                        <div class="user-info">
-                            <h6 class=" mb-0 font-weight-semibold">@Context.Session.GetString("FullName")</h6>
-
-                            <span class="text-muted app-sidebar__user-name text-sm">@Context.Session.GetString("roleName")</span>
+            @if (!hideSidebar)
+            {
+                <aside class="app-sidebar">
+                    <div class="app-sidebar__user">
+                        <div class="dropdown user-pro-body text-center">
+                            <div class="user-pic">
+                                <img src="@Context.Session.GetString("ImagePath")" class="avatar-xl rounded-circle mb-1">
+                            </div>
+                            <div class="user-info">
+                                <h6 class="mb-0 font-weight-semibold">@Context.Session.GetString("FullName")</h6>
+                                <span class="text-muted app-sidebar__user-name text-sm">@Context.Session.GetString("roleName")</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                @Html.Raw(Context.Session.GetString("AppMenu"))
-            </aside>
+                    @Html.Raw(Context.Session.GetString("AppMenu"))
+                </aside>
+            }
             <!-- APP SIDEBAR CLOSED -->
             <!-- CONTAINER -->
             <div class="app-content">
@@ -417,6 +429,13 @@
     <script src="~/js/formeditor.js"></script>
     <script src="~/js/jquery-dateformat.min.js"></script>
     @RenderSection("scripts", false);
+    <script>
+        function openPOSPage() {
+            var url = "/POS/POS";
+           
+            window.open(url, '_blank');
+        }
+    </script>
 
 </body>
 </html>
