@@ -88,6 +88,55 @@
         }
 
          //Delete
+
+        //$('#PaymentMethod_Tb tbody').on('click', 'button[data-target="#delete"]', function () {
+        //    var id = $(this).data('id');
+        //    swal({
+        //        html: true,
+        //        title: "Are you sure?",
+        //        text: "You will not be able to recover this data!",
+        //        type: "warning",
+        //        showCancelButton: true,
+        //        confirmButtonColor: "#DD6B55",
+        //        confirmButtonText: "Yes, confirm it!",
+        //        closeOnConfirm: false
+        //    }, function () {
+        //        $.ajax({
+        //            type: "GET",
+        //            url: "@apiUrl/api/PaymentMethod/DeletePaymentMethod/" + id + "/" + @Context.Session.GetInt32("UserId"),
+        //            contentType: "application/json; charset=utf-8",
+        //            headers: {
+        //                "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+        //            },
+        //            dataType: "json",
+        //            success: function (data, statusText, xhr) {
+        //                if (xhr.status == 200) {
+        //                    $('#PaymentMethod_Tb').DataTable().ajax.reload(null, false);
+        //                    sweetAlert({
+        //                        html: true,
+        //                        title: "PaymentMethod",
+        //                        text: "Successfully deleted!",
+        //                        type: "success"
+        //                    });
+        //                } else if (xhr.status == 202) {
+        //                    sweetAlert("Validation Alert!", data.responseMsg, "warning");
+        //                } else {
+        //                    sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+        //                }
+        //            },
+        //            error: function (data) {
+        //                if (data.status == 401) {
+        //                    window.location.replace('/Message/TokenExpire');
+        //                } else if (data.status == 403) {
+        //                    window.location.replace('/Message/Unauthorize');
+        //                }
+        //            }
+        //        });
+        //    });
+        //});
+
+
+
         $('#PaymentMethod_Tb tbody').on('click', 'button[data-target="#delete"]', function () {
             var id = $(this).data('id');
             swal({
@@ -99,42 +148,42 @@
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Yes, confirm it!",
                 closeOnConfirm: false
-            }, function () {
-                $.ajax({
-                    type: "GET",
-                    url: "@apiUrl/api/PaymentMethod/DeletePaymentMethod/" + id + "/" + @Context.Session.GetInt32("UserId"),
-                    contentType: "application/json; charset=utf-8",
-                    headers: {
-                        "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
-                    },
-                    dataType: "json",
-                    success: function (data, statusText, xhr) {
-                        if (xhr.status == 200) {
-                            $('#PaymentMethod_Tb').DataTable().ajax.reload(null, false);
-                            sweetAlert({
-                                html: true,
-                                title: "PaymentMethod",
-                                text: "Successfully deleted!",
-                                type: "success"
-                            });
-                        } else if (xhr.status == 202) {
-                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
-                        } else {
-                            sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "GET",
+                        url: "@apiUrl/api/PaymentMethod/DeletePaymentMethod/" + id + "/" + @Context.Session.GetInt32("UserId"),
+                        contentType: "application/json; charset=utf-8",
+                        headers: {
+                            "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                        },
+                        dataType: "json",
+                        success: function (data, statusText, xhr) {
+                            if (xhr.status == 200) {
+                                $('#PaymentMethod_Tb').DataTable().ajax.reload(null, false);
+                                swal({
+                                    html: true,
+                                    title: "PaymentMethod",
+                                    text: "Successfully deleted!",
+                                    type: "success"
+                                });
+                            } else if (xhr.status == 202) {
+                                swal("Validation Alert!", data.responseMsg, "warning");
+                            } else {
+                                swal("Validation Alert!", "Something unexpected!", "warning");
+                            }
+                        },
+                        error: function (data) {
+                            if (data.status == 401) {
+                                window.location.replace('/Message/TokenExpire');
+                            } else if (data.status == 403) {
+                                window.location.replace('/Message/Unauthorize');
+                            }
                         }
-                    },
-                    error: function (data) {
-                        if (data.status == 401) {
-                            window.location.replace('/Message/TokenExpire');
-                        } else if (data.status == 403) {
-                            window.location.replace('/Message/Unauthorize');
-                        }
-                    }
-                });
+                    });
+                }
             });
         });
-
-
 
       
 
