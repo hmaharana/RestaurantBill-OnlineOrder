@@ -3,6 +3,8 @@ using AdminApi.Models.App.Category;
 using AdminApi.Models.App.CustomerLogin;
 using AdminApi.Models.App.Item;
 using AdminApi.Models.App.Location_Master;
+using AdminApi.Models.App.Payment_Method;
+using AdminApi.Models.App.Purchase;
 using AdminApi.Models.App.Supplier;
 using AdminApi.Models.App.Tax;
 using AdminApi.Models.App.Vendor;
@@ -46,6 +48,8 @@ namespace AdminApi.Models
         public virtual DbSet<CustomerLogin> CustomerLogins { get; set; }
         public virtual DbSet<Supplier> Suppliers { get; set; }
         public virtual DbSet<GST> GSTs { get; set; }
+        public virtual DbSet<Purchase> Purchases { get; set; }
+        public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -169,6 +173,27 @@ namespace AdminApi.Models
        .HasDefaultValue(System.DateTime.Now);
 
             modelBuilder.Entity<Supplier>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
+
+            //purchase
+            modelBuilder.Entity<Purchase>()
+       .Property(s => s.CreatedOn)
+       .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<Purchase>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
+
+            //paymentMethod
+
+            modelBuilder.Entity<PaymentMethod>()
+      .Property(s => s.CreatedOn)
+      .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<PaymentMethod>()
             .Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .ValueGeneratedNever();

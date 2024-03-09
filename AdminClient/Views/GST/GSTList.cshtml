@@ -45,6 +45,7 @@
 </div>
 @section scripts{
     <script>
+
         loadGst()
         function loadGst() {
             var table = $('#gst').DataTable();
@@ -79,14 +80,13 @@
                     {
 
                         "render": function (data, type, row) {
-                            return '<a class="btn btn-sm btn-primary" href="../supplier/SupplierEdit?supplierId=' + row.supplierId + '"><i class="fa fa-edit"></i></a>' + '&nbsp&nbsp<button class="btn btn-sm btn-danger" data-target="#delete" data-id=' + row.supplierId + ' data-title="Delete"><i class="fa fa-trash"></i></button>';
+                            return '<a class="btn btn-sm btn-primary" href="../gst/GSTEdit?gstId=' + row.gstId + '"><i class="fa fa-edit"></i></a>' + '&nbsp&nbsp<button class="btn btn-sm btn-danger" data-target="#delete" data-id=' + row.gstId + ' data-title="Delete"><i class="fa fa-trash"></i></button>';
 
                         }
                     }
                 ]
             });
         }
-
 
         // Delete
         $('#gst tbody').on('click', 'button[data-target="#delete"]', function () {
@@ -112,10 +112,9 @@
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 200) {
                             $('#gst').DataTable().ajax.reload(null, false);
-                            $('#delete').modal('hide');
                             sweetAlert({
                                 html: true,
-                                title: "GST",
+                                title: "gst",
                                 text: "Successfully deleted!",
                                 type: "success"
                             });
