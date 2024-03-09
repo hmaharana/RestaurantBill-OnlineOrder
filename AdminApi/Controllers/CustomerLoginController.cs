@@ -11,6 +11,7 @@ using System.Text;
 using System.Security.Cryptography;
 using AdminApi.DTO.App.CustomerLoginDTO;
 using System.Linq;
+using AdminApi.Models.App.Customer;
 
 namespace AdminApi.Controllers
 {
@@ -35,7 +36,7 @@ namespace AdminApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("{CustomerMobNo}/{PassWord}")]
+        [HttpGet("{CustomerMobNo}/{Password}")]
         public ActionResult CustomerLogin(string CustomerMobNo, string Password)
         {
 
@@ -89,11 +90,11 @@ namespace AdminApi.Controllers
                 if (objcheck == null)
                 {
                     CustomerLogin customerLogin = new CustomerLogin();
-                    customerLogin.CustomerName = customerLogin.CustomerName;
-                    customerLogin.CustomerMobNo = customerLogin.CustomerMobNo;
-                    customerLogin.Email = customerLogin.Email;
+                    customerLogin.CustomerName = customerLoginDTO.CustomerName;
+                    customerLogin.CustomerMobNo = customerLoginDTO.CustomerMobNo;
+                    customerLogin.Email = customerLoginDTO.Email;
                     customerLogin.Password = EncryptPassword(customerLoginDTO.Password);
-                    customerLogin.CreatedBy = customerLogin.CreatedBy;
+                    customerLogin.CreatedBy = customerLoginDTO.CreatedBy;
                     customerLogin.CreatedOn = System.DateTime.Now;
                     var obj = _customerLoginRepo.Insert(customerLogin);
                     return Ok(obj);
@@ -112,25 +113,22 @@ namespace AdminApi.Controllers
 
         }
 
-        [HttpGet("{UserId}")]
-        public ActionResult GetCustomerListbyuserid(int UserId)
+
+        [HttpGet]
+        public ActionResult GetCustomerList()
         {
             try
             {
                 var list = (from u in _context.CustomerLogins
-                            join a in _context.Users on u.CreatedBy equals a.UserId
-                            select new
-                            {
-                                a.UserId,
-                                a.UserName,
+                            select new 
+                            { 
                                 u.CustomerLoginId,
                                 u.CustomerName,
-                                u.CustomerMobNo,
+                                u.CustomerMobNo, 
                                 u.Email,
-                                u.Password,
                                 u.CreatedBy,
-                                u.IsDeleted
-                            }).Where(x => x.IsDeleted == false && x.UserId == UserId).ToList();
+                                u.IsDeleted 
+                            }).Where(x => x.IsDeleted == false).ToList();
 
 
                 int totalRecords = list.Count();
@@ -182,12 +180,12 @@ namespace AdminApi.Controllers
             }
         }
 
-        [HttpGet("{Id}/{DeletedBy}")]
-        public ActionResult DeleteCustomer(int Id, int DeletedBy)
+        [HttpGet("{customerId}/{DeletedBy}")]
+        public ActionResult DeleteCustomer(int customerId, int DeletedBy)
         {
             try
             {
-                var objabout = _context.CustomerLogins.SingleOrDefault(opt => opt.CustomerLoginId == Id);
+                var objabout = _context.CustomerLogins.SingleOrDefault(opt => opt.CustomerLoginId == customerId);
                 objabout.IsDeleted = true;
                 objabout.UpdatedBy = DeletedBy;
                 objabout.UpdatedOn = System.DateTime.Now;

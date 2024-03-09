@@ -57,6 +57,39 @@
 </div>
 @section scripts{
     <script>
+
+        var gstId = @ViewBag.gstId
+            loadSingleGST()
+        function loadSingleGST() {
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/GST/GetSingleGstId/" + gstId,
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                },
+                dataType: "json",
+                success: function (data) {
+                    //console.log(data);
+                    if (data) {
+                        $('#gstName').val(data.gstName);
+                        $('#percentage').val(data.percentage);
+                        // loadParent();
+                    }
+                    else {
+                        sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+                    }
+                },
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+
         $("#btnupdate").click(function (e) {
             if (!document.getElementById("formPost").checkValidity()) {
                 e.preventDefault();
