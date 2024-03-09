@@ -6,7 +6,7 @@ namespace AdminApi.DTO.App.PaymentMethodDTO
     {
         public string PaymentMethodName { get; set; }
         public int CreatedBy { get; set; }
-        public DateTime CreatedOn { get; set; }
+       
     }
 
     public class UpdatePaymentMenthodDTO
