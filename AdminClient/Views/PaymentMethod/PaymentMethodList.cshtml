@@ -29,7 +29,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="PaymentMethod_Tb" class="table table-striped table-bordered nowrap dataTable no-footer dtr-inline" style="width:100%">
+                    <table id="paymentMethod" class="table table-striped table-bordered nowrap dataTable no-footer dtr-inline" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Payment Method Name</th>
@@ -49,9 +49,9 @@
         //List
         loadPaymentMethod()
         function loadPaymentMethod() {
-            var table = $('#PaymentMethod_Tb').DataTable();
+            var table = $('#paymentMethod').DataTable();
             table.destroy();
-            table = $('#PaymentMethod_Tb').dataTable({
+            table = $('#paymentMethod').dataTable({
                 "paginationType": "full_numbers",
                 "dom": 'Bfrtip',
                 "buttons": ['copy', 'csv', 'excel', 'pdf', 'print'],
@@ -89,7 +89,7 @@
 
 
 
-        $('#PaymentMethod_Tb tbody').on('click', 'button[data-target="#delete"]', function () {
+        $('#paymentMethod tbody').on('click', 'button[data-target="#delete"]', function () {
             var id = $(this).data('id');
             swal({
                 html: true,
@@ -100,7 +100,6 @@
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Yes, confirm it!",
                 closeOnConfirm: false
-            }, function () {
                 $.ajax({
                     type: "GET",
                     url: "@apiUrl/api/PaymentMethod/DeletePaymentMethod/" + id + "/" + @Context.Session.GetInt32("UserId"),
@@ -111,8 +110,7 @@
                     dataType: "json",
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 200) {
-                            $('#PaymentMethod_Tb').DataTable().ajax.reload(null, false);
-
+                            $('#paymentMethod').DataTable().ajax.reload(null, false);
                             sweetAlert({
                                 html: true,
                                 title: "PaymentMethod",
@@ -136,6 +134,7 @@
             });
         });
 
+     
 
 
        
