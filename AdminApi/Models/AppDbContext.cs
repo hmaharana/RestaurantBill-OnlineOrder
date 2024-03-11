@@ -3,6 +3,7 @@ using AdminApi.Models.App.Category;
 using AdminApi.Models.App.CustomerLogin;
 using AdminApi.Models.App.Item;
 using AdminApi.Models.App.Location_Master;
+using AdminApi.Models.App.Order;
 using AdminApi.Models.App.Payment_Method;
 using AdminApi.Models.App.Purchase;
 using AdminApi.Models.App.Supplier;
@@ -50,6 +51,7 @@ namespace AdminApi.Models
         public virtual DbSet<GST> GSTs { get; set; }
         public virtual DbSet<Purchase> Purchases { get; set; }
         public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
+        public virtual DbSet<POSOrderItem>POSOrderItems { get; set; }
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

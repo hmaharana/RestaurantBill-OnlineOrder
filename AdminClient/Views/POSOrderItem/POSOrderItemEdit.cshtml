@@ -3,17 +3,17 @@
 @inject IConfiguration Configuration;
 
 @{
-    ViewBag.Title = "Location";
+    ViewBag.Title = "POSOrderItem";
     string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
 }
 <!-- PAGE-HEADER -->
 <div class="page-header">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#"><i class="fe fe-file-text mr-1"></i>Admin Consol</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Location Edit</li>
+        <li class="breadcrumb-item active" aria-current="page">POSOrderItem Edit</li>
     </ol>
     <div class="ml-auto">
-        <a href="~/Location/LocationList" class="btn btn-primary btn-icon btn-sm text-white mr-2">
+        <a href="~/POSOrderItem/POSOrderItemList" class="btn btn-primary btn-icon btn-sm text-white mr-2">
             <span>
                 <i class="fe fe-plus"></i>
             </span> View
@@ -25,7 +25,7 @@
     <div class="col-md">
         <div class="card overflow-hidden">
             <div class="card-header">
-                <h3 class="card-title">Location Edit</h3>
+                <h3 class="card-title">POSOrderItem Edit</h3>
             </div>
             <div class="card-body">
                 <form action="#" role="form" class="validate" id="formPost">
@@ -39,31 +39,42 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="form-label">Location Name &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="text" class="form-control" id="locationName" placeholder="Enter Location Name" required>
+                                <label class="form-label">Item Name &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <div class="input-box">
+                                    <select class="form-control" id="Selectitem">
+                                    </select>
+                                </div>
                             </div>
                         </div>
+
                     </div>
                     <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Quantity &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="quantity" placeholder="Enter Quantity" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="form-label">Price &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="price" placeholder="Enter Price" required>
+                            </div>
+                        </div>
 
+                    </div>
+                    <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="form-label">Latitude &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="text" class="form-control" id="latitude" placeholder="Enter Latitude" required>
+                                <label class="form-label">Total Price &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="totalPrice" placeholder="Enter Total Price" required>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="form-label">Longitude &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="text" class="form-control" id="longitude" placeholder="Enter Longitude" required>
-                            </div>
-                        </div>
+
                     </div>
 
-                   
                     <div class="row">
                         <div class="col-md-12">
                             <button type="button" id="btnupdate" class="btn btn-radius btn-success">Update</button>
@@ -79,8 +90,8 @@
 @section scripts{
     <script>
 
-        Getvendor()
-        async function Getvendor(Id) {
+        GetVendor()
+        async function GetVendor(Id) {
             var opt = '';
             $.ajax({
                 type: "GET",
@@ -89,7 +100,7 @@
                 dataType: "json",
                 success: function (res) {
                     var options = [];
-                    options.push('<option value = ""> Select Vendor </option>');
+                    options.push(' <option value = ""> Select Vendor </option> ');
                     for (var i = 0; i < res.data.length; i++) {
                         if (Id == res.data[i].vendorId) {
                             opt = 'selected'
@@ -110,12 +121,47 @@
                 }
             });
         }
-        var locationId = @ViewBag.locationId
-            loadSinglelocation()
-        function loadSinglelocation() {
+
+        GetItem()
+        async function GetItem(Id) {
+            var opt = '';
             $.ajax({
                 type: "GET",
-                url: "@apiUrl/api/Location/GetSingleLocationId/" + locationId,
+                url: "@apiUrl/api/Item/AllItemList",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var options = [];
+                    options.push(' <option value = ""> Select Item </option> ');
+                    for (var i = 0; i < res.data.length; i++) {
+                        if (Id == res.data[i].itemId) {
+                            opt = 'selected'
+                        } else {
+                            opt = '';
+                        }
+                        options.push('<option value = "' + res.data[i].itemId + '" ' + opt + ' > ' + res.data[i].itemName + '</option>');
+                    }
+                    $("#Selectitem").html(options.join(''));
+                },
+
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+
+
+        var POSOrderItemId = @ViewBag.POSOrderItemId
+
+            loadSinglePOSOrderItem()
+        function loadSinglePOSOrderItem() {
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/POSOrderItem/GetSinglePOSOrderItemId/" + POSOrderItemId,
                 contentType: "application/json; charset=utf-8",
                 headers: {
                     "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
@@ -124,9 +170,10 @@
                 success: function (data) {
                     if (data) {
                         $('#Selectvendor').val(data.vendorId);
-                        $('#locationName').val(data.locationName);
-                        $('#latitude').val(data.latitude);
-                        $('#longitude').val(data.longitude);
+                        $('#Selectitem').val(data.itemId);
+                        $('#quantity').val(data.quantity);
+                        $('#price').val(data.price);
+                        $('#totalPrice').val(data.totalPrice);
                     }
                     else {
                         sweetAlert("Validation Alert!", "Something unexpected!", "warning");
@@ -148,17 +195,18 @@
             } else {
 
                 var model = {
-                    locationId: locationId,
-                    vendorId: $.trim($("#Selectvendor").val()),
-                    locationName: $.trim($("#locationName").val()),
-                    latitude: $.trim($("#latitude").val()),
-                    longitude: $.trim($("#longitude").val()),
+                    posOrderItemId: POSOrderItemId,
+                    vendorId: parseInt($("#Selectvendor").val()),
+                    itemId: parseInt($("#Selectitem").val()),
+                    quantity: parseInt($("#quantity").val()),
+                    price: parseFloat($("#price").val()),
+                    totalPrice: parseFloat($("#totalPrice").val()),
                     updatedBy: @Context.Session.GetInt32("UserId"),
                 }
-                console.log(model)
+              
                 $.ajax({
                     type: "POST",
-                    url: "@apiUrl/api/Location/UpdateLocation",
+                    url: "@apiUrl/api/POSOrderItem/UpdatePOSOrderItem",
                     data: JSON.stringify(model),
                     contentType: "application/json; charset=utf-8",
                     headers: {
@@ -168,11 +216,11 @@
                     success: function (data, statusText, xhr) {
                         console.log(data)
                         if (xhr.status === 200) {
-                            $('#Location_Tb').DataTable().ajax.reload(null, false);
+                            $('#POSOrderItem').DataTable().ajax.reload(null, false);
                             sweetAlert({
                                 html: true,
                                 icon: "success",
-                                title: "Location Update Order",
+                                title: "POSOrderItem Update Order",
                                 text: "Successfully updated!",
                                 type: "success"
                             });
