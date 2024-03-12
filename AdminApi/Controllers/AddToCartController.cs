@@ -1,5 +1,4 @@
-﻿using AdminApi.DTO.App.Order;
-using AdminApi.Models.App.Order;
+﻿using AdminApi.Models.App.Order;
 using AdminApi.Models.Helper;
 using AdminApi.Models;
 using Microsoft.AspNetCore.Mvc;
