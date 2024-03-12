@@ -1,4 +1,5 @@
 ﻿using AdminApi.Models.App;
+using AdminApi.Models.App.Add_To_Cart;
 using AdminApi.Models.App.Category;
 using AdminApi.Models.App.CustomerLogin;
 using AdminApi.Models.App.Item;
@@ -53,9 +54,9 @@ namespace AdminApi.Models
         public virtual DbSet<Purchase> Purchases { get; set; }
         public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
         public virtual DbSet<POSOrder> POSOrders { get; set; }
-        public virtual DbSet<POSOrderItem> POSOrderItems { get; set; }
         public virtual DbSet<Stock> Stocks { get; set; }
-       
+        public virtual DbSet<AddToCart> AddToCarts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Seed();
@@ -140,6 +141,15 @@ namespace AdminApi.Models
             .Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .ValueGeneratedNever();
+            //item
+            modelBuilder.Entity<Item>()
+          .Property(s => s.CreatedOn)
+          .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<Item>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
 
             //itemImage
             modelBuilder.Entity<ItemImage>()
@@ -202,39 +212,16 @@ namespace AdminApi.Models
             .Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .ValueGeneratedNever();
+            //addToCart
 
+            modelBuilder.Entity<AddToCart>()
+      .Property(s => s.CreatedOn)
+      .HasDefaultValue(System.DateTime.Now);
 
-            //posOrders
-            modelBuilder.Entity<POSOrder>()
-     .Property(s => s.CreatedOn)
-     .HasDefaultValue(System.DateTime.Now);
-
-            modelBuilder.Entity<POSOrder>()
+            modelBuilder.Entity<AddToCart>()
             .Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .ValueGeneratedNever();
-
-            //posOrderItem
-
-            modelBuilder.Entity<POSOrderItem>()
-    .Property(s => s.CreatedOn)
-    .HasDefaultValue(System.DateTime.Now);
-
-            modelBuilder.Entity<POSOrderItem>()
-            .Property(s => s.IsDeleted)
-            .HasDefaultValue(false)
-            .ValueGeneratedNever();
-
-            //Stock
-            modelBuilder.Entity<Stock>()
-    .Property(s => s.CreatedOn)
-    .HasDefaultValue(System.DateTime.Now);
-
-            modelBuilder.Entity<Stock>()
-            .Property(s => s.IsDeleted)
-            .HasDefaultValue(false)
-            .ValueGeneratedNever();
-
         }
 
 

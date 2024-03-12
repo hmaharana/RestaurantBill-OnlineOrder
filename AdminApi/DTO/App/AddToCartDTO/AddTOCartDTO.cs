@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace AdminApi.DTO.App.Order
+namespace AdminApi.DTO.App.AddToCartDTO
 {
-    public class PosOrderItemDTO
+    public class AddTOCartDTO
     {
         public int VendorId { get; set; }
         public int ItemId { get; set; }
@@ -11,9 +11,9 @@ namespace AdminApi.DTO.App.Order
         public double TotalPrice { get; set; }
         public int CreatedBy { get; set; }
     }
-    public class UpdateOrderItemDTO
+    public class UpdateAddToCartDTO
     {
-        public Int64 POSOrderItemId { get; set; }
+        public int AddToCartId { get; set; }
         public int VendorId { get; set; }
         public int ItemId { get; set; }
         public Int64 Quantity { get; set; }
