@@ -120,8 +120,8 @@
                 }
             });
         }
-        GetPOSOrderItem()
-        async function GetPOSOrderItem(Id) {
+        GetItem()
+        async function GetItem(Id) {
             var opt = '';
             $.ajax({
                 type: "GET",
@@ -168,7 +168,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "@apiUrl/api/POSOrderItem/CreatePOSOrderItem",
+                    url: "@apiUrl/api/AddToCart/CreateAddToCart",
                     data: JSON.stringify(model),
                     contentType: "application/json; charset=utf-8",
                     headers: {
@@ -180,7 +180,7 @@
                             console.log(data);
                             sweetAlert({
                                 html: true,
-                                title: "POSOrderItem Add",
+                                title: "AddToCart Add",
                                 text: "Successfully Created!",
                                 type: "success"
                             });

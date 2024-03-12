@@ -1,5 +1,4 @@
-﻿using AdminApi.DTO.App.Order;
-using AdminApi.Models.App.Order;
+﻿using AdminApi.Models.App.Order;
 using AdminApi.Models.Helper;
 using AdminApi.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -104,7 +103,7 @@ namespace AdminApi.Controllers
             }
         }
         [HttpPost]
-        public ActionResult UpdatePOSOrderItem(UpdateAddToCartDTO updateAddToCartDTO)
+        public ActionResult UpdateAddToCart(UpdateAddToCartDTO updateAddToCartDTO)
         {
             try
             {
@@ -132,7 +131,7 @@ namespace AdminApi.Controllers
             }
         }
         [HttpGet("{AddToCartId}/{DeletedBy}")]
-        public ActionResult DeletePOSOrderItem(int AddToCartId, int DeletedBy)
+        public ActionResult DeleteAddToCart(int AddToCartId, int DeletedBy)
         {
             try
             {
