@@ -3,20 +3,20 @@
 @inject IConfiguration Configuration;
 
 @{
-    ViewBag.Title = "POSOrderItem";
+    ViewBag.Title = "AddToCart";
     string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
 }
 
 <div class="page-header">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#"><i class="fe fe-file-text mr-1"></i>Admin Console</a></li>
-        <li class="breadcrumb-item active" aria-current="page">POSOrderItem List</li>
+        <li class="breadcrumb-item active" aria-current="page">AddToCart List</li>
     </ol>
     <div class="ml-auto">
-        <a href="~/POSOrderItem/POSOrderItemCreate" class="btn btn-primary btn-icon btn-sm text-white mr-2">
+        <a href="~/AddToCart/AddToCartCreate" class="btn btn-primary btn-icon btn-sm text-white mr-2">
             <span>
                 <i class="fe fe-plus"></i>
-            </span> POSOrderItem Create
+            </span> AddToCart Create
         </a>
     </div>
 </div>
@@ -25,7 +25,7 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">POSOrderItem List</div>
+                <div class="card-title">AddToCart List</div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -122,7 +122,7 @@
                             $('#delete').modal('hide');
                             sweetAlert({
                                 html: true,
-                                title: "POSOrderItem",
+                                title: "AddToCart",
                                 text: "Successfully deleted!",
                                 type: "success"
                             });

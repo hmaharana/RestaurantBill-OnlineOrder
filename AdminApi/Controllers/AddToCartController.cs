@@ -115,7 +115,7 @@ namespace AdminApi.Controllers
                     addToCart.Quantity = updateAddToCartDTO.Quantity;
                     addToCart.Price = updateAddToCartDTO.Price;
                     addToCart.TotalPrice = updateAddToCartDTO.TotalPrice;
-                    addToCart.UpdatedBy = updateAddToCartDTO.UpdatedBy;
+                    addToCart.UpdatedBy = updateAddToCartDTO.CreatedBy;
                     addToCart.UpdatedOn = System.DateTime.Now;
                     _context.SaveChanges();
                     return Ok(addToCart);
@@ -138,6 +138,41 @@ namespace AdminApi.Controllers
                 var addToCart = _context.AddToCarts.SingleOrDefault(opt => opt.AddToCartId == AddToCartId);
                 addToCart.IsDeleted = true;
                 addToCart.UpdatedBy = DeletedBy;
+                addToCart.UpdatedOn = System.DateTime.Now;
+                _context.SaveChanges();
+                return Ok(addToCart);
+            }
+            catch (Exception ex)
+            {
+                return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult UpdatePlusQuantity(UpdateAddToCartDTO updateAddToCartDTO)
+        {
+            try
+            {
+                var addToCart = _context.AddToCarts.SingleOrDefault(x => x.AddToCartId ==  updateAddToCartDTO.AddToCartId);
+                addToCart.Quantity = addToCart.Quantity + 1;
+                addToCart.UpdatedBy = updateAddToCartDTO.CreatedBy;
+                addToCart.UpdatedOn = System.DateTime.Now;
+                _context.SaveChanges();
+                return Ok(addToCart);
+            }
+            catch (Exception ex)
+            {
+                return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateMinusQuantity(UpdateAddToCartDTO updateAddToCartDTO)
+        {
+            try
+            {
+                var addToCart = _context.AddToCarts.SingleOrDefault(x => x.AddToCartId == updateAddToCartDTO.AddToCartId);
+                addToCart.Quantity = addToCart.Quantity - 1;
+                addToCart.UpdatedBy = updateAddToCartDTO.CreatedBy;
                 addToCart.UpdatedOn = System.DateTime.Now;
                 _context.SaveChanges();
                 return Ok(addToCart);
