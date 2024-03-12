@@ -1,0 +1,319 @@
+﻿@using Microsoft.Extensions.Configuration;
+@using Microsoft.AspNetCore.Http
+@inject IConfiguration Configuration;
+
+@{
+    ViewBag.Title = "Stock";
+    string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
+}
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="fe fe-file-text mr-1"></i>Admin Console</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Stock Create</li>
+    </ol>
+    <div class="ml-auto">
+        <a href="~/Stock/StockList" class="btn btn-primary btn-icon btn-sm text-white mr-2">
+            <span>
+                <i class="fe fe-plus"></i>
+            </span>Stock View
+        </a>
+    </div>
+</div>
+<!-- PAGE-HEADER END -->
+
+<div class="row">
+    <div class="col-md">
+        <div class="card overflow-hidden">
+            <div class="card-header">
+                <h3 class="card-title">Stock Create</h3>
+            </div>
+            <div class="card-body">
+                <form action="#" role="form" class="validate" id="formPost">
+                    <div class="row">
+                        <div class="col-md-6">
+
+
+                            <div class="form-group">
+                                <label class="form-label">Location Name &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <div class="input-box">
+                                    <select class="form-control" id="Selectlocation">
+                                    </select>
+                                </div>
+                            </div>
+
+                           @*  <div class="form-group">
+                                <label class="form-label">Item Name &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <div class="input-box">
+                                    <select class="form-control" id="Selectitem">
+                                    </select>
+                                </div>
+                            </div> *@
+                            <div class="form-group">
+                                <label class="form-label">Item Name</label>
+                                <div class="input-box">
+                                    <select multiple="multiple" class="form-control" id="Selectitem" data-placeholder="Select Question" required>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="form-label">Status &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <select name="" id="status" class="form-control" placeholder="Select Status">
+                                    <option value="" disabled selected>Select Status</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="completed">Completed</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Additional Notes &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <textarea class="form-control" id="additionalnotes" placeholder="Additional Notes" required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <label class="form-label">Supplier Name &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <div class="input-box">
+                                    <select class="form-control" id="Selectsupplier">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Shipping Charges &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="shippingcharges" placeholder="Shipping Charges" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Total Amount &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="totalamount" placeholder="Total Amount" required>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button type="button" id="btnSave" class="btn btn-radius btn-success">Save</button>
+                            <a type="button" href="/Supplier/SupplierCreate" class="btn btn-radius btn-danger">Reset</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        GetLocation()
+        function GetLocation(Id) {
+            var opt = '';
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Location/GetLocationList",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var options = [];
+                    options.push(' <option value = ""> Select Location </option> ');
+                    for (var i = 0; i < res.data.length; i++) {
+                        if (Id == res.data[i].locationId) {
+                            opt = 'selected'
+                        } else {
+                            opt = '';
+                        }
+                        options.push('<option value = "' + res.data[i].locationId + '" ' + opt + ' > ' + res.data[i].locationName + '</option>');
+                    }
+                    $("#Selectlocation").html(options.join(''));
+                },
+
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+
+
+        GetSupplier()
+        function GetSupplier(Id) {
+            var opt = '';
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Supplier/GetSupplierList",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var options = [];
+                    options.push(' <option value = ""> Select Supplier </option> ');
+                    for (var i = 0; i < res.data.length; i++) {
+                        if (Id == res.data[i].supplierId) {
+                            opt = 'selected'
+                        } else {
+                            opt = '';
+                        }
+                        options.push('<option value = "' + res.data[i].supplierId + '" ' + opt + ' > ' + res.data[i].supplierName + '</option>');
+                    }
+                    $("#Selectsupplier").html(options.join(''));
+                },
+
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+
+
+        GetItem()
+        function GetItem(Id) {
+            var opt = '';
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Item/AllItemList",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var options = [];
+                    options.push(' <option value = ""> Select Item </option> ');
+                    for (var i = 0; i < res.data.length; i++) {
+                        if (Id == res.data[i].itemId) {
+                            opt = 'selected'
+                        } else {
+                            opt = '';
+                        }
+                        options.push('<option value = "' + res.data[i].itemId + '" ' + opt + ' > ' + res.data[i].itemName + '</option>');
+                    }
+                    $("#Selectitem").html(options.join(''));
+                },
+
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+
+        // var selectedQuestion = [];
+        // GetSubscriptionType()
+        // async function GetSubscriptionType(Id) {
+        //     var opt = '';
+        //     $.ajax({
+        //         type: "GET",
+        //         url: '@apiUrl/api/Question/GetQuestionList',
+
+        //         dataType: "json",
+        //         success: function (data) {
+        //             var options = [];
+        //             console.log(data)
+
+        //             for (var i = 0; i < data['data'].length; i++) {
+        //                 if (Id == data['data'][i].questionId) {
+        //                     opt = 'selected'
+        //                 } else {
+        //                     opt = '';
+        //                 }
+        //                 options.push('<option value="__select_all__">Select All</option>');
+        //                 for (var i = 0; i < data['data'].length; i++) {
+        //                     options.push('<option value="' + data['data'][i].questionId + '" ' + opt + '>' + data['data'][i].questionName + '</option>');
+        //                 }
+        //             }
+        //             $("#SelectQuestion").html(options.join(''));
+        //             $('#SelectQuestion').change(function () {
+
+        //                 selectedQuestion = $(this).val()
+        //                 //console.log(selectedSeller);
+        //             }).multipleSelect({
+        //                 width: '100%'
+        //             });
+        //             $('#SelectQuestion').on('change', function () {
+        //                 if ($(this).val() && $(this).val().includes('__select_all__')) {
+        //                     // Select all options except "__select_all__"
+        //                     var allOptions = data['data'].map(category => category.questionId);
+        //                     $('#SelectQuestion').val(allOptions).trigger('change');
+        //                 }
+        //             });
+        //         },
+
+        //         error: function (data) {
+        //             if (data.status == 401) {
+        //                 window.location.replace('/Message/TokenExpire');
+        //             } else if (data.status == 403) {
+        //                 window.location.replace('/Message/Unauthorize');
+        //             }
+        //         }
+        //     });
+        // }
+
+
+
+        $("#btnSave").click(function (e) {
+            if (!document.getElementById("formPost").checkValidity()) {
+                e.preventDefault();
+            } else {
+                var model = {
+                    locationId: parseInt($("#Selectlocation").val()),
+                    itemId: $.trim($("#Selectitem").val()),
+                    status: $.trim($("#status").val()),
+                    additionalNotes: $.trim($("#additionalnotes").val()),
+                    supplierId: $.trim($("#Selectsupplier").val()),
+                    shippingCharges: $.trim($("#shippingcharges").val()),
+                    totalAmount: $.trim($("#totalamount").val()),
+                    createdBy: @Context.Session.GetInt32("UserId"),
+                };
+
+                console.log(model);
+
+                $.ajax({
+                    type: "POST",
+                    url: "@apiUrl/api/Stock/CreateStock",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8",
+                    headers: {
+                        "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                    },
+                    dataType: "json",
+                    success: function (data, statusText, xhr) {
+                        if (xhr.status === 200) {
+                            console.log(data);
+                            sweetAlert({
+                                html: true,
+                                title: "Stock Add",
+                                text: "Successfully Created!",
+                                type: "success"
+                            });
+                        } else if (data.status === "duplicate") {
+                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                        } else if (data.status === "error") {
+                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                        } else {
+                            sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+                        }
+                    },
+                    error: function (data) {
+                        if (data.status == 401) {
+                            window.location.replace('/Message/TokenExpire');
+                        } else if (data.status == 403) {
+                            window.location.replace('/Message/Unauthorize');
+                        } else if (data.status == 400) {
+                            sweetAlert("Validation Alert!", "Please check input data!", "warning");
+                        }
+                    }
+                });
+
+
+            }
+        });
+    </script>
+}
