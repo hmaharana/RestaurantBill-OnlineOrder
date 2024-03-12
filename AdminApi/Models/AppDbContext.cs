@@ -3,8 +3,10 @@ using AdminApi.Models.App.Category;
 using AdminApi.Models.App.CustomerLogin;
 using AdminApi.Models.App.Item;
 using AdminApi.Models.App.Location_Master;
+using AdminApi.Models.App.Order;
 using AdminApi.Models.App.Payment_Method;
 using AdminApi.Models.App.Purchase;
+using AdminApi.Models.App.Stock;
 using AdminApi.Models.App.Supplier;
 using AdminApi.Models.App.Tax;
 using AdminApi.Models.App.Vendor;
@@ -50,6 +52,9 @@ namespace AdminApi.Models
         public virtual DbSet<GST> GSTs { get; set; }
         public virtual DbSet<Purchase> Purchases { get; set; }
         public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
+        public virtual DbSet<POSOrder> POSOrders { get; set; }
+        public virtual DbSet<POSOrderItem> POSOrderItems { get; set; }
+        public virtual DbSet<Stock> Stocks { get; set; }
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -197,6 +202,39 @@ namespace AdminApi.Models
             .Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .ValueGeneratedNever();
+
+
+            //posOrders
+            modelBuilder.Entity<POSOrder>()
+     .Property(s => s.CreatedOn)
+     .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<POSOrder>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
+
+            //posOrderItem
+
+            modelBuilder.Entity<POSOrderItem>()
+    .Property(s => s.CreatedOn)
+    .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<POSOrderItem>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
+
+            //Stock
+            modelBuilder.Entity<Stock>()
+    .Property(s => s.CreatedOn)
+    .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<Stock>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
+
         }
 
 
