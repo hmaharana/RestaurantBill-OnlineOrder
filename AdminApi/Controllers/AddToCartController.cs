@@ -1,54 +1,56 @@
 ﻿using AdminApi.DTO.App.Order;
-using AdminApi.Models;
 using AdminApi.Models.App.Order;
 using AdminApi.Models.Helper;
+using AdminApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
+using AdminApi.Models.App.Add_To_Cart;
+using AdminApi.DTO.App.AddToCartDTO;
 using System.Linq;
 
 namespace AdminApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class POSOrderItemController : Controller
+    public class AddToCartController : Controller
     {
         private readonly IConfiguration _config;
         private readonly AppDbContext _context;
-        private readonly ISqlRepository<POSOrderItem> _pOSOrderItemRepo;
-        public POSOrderItemController(IConfiguration config,
+        private readonly ISqlRepository<AddToCart> _addToCartRepo;
+        public AddToCartController(IConfiguration config,
                                 AppDbContext context,
-                                ISqlRepository<POSOrderItem> pOSOrderItemRepo
+                                ISqlRepository<AddToCart> addToCartRepo
                                )
         {
             _config = config;
             _context = context;
-            _pOSOrderItemRepo = pOSOrderItemRepo;
+            _addToCartRepo = addToCartRepo;
 
         }
         [HttpPost]
-        public IActionResult CreatePOSOrderItem(PosOrderItemDTO posOrderItemDTO)
+        public IActionResult CreateAddToCart(AddTOCartDTO addTOCartDTO)
         {
             try
             {
-                var objCheck = _context.POSOrderItems.SingleOrDefault(x => x.ItemId == posOrderItemDTO.ItemId && x.IsDeleted == false);
+                var objCheck = _context.AddToCarts.SingleOrDefault(x => x.ItemId == addTOCartDTO.ItemId && x.IsDeleted == false);
                 if (objCheck == null)
                 {
-                    POSOrderItem pOSOrderItem = new POSOrderItem();
-                    pOSOrderItem.ItemId = posOrderItemDTO.ItemId;
-                    pOSOrderItem.VendorId = posOrderItemDTO.VendorId;
-                    pOSOrderItem.Quantity = posOrderItemDTO.Quantity;
-                    pOSOrderItem.Price = posOrderItemDTO.Price;
-                    pOSOrderItem.TotalPrice = posOrderItemDTO.TotalPrice;
-                    pOSOrderItem.CreatedBy = posOrderItemDTO.CreatedBy;
-                    var obj = _pOSOrderItemRepo.Insert(pOSOrderItem);
+                    AddToCart addToCart = new AddToCart();
+                    addToCart.ItemId = addTOCartDTO.ItemId;
+                    addToCart.VendorId = addTOCartDTO.VendorId;
+                    addToCart.Quantity = addTOCartDTO.Quantity;
+                    addToCart.Price = addTOCartDTO.Price;
+                    addToCart.TotalPrice = addTOCartDTO.TotalPrice;
+                    addToCart.CreatedBy = addTOCartDTO.CreatedBy;
+                    var obj = _addToCartRepo.Insert(addToCart);
                     return Ok(obj);
 
 
                 }
                 else if (objCheck != null)
                 {
-                    return Accepted(new Confirmation { Status = "duplicate", ResponseMsg = "Duplicate POSOrderItem!" });
+                    return Accepted(new Confirmation { Status = "duplicate", ResponseMsg = "Duplicate AddToCart!" });
                 }
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = "Something unexpected!" });
             }
@@ -60,17 +62,17 @@ namespace AdminApi.Controllers
 
         }
         [HttpGet]
-        public ActionResult GetPOSOrderItemList()
+        public ActionResult GetAddToCartList()
         {
             try
             {
-                var list = (from u in _context.POSOrderItems
+                var list = (from u in _context.AddToCarts
                             join a in _context.Vendors on u.VendorId equals a.VendorId
                             join b in _context.Items on u.ItemId equals b.ItemId
                             select new
                             {
                                 u.VendorId,
-                                u.POSOrderItemId,
+                                u.AddToCartId,
                                 a.VendorName,
                                 u.ItemId,
                                 b.ItemName,
@@ -87,12 +89,12 @@ namespace AdminApi.Controllers
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
             }
         }
-        [HttpGet("{pOSOrderItemId}")]
-        public ActionResult GetSinglePOSOrderItemId(Int64 POSOrderItemId)
+        [HttpGet("{AddToCartId}")]
+        public ActionResult GetSingleAddToCartId(int AddToCartId)
         {
             try
             {
-                var singlepOSOrderItem = _pOSOrderItemRepo.SelectById(POSOrderItemId);
+                var singlepOSOrderItem = _addToCartRepo.SelectById(AddToCartId);
 
                 return Ok(singlepOSOrderItem);
             }
@@ -102,26 +104,26 @@ namespace AdminApi.Controllers
             }
         }
         [HttpPost]
-        public ActionResult UpdatePOSOrderItem(UpdateOrderItemDTO updateOrderItemDTO)
+        public ActionResult UpdatePOSOrderItem(UpdateAddToCartDTO updateAddToCartDTO)
         {
             try
             {
-                var pOSOrderItem =_context.POSOrderItems.SingleOrDefault(x => x.POSOrderItemId ==  updateOrderItemDTO.POSOrderItemId);
-                if(pOSOrderItem != null)
+                var addToCart = _context.AddToCarts.SingleOrDefault(x => x.AddToCartId == updateAddToCartDTO.AddToCartId);
+                if (addToCart != null)
                 {
-                    pOSOrderItem.VendorId = updateOrderItemDTO.VendorId;
-                    pOSOrderItem.ItemId = updateOrderItemDTO.ItemId;
-                    pOSOrderItem.Quantity = updateOrderItemDTO.Quantity;
-                    pOSOrderItem.Price = updateOrderItemDTO.Price;
-                    pOSOrderItem.TotalPrice = updateOrderItemDTO.TotalPrice;
-                    pOSOrderItem.UpdatedBy = updateOrderItemDTO.UpdatedBy;
-                    pOSOrderItem.UpdatedOn = System.DateTime.Now;
+                    addToCart.VendorId = updateAddToCartDTO.VendorId;
+                    addToCart.ItemId = updateAddToCartDTO.ItemId;
+                    addToCart.Quantity = updateAddToCartDTO.Quantity;
+                    addToCart.Price = updateAddToCartDTO.Price;
+                    addToCart.TotalPrice = updateAddToCartDTO.TotalPrice;
+                    addToCart.UpdatedBy = updateAddToCartDTO.UpdatedBy;
+                    addToCart.UpdatedOn = System.DateTime.Now;
                     _context.SaveChanges();
-                    return Ok(pOSOrderItem);
+                    return Ok(addToCart);
                 }
                 else
                 {
-                    return NotFound(new Confirmation { Status = "error", ResponseMsg = "POSOrderItem not found" });
+                    return NotFound(new Confirmation { Status = "error", ResponseMsg = "AddToCart not found" });
                 }
             }
             catch (Exception ex)
@@ -129,17 +131,17 @@ namespace AdminApi.Controllers
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
             }
         }
-        [HttpGet("{POSOrderItemId}/{DeletedBy}")]
-        public ActionResult DeletePOSOrderItem(Int64 POSOrderItemId, int DeletedBy)
+        [HttpGet("{AddToCartId}/{DeletedBy}")]
+        public ActionResult DeletePOSOrderItem(int AddToCartId, int DeletedBy)
         {
             try
             {
-                var pOSOrderItem = _context.POSOrderItems.SingleOrDefault(opt => opt.POSOrderItemId == POSOrderItemId);
-                pOSOrderItem.IsDeleted = true;
-                pOSOrderItem.UpdatedBy = DeletedBy;
-                pOSOrderItem.UpdatedOn = System.DateTime.Now;
+                var addToCart = _context.AddToCarts.SingleOrDefault(opt => opt.AddToCartId == AddToCartId);
+                addToCart.IsDeleted = true;
+                addToCart.UpdatedBy = DeletedBy;
+                addToCart.UpdatedOn = System.DateTime.Now;
                 _context.SaveChanges();
-                return Ok(pOSOrderItem);
+                return Ok(addToCart);
             }
             catch (Exception ex)
             {

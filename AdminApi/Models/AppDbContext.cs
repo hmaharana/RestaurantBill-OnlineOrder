@@ -1,4 +1,5 @@
 ﻿using AdminApi.Models.App;
+using AdminApi.Models.App.Add_To_Cart;
 using AdminApi.Models.App.Category;
 using AdminApi.Models.App.CustomerLogin;
 using AdminApi.Models.App.Item;
@@ -51,8 +52,9 @@ namespace AdminApi.Models
         public virtual DbSet<GST> GSTs { get; set; }
         public virtual DbSet<Purchase> Purchases { get; set; }
         public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
-        public virtual DbSet<POSOrderItem>POSOrderItems { get; set; }
        
+        public virtual DbSet<AddToCart> AddToCarts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Seed();
