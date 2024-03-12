@@ -1,0 +1,219 @@
+﻿@using Microsoft.Extensions.Configuration;
+@using Microsoft.AspNetCore.Http
+@inject IConfiguration Configuration;
+
+@{
+    ViewBag.Title = "Purchase";
+    string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
+}
+
+<!-- PAGE-HEADER -->
+<div class="page-header">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#"><i class="fe fe-file-text mr-1"></i>Admin Console</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Purchase Create</li>
+    </ol>
+    <div class="ml-auto">
+        <a href="~/Purchase/PurchaseList" class="btn btn-primary btn-icon btn-sm text-white mr-2">
+            <span>
+                <i class="fe fe-plus"></i>
+            </span>Purchase View
+        </a>
+    </div>
+</div>
+<!-- PAGE-HEADER END -->
+
+<div class="row">
+    <div class="col-md">
+        <div class="card overflow-hidden">
+            <div class="card-header">
+                <h3 class="card-title">Purchase Create</h3>
+            </div>
+            <div class="card-body">
+                <form action="#" role="form" class="validate" id="formPost">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Supplier Name &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <div class="input-box">
+                                    <select class="form-control" id="Selectsupplier">
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Purchase Date &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="date" class="form-control" id="date" placeholder="Purchase Date" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Purchase Status &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <select name="" id="status" class="form-control" placeholder="Select Status">
+                                    <option value="" disabled selected>Select Status</option>
+                                    <option value="success">Success</option>
+                                    <option value="pending">Pending</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Item Name &nbsp;<span style="color: red;"><b>*</b></span></label>
+                               <div class="input-box">
+                                   <select class="form-control" id="Selectitem">
+                                   </select>
+                               </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Total Amount &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="amount" placeholder="Total Amount" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Payment Status &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <select name="" id="paymentstatus" class="form-control" placeholder="Select Status">
+                                    <option value="" disabled selected>Select Status</option>
+                                    <option value="clear">Clear</option>
+                                    <option value="due">Due</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <button type="button" id="btnSave" class="btn btn-radius btn-success">Save</button>
+                            <a type="button" href="/Purchase/PurchaseCreate" class="btn btn-radius btn-danger">Reset</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        GetSupplier()
+        function GetSupplier(Id) {
+            var opt = '';
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Supplier/GetSupplierList",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var options = [];
+                    options.push(' <option value = ""> Select Supplier </option> ');
+                    for (var i = 0; i < res.data.length; i++) {
+                        if (Id == res.data[i].supplierId) {
+                            opt = 'selected'
+                        } else {
+                            opt = '';
+                        }
+                        options.push('<option value = "' + res.data[i].supplierId + '" ' + opt + ' > ' + res.data[i].supplierName + '</option>');
+                    }
+                    $("#Selectsupplier").html(options.join(''));
+                },
+
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+
+
+        GetItem()
+        function GetItem(Id) {
+            var opt = '';
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/Item/AllItemList",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (res) {
+                    var options = [];
+                    options.push(' <option value = ""> Select Item </option> ');
+                    for (var i = 0; i < res.data.length; i++) {
+                        if (Id == res.data[i].itemId) {
+                            opt = 'selected'
+                        } else {
+                            opt = '';
+                        }
+                        options.push('<option value = "' + res.data[i].itemId + '" ' + opt + ' > ' + res.data[i].itemName + '</option>');
+                    }
+                    $("#Selectitem").html(options.join(''));
+                },
+
+                error: function (data) {
+                    if (data.status == 401) {
+                        window.location.replace('/Message/TokenExpire');
+                    } else if (data.status == 403) {
+                        window.location.replace('/Message/Unauthorize');
+                    }
+                }
+            });
+        }
+
+
+        $("#btnSave").click(function (e) {
+            if (!document.getElementById("formPost").checkValidity()) {
+                e.preventDefault();
+            } else {
+                var model = {
+                    supplierId: parseInt($("#Selectsupplier").val()),
+                    itemId: $.trim($("#Selectitem").val()),
+                    purchaseDate: $.trim($("#date").val()),
+                    purchaseStatus: $.trim($("#status").val()),
+                    totalAmount: $.trim($("#amount").val()),
+                    paymentStatus: $.trim($("#paymentstatus").val()),
+                    createdBy: @Context.Session.GetInt32("UserId"),
+                };
+
+                console.log(model);
+
+                $.ajax({
+                    type: "POST",
+                    url: "@apiUrl/api/Purchase/CreatePurchase",
+                    data: JSON.stringify(model),
+                    contentType: "application/json; charset=utf-8",
+                    headers: {
+                        "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+                    },
+                    dataType: "json",
+                    success: function (data, statusText, xhr) {
+                        if (xhr.status === 200) {
+                            console.log(data);
+                            sweetAlert({
+                                html: true,
+                                title: "Purchase Add",
+                                text: "Successfully Created!",
+                                type: "success"
+                            });
+                        } else if (data.status === "duplicate") {
+                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                        } else if (data.status === "error") {
+                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                        } else {
+                            sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+                        }
+                    },
+                    error: function (data) {
+                        if (data.status == 401) {
+                            window.location.replace('/Message/TokenExpire');
+                        } else if (data.status == 403) {
+                            window.location.replace('/Message/Unauthorize');
+                        } else if (data.status == 400) {
+                            sweetAlert("Validation Alert!", "Please check input data!", "warning");
+                        }
+                    }
+                });
+
+
+            }
+        });
+
+    </script>
+}

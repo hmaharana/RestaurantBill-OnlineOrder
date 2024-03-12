@@ -3,17 +3,17 @@
 @inject IConfiguration Configuration;
 
 @{
-    ViewBag.Title = "Location";
+    ViewBag.Title = "PaymentMethod";
     string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
 }
 <!-- PAGE-HEADER -->
 <div class="page-header">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#"><i class="fe fe-file-text mr-1"></i>Admin Consol</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Location Edit</li>
+        <li class="breadcrumb-item active" aria-current="page">Payment Method Edit</li>
     </ol>
     <div class="ml-auto">
-        <a href="~/Location/LocationList" class="btn btn-primary btn-icon btn-sm text-white mr-2">
+        <a href="~/PaymentMethod/PaymentMethodList" class="btn btn-primary btn-icon btn-sm text-white mr-2">
             <span>
                 <i class="fe fe-plus"></i>
             </span> View
@@ -25,49 +25,25 @@
     <div class="col-md">
         <div class="card overflow-hidden">
             <div class="card-header">
-                <h3 class="card-title">Location Edit</h3>
-            </div>
+                <h3 class="card-title">Payment Method Edit</h3>
+            </div> 
             <div class="card-body">
                 <form action="#" role="form" class="validate" id="formPost">
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="form-label">Vendor Name &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <div class="input-box">
-                                    <select class="form-control" id="Selectvendor">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                        
 
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="form-label">Location Name &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="text" class="form-control" id="locationName" placeholder="Enter Location Name" required>
+                                <label class="form-label">Payment Method Name &nbsp;<span style="color: red;"><b>*</b></span></label>
+                                <input type="text" class="form-control" id="paymentMethodName" placeholder="Enter Payment Method Name" required>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="form-label">Latitude &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="text" class="form-control" id="latitude" placeholder="Enter Latitude" required>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="form-label">Longitude &nbsp;<span style="color: red;"><b>*</b></span></label>
-                                <input type="text" class="form-control" id="longitude" placeholder="Enter Longitude" required>
-                            </div>
-                        </div>
-                    </div>
-
-                   
+                    
                     <div class="row">
                         <div class="col-md-12">
                             <button type="button" id="btnupdate" class="btn btn-radius btn-success">Update</button>
-                            <a type="button" href="~/Location/LocationList" class="btn btn-radius btn-danger">Reset</a>
+                            <a type="button" href="~/PaymentMethod/PaymentMethodList" class="btn btn-radius btn-danger">Reset</a>
                         </div>
                     </div>
                 </form>
@@ -79,43 +55,13 @@
 @section scripts{
     <script>
 
-        Getvendor()
-        async function Getvendor(Id) {
-            var opt = '';
-            $.ajax({
-                type: "GET",
-                url: "@apiUrl/api/Vendor/GetVendorList",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (res) {
-                    var options = [];
-                    options.push('<option value = ""> Select Vendor </option>');
-                    for (var i = 0; i < res.data.length; i++) {
-                        if (Id == res.data[i].vendorId) {
-                            opt = 'selected'
-                        } else {
-                            opt = '';
-                        }
-                        options.push('<option value = "' + res.data[i].vendorId + '" ' + opt + ' > ' + res.data[i].vendorName + '</option>');
-                    }
-                    $("#Selectvendor").html(options.join(''));
-                },
 
-                error: function (data) {
-                    if (data.status == 401) {
-                        window.location.replace('/Message/TokenExpire');
-                    } else if (data.status == 403) {
-                        window.location.replace('/Message/Unauthorize');
-                    }
-                }
-            });
-        }
-        var locationId = @ViewBag.locationId
-            loadSinglelocation()
-        function loadSinglelocation() {
+        var paymentMethodId = @ViewBag.paymentMethodId
+            loadSinglePaymentMethod()
+        function loadSinglePaymentMethod() {
             $.ajax({
                 type: "GET",
-                url: "@apiUrl/api/Location/GetSingleLocationId/" + locationId,
+                url: "@apiUrl/api/PaymentMethod/GetSinglePaymentMethodId/" + paymentMethodId,
                 contentType: "application/json; charset=utf-8",
                 headers: {
                     "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
@@ -123,10 +69,9 @@
                 dataType: "json",
                 success: function (data) {
                     if (data) {
-                        $('#Selectvendor').val(data.vendorId);
-                        $('#locationName').val(data.locationName);
-                        $('#latitude').val(data.latitude);
-                        $('#longitude').val(data.longitude);
+
+                        $('#paymentMethodName').val(data.paymentMethodName);
+                      
                     }
                     else {
                         sweetAlert("Validation Alert!", "Something unexpected!", "warning");
@@ -148,17 +93,16 @@
             } else {
 
                 var model = {
-                    locationId: locationId,
-                    vendorId: $.trim($("#Selectvendor").val()),
-                    locationName: $.trim($("#locationName").val()),
-                    latitude: $.trim($("#latitude").val()),
-                    longitude: $.trim($("#longitude").val()),
+                    paymentMethodId: paymentMethodId,
+
+                    paymentMethodName: $.trim($("#paymentMethodName").val()),
+                    
                     updatedBy: @Context.Session.GetInt32("UserId"),
                 }
                 console.log(model)
                 $.ajax({
                     type: "POST",
-                    url: "@apiUrl/api/Location/UpdateLocation",
+                    url: "@apiUrl/api/PaymentMethod/UpdatePaymentMethod",
                     data: JSON.stringify(model),
                     contentType: "application/json; charset=utf-8",
                     headers: {
@@ -168,11 +112,11 @@
                     success: function (data, statusText, xhr) {
                         console.log(data)
                         if (xhr.status === 200) {
-                            $('#Location_Tb').DataTable().ajax.reload(null, false);
+                            $('#PaymentMethod_Tb').DataTable().ajax.reload(null, false);
                             sweetAlert({
                                 html: true,
                                 icon: "success",
-                                title: "Location Update Order",
+                                title: "PaymentMethod Update Order",
                                 text: "Successfully updated!",
                                 type: "success"
                             });

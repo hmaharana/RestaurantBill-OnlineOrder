@@ -1,13 +1,15 @@
 ﻿using System;
 
-namespace AdminApi.Models.App.Order
+namespace AdminApi.Models.App.Add_To_Cart
 {
-    public class POSOrderItem
+    public class AddToCart
     {
-        public Int64 POSOrderItemId { get; set; }
-        public Int64 POSOrderId { get; set; }
-        public int ItemId { get; set;}
+        public int AddToCartId { get; set; }
+        public int VendorId { get; set; }
+        public int ItemId { get; set; }
         public Int64 Quantity { get; set; }
+        public double Price { get; set; }
+        public double TotalPrice { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public int? UpdatedBy { get; set; }

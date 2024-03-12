@@ -1,10 +1,13 @@
 ﻿using AdminApi.Models.App;
+using AdminApi.Models.App.Add_To_Cart;
 using AdminApi.Models.App.Category;
 using AdminApi.Models.App.CustomerLogin;
 using AdminApi.Models.App.Item;
 using AdminApi.Models.App.Location_Master;
+using AdminApi.Models.App.Order;
 using AdminApi.Models.App.Payment_Method;
 using AdminApi.Models.App.Purchase;
+using AdminApi.Models.App.Stock;
 using AdminApi.Models.App.Supplier;
 using AdminApi.Models.App.Tax;
 using AdminApi.Models.App.Vendor;
@@ -50,7 +53,10 @@ namespace AdminApi.Models
         public virtual DbSet<GST> GSTs { get; set; }
         public virtual DbSet<Purchase> Purchases { get; set; }
         public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
-       
+        public virtual DbSet<POSOrder> POSOrders { get; set; }
+        public virtual DbSet<Stock> Stocks { get; set; }
+        public virtual DbSet<AddToCart> AddToCarts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Seed();
@@ -135,6 +141,15 @@ namespace AdminApi.Models
             .Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .ValueGeneratedNever();
+            //item
+            modelBuilder.Entity<Item>()
+          .Property(s => s.CreatedOn)
+          .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<Item>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
 
             //itemImage
             modelBuilder.Entity<ItemImage>()
@@ -194,6 +209,16 @@ namespace AdminApi.Models
       .HasDefaultValue(System.DateTime.Now);
 
             modelBuilder.Entity<PaymentMethod>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
+            //addToCart
+
+            modelBuilder.Entity<AddToCart>()
+      .Property(s => s.CreatedOn)
+      .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<AddToCart>()
             .Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .ValueGeneratedNever();

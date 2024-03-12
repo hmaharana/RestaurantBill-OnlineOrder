@@ -265,7 +265,7 @@
                                 $('#additionalImages').append(imageElement);
                             }
                         }
-
+                        
                     } else {
                         alert("Validation Alert! Something unexpected happened!");
                     }
@@ -338,7 +338,7 @@
                                 updatedBy: @Context.Session.GetInt32("UserId")
                             };
 
-                            console.log(model);
+                          
 
                             $.ajax({
                                 type: "POST",
