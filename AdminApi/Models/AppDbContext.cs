@@ -139,6 +139,15 @@ namespace AdminApi.Models
             .Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .ValueGeneratedNever();
+            //item
+            modelBuilder.Entity<Item>()
+          .Property(s => s.CreatedOn)
+          .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<Item>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
 
             //itemImage
             modelBuilder.Entity<ItemImage>()
@@ -198,6 +207,16 @@ namespace AdminApi.Models
       .HasDefaultValue(System.DateTime.Now);
 
             modelBuilder.Entity<PaymentMethod>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
+            //addToCart
+
+            modelBuilder.Entity<AddToCart>()
+      .Property(s => s.CreatedOn)
+      .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<AddToCart>()
             .Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .ValueGeneratedNever();
