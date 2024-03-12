@@ -217,7 +217,7 @@
             });
         }
     </script>
-    <script>
+  /*  <script>
         // Fetch data from the API
         $.ajax({
             url: '@apiUrl/api/Item/AllItemList',
@@ -241,7 +241,65 @@
                 console.error('Error fetching data:', error); // Use error to get the error message
             }
         });
+    </script>*/
+
+    <script>
+        // Fetch data from the API
+        $.ajax({
+            url: '@apiUrl/api/Item/AllItemList',
+            method: 'GET',
+            success: function (data) {
+                console.log(data);
+                var itemList = '';
+                for (var i = 0; i < data.data.length; i++) {
+                    for (var x = 0; x < data.data[i].itemImages.length; x++) {
+                        if (x === 0) {
+                            itemList += '<div class="col-sm-3 col-md3 col-lg-3 col-xl-3"><div class="card item-card"><div class="card-body"><div><a href="#" class="item-link" data-item-id="' + data.data[i].itemId + '"><img src="' + data.data[i].itemImages[x]["mainImage"] + '" alt="img"></a></div><div class="product-content text-center"><h4 class="title"><a href="#" class="item-link" data-item-id="' + data.data[i].itemId + '">' + data.data[i]["itemName"] + '</a></h4><div class="price">' + data.data[i]["salePrice"] + '</div></div></div></div></div>';
+                        }
+                    }
+                }
+                $('#items').html(itemList);
+
+                // Add click event listener to item links
+                $('.item-link').click(function (e) {
+                    e.preventDefault();
+                    var itemId = $(this).data('item-id');
+                    addToCart(itemId);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching data:', error); // Use error to get the error message
+            }
+        });
+
+        // Function to add item to cart
+        function addToCart(itemId, vendorId, quantity, price, ) {
+            var cartData = {
+                "vendorId": vendorId,
+                "itemId": itemId,
+                "quantity": quantity, // You can modify quantity as needed
+                "price": price, // Replace with actual price if needed
+                "totalPrice": totalPrice, // Replace with actual total price if needed
+                "createdBy": createdBy // Replace with actual user ID
+            };
+
+            // AJAX call to add item to cart
+            $.ajax({
+                url: '@apiUrl/api/AddToCart/CreateAddToCart',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(cartData),
+                success: function (response) {
+                    console.log('Item added to cart successfully:', response);
+                    // You can update UI or show a message here if needed
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error adding item to cart:', error); // Use error to get the error message
+                }
+            });
+        }
     </script>
+
 
    
 
