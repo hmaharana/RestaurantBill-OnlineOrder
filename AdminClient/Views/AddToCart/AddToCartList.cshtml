@@ -3,20 +3,20 @@
 @inject IConfiguration Configuration;
 
 @{
-    ViewBag.Title = "POSOrderItem";
+    ViewBag.Title = "AddToCart";
     string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
 }
 
 <div class="page-header">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#"><i class="fe fe-file-text mr-1"></i>Admin Console</a></li>
-        <li class="breadcrumb-item active" aria-current="page">POSOrderItem List</li>
+        <li class="breadcrumb-item active" aria-current="page">AddToCart List</li>
     </ol>
     <div class="ml-auto">
-        <a href="~/POSOrderItem/POSOrderItemCreate" class="btn btn-primary btn-icon btn-sm text-white mr-2">
+        <a href="~/AddToCart/AddToCartCreate" class="btn btn-primary btn-icon btn-sm text-white mr-2">
             <span>
                 <i class="fe fe-plus"></i>
-            </span> POSOrderItem Create
+            </span> AddToCart Create
         </a>
     </div>
 </div>
@@ -25,11 +25,11 @@
     <div class="col-md-12 col-lg-12">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">POSOrderItem List</div>
+                <div class="card-title">AddToCart List</div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="POSOrderItem" class="table table-striped table-bordered nowrap dataTable no-footer dtr-inline" style="width:100%">
+                    <table id="AddToCart" class="table table-striped table-bordered nowrap dataTable no-footer dtr-inline" style="width:100%">
                         <thead>
                             <tr>
 
@@ -52,11 +52,11 @@
     <script>
 
         //List
-        loadPOSOrderItem()
-        function loadPOSOrderItem() {
-            var table = $('#POSOrderItem').DataTable();
+        loadAddToCart()
+        function loadAddToCart() {
+            var table = $('#AddToCart').DataTable();
             table.destroy();
-            table = $('#POSOrderItem').dataTable({
+            table = $('#AddToCart').dataTable({
                 "paginationType": "full_numbers",
                 "dom": 'Bfrtip',
                 "buttons": ['copy', 'csv', 'excel', 'pdf', 'print'],
@@ -65,7 +65,7 @@
                 "sort": true,
                 "info": true,
                 "ajax": {
-                    "url": '@apiUrl/api/POSOrderItem/GetPOSOrderItemList',
+                    "url": '@apiUrl/api/AddToCart/GetAddToCartList',
                     "type": "GET",
                     "dataType": "json",
                     "headers": {
@@ -88,7 +88,7 @@
                     { "data": "totalPrice", "orderable": true },
                     {
                         "render": function (data, type, row) {
-                            return '<a class="btn btn-sm btn-primary" href="../POSOrderItem/POSOrderItemEdit?posOrderItemId=' + row.posOrderItemId + '"><i class="fa fa-edit"></i></a>' + '&nbsp&nbsp<button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete" data-id="' + row.posOrderItemId + '"><i class="fa fa-trash"></i></button>';
+                            return '<a class="btn btn-sm btn-primary" href="../AddToCart/AddToCartEdit?addToCartId=' + row.addToCartId + '"><i class="fa fa-edit"></i></a>' + '&nbsp&nbsp<button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete" data-id="' + row.addToCartId + '"><i class="fa fa-trash"></i></button>';
                         }
                     }
                 ]
@@ -96,7 +96,7 @@
         }
 
         //Delete
-        $('#POSOrderItem tbody').on('click', 'button[data-target="#delete"]', function () {
+        $('#AddToCart tbody').on('click', 'button[data-target="#delete"]', function () {
             var id = $(this).data('id');
             swal({
                 html: true,
@@ -110,7 +110,7 @@
             }, function () {
                 $.ajax({
                     type: "GET",
-                    url: "@apiUrl/api/POSOrderItem/DeletePOSOrderItem/" + id + "/" + @Context.Session.GetInt32("UserId"),
+                    url: "@apiUrl/api/AddToCart/DeleteAddToCart/" + id + "/" + @Context.Session.GetInt32("UserId"),
                     contentType: "application/json; charset=utf-8",
                     headers: {
                         "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
@@ -118,11 +118,11 @@
                     dataType: "json",
                     success: function (data, statusText, xhr) {
                         if (xhr.status == 200) {
-                            $('#POSOrderItem').DataTable().ajax.reload(null, false);
+                            $('#AddToCart').DataTable().ajax.reload(null, false);
                             $('#delete').modal('hide');
                             sweetAlert({
                                 html: true,
-                                title: "POSOrderItem",
+                                title: "AddToCart",
                                 text: "Successfully deleted!",
                                 type: "success"
                             });

@@ -3,7 +3,7 @@
 @inject IConfiguration Configuration;
 
 @{
-    ViewBag.Title = "POSOrderItem";
+    ViewBag.Title = "AddToCart";
     string apiUrl = Configuration.GetValue<string>("WebAPIBaseUrl");
 }
 
@@ -11,10 +11,10 @@
 <div class="page-header">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="#"><i class="fe fe-file-text mr-1"></i>Admin Consol</a></li>
-        <li class="breadcrumb-item active" aria-current="page">POSOrderItem Create</li>
+        <li class="breadcrumb-item active" aria-current="page">AddToCart Create</li>
     </ol>
     <div class="ml-auto">
-        <a href="~/POSOrderItem/POSOrderItemList" class="btn btn-primary btn-icon btn-sm text-white mr-2">
+        <a href="~/AddToCart/AddToCartList" class="btn btn-primary btn-icon btn-sm text-white mr-2">
             <span>
                 <i class="fe fe-plus"></i>
             </span> View
@@ -27,7 +27,7 @@
     <div class="col-md">
         <div class="card overflow-hidden">
             <div class="card-header">
-                <h3 class="card-title">POSOrderItem Create</h3>
+                <h3 class="card-title">AddToCart Create</h3>
             </div>
             <div class="card-body">
                 <form action="#" role="form" class="validate" id="formPost">
@@ -120,8 +120,8 @@
                 }
             });
         }
-        GetPOSOrderItem()
-        async function GetPOSOrderItem(Id) {
+        GetItem()
+        async function GetItem(Id) {
             var opt = '';
             $.ajax({
                 type: "GET",
@@ -168,7 +168,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "@apiUrl/api/POSOrderItem/CreatePOSOrderItem",
+                    url: "@apiUrl/api/AddToCart/CreateAddToCart",
                     data: JSON.stringify(model),
                     contentType: "application/json; charset=utf-8",
                     headers: {
@@ -180,7 +180,7 @@
                             console.log(data);
                             sweetAlert({
                                 html: true,
-                                title: "POSOrderItem Add",
+                                title: "AddToCart Add",
                                 text: "Successfully Created!",
                                 type: "success"
                             });

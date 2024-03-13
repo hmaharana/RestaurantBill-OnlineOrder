@@ -19,6 +19,6 @@ namespace AdminApi.DTO.App.AddToCartDTO
         public Int64 Quantity { get; set; }
         public double Price { get; set; }
         public double TotalPrice { get; set; }
-        public int? UpdatedBy { get; set; }
+        public int CreatedBy { get; set; }
     }
 }

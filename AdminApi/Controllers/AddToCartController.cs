@@ -1,5 +1,4 @@
-﻿
-using AdminApi.Models.App.Order;
+﻿using AdminApi.Models.App.Order;
 using AdminApi.Models.Helper;
 using AdminApi.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -104,7 +103,7 @@ namespace AdminApi.Controllers
             }
         }
         [HttpPost]
-        public ActionResult UpdatePOSOrderItem(UpdateAddToCartDTO updateAddToCartDTO)
+        public ActionResult UpdateAddToCart(UpdateAddToCartDTO updateAddToCartDTO)
         {
             try
             {
@@ -116,7 +115,7 @@ namespace AdminApi.Controllers
                     addToCart.Quantity = updateAddToCartDTO.Quantity;
                     addToCart.Price = updateAddToCartDTO.Price;
                     addToCart.TotalPrice = updateAddToCartDTO.TotalPrice;
-                    addToCart.UpdatedBy = updateAddToCartDTO.UpdatedBy;
+                    addToCart.UpdatedBy = updateAddToCartDTO.CreatedBy;
                     addToCart.UpdatedOn = System.DateTime.Now;
                     _context.SaveChanges();
                     return Ok(addToCart);
@@ -132,13 +131,48 @@ namespace AdminApi.Controllers
             }
         }
         [HttpGet("{AddToCartId}/{DeletedBy}")]
-        public ActionResult DeletePOSOrderItem(int AddToCartId, int DeletedBy)
+        public ActionResult DeleteAddToCart(int AddToCartId, int DeletedBy)
         {
             try
             {
                 var addToCart = _context.AddToCarts.SingleOrDefault(opt => opt.AddToCartId == AddToCartId);
                 addToCart.IsDeleted = true;
                 addToCart.UpdatedBy = DeletedBy;
+                addToCart.UpdatedOn = System.DateTime.Now;
+                _context.SaveChanges();
+                return Ok(addToCart);
+            }
+            catch (Exception ex)
+            {
+                return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult UpdatePlusQuantity(UpdateAddToCartDTO updateAddToCartDTO)
+        {
+            try
+            {
+                var addToCart = _context.AddToCarts.SingleOrDefault(x => x.AddToCartId ==  updateAddToCartDTO.AddToCartId);
+                addToCart.Quantity = addToCart.Quantity + 1;
+                addToCart.UpdatedBy = updateAddToCartDTO.CreatedBy;
+                addToCart.UpdatedOn = System.DateTime.Now;
+                _context.SaveChanges();
+                return Ok(addToCart);
+            }
+            catch (Exception ex)
+            {
+                return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
+            }
+        }
+        [HttpPost]
+        public ActionResult UpdateMinusQuantity(UpdateAddToCartDTO updateAddToCartDTO)
+        {
+            try
+            {
+                var addToCart = _context.AddToCarts.SingleOrDefault(x => x.AddToCartId == updateAddToCartDTO.AddToCartId);
+                addToCart.Quantity = addToCart.Quantity - 1;
+                addToCart.UpdatedBy = updateAddToCartDTO.CreatedBy;
                 addToCart.UpdatedOn = System.DateTime.Now;
                 _context.SaveChanges();
                 return Ok(addToCart);
