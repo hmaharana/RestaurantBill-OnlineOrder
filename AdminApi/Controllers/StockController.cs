@@ -20,23 +20,24 @@ namespace AdminApi.Controllers
         private readonly ISqlRepository<StockItems> _stockItemsRepo;
         public StockController(IConfiguration config,
                                 AppDbContext context,
-                                ISqlRepository<Stock> stockRepo
+                                ISqlRepository<Stock> stockRepo,
+                                ISqlRepository<StockItems> stockItemsRepo
+
                                )
         {
             _config = config;
             _context = context;
             _stockRepo = stockRepo;
+            _stockItemsRepo = stockItemsRepo;
 
         }
 
         [HttpPost]
         public IActionResult CreateStock(StockDTO stockDTO)
         {
-           // var objCheck = _context.Stocks.SingleOrDefault(opt => opt.LocationId == stockDTO.LocationId && opt.IsDeleted == false);
+           
             try
             {
-                //if (objCheck == null)
-                //{
                     Stock stock = new Stock();
                     stock.LocationId = stockDTO.LocationId;
                     stock.SupplierId = stockDTO.SupplierId;
@@ -46,15 +47,20 @@ namespace AdminApi.Controllers
                     stock.AdditionalNotes = stockDTO.AdditionalNotes;
                     stock.CreatedBy = stockDTO.CreatedBy;
                     var obj = _stockRepo.Insert(stock);
-                    return Ok(obj);
+                for(int i= 0; i < stockDTO.StockItemsDTOs.Count; i++)
+                {
+                    StockItems stockItems = new StockItems();
+                    stockItems.StockId = obj.StockId;
+                    stockItems.Product = stockDTO.StockItemsDTOs[i].Product;
+                    stockItems.Quantity = stockDTO.StockItemsDTOs[i].Quantity;
+                    stockItems.UnitPrice = stockDTO.StockItemsDTOs[i].UnitPrice;
+                    stockItems.SubTotal = stockDTO.StockItemsDTOs[i].SubTotal;
+                    var stocks = _stockItemsRepo.Insert(stockItems);
 
                 }
-            //    else if (objCheck != null)
-            //    {
-            //        return Accepted(new Confirmation { Status = "duplicate", ResponseMsg = "Duplicate Hospital!" });
-            //    }
-            //    return Accepted(new Confirmation { Status = "error", ResponseMsg = "Something unexpected!" });
-            //}
+                    return Ok(stockDTO);
+
+                }
             catch (Exception ex)
             {
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
@@ -79,8 +85,19 @@ namespace AdminApi.Controllers
                                 a.LocationName,
                                 b.SupplierId,
                                 b.SupplierName,
-                                u.IsDeleted
-                            }).Where(x => x.IsDeleted == false);
+                                u.IsDeleted,
+
+                              StockItems = _context.StockItems
+                                             .Where(x => x.StockId == u.StockId)
+                                             .Select(x => new StockItemsDTO
+                                             {
+                                                 Product = x.Product,
+                                                 Quantity = x.Quantity,
+                                                 UnitPrice = x.UnitPrice,
+                                                 SubTotal = x.SubTotal,
+                                             }).ToList()
+
+                            }).Where(x => x.IsDeleted == false).Distinct().ToList();
                 int totalRecords = list.Count();
                 return Ok(new { data = list, recordsTotal = totalRecords, recordsFiltered = totalRecords });
             }
