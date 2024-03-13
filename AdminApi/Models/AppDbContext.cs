@@ -245,17 +245,17 @@ namespace AdminApi.Models
             .Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .ValueGeneratedNever();
-        }
+            //stockitems
 
-            //StockItems
             modelBuilder.Entity<StockItems>()
-     .Property(s => s.CreatedOn)
-     .HasDefaultValue(System.DateTime.Now);
+      .Property(s => s.CreatedOn)
+      .HasDefaultValue(System.DateTime.Now);
 
             modelBuilder.Entity<StockItems>()
             .Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .ValueGeneratedNever();
-        }
+
+        } 
     }
 }
