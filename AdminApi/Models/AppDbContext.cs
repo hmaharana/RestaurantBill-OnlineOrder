@@ -56,6 +56,7 @@ namespace AdminApi.Models
         public virtual DbSet<POSOrder> POSOrders { get; set; }
         public virtual DbSet<Stock> Stocks { get; set; }
         public virtual DbSet<AddToCart> AddToCarts { get; set; }
+        public virtual DbSet<StockItems> StockItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -222,8 +223,16 @@ namespace AdminApi.Models
             .Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .ValueGeneratedNever();
+
+            //StockItems
+            modelBuilder.Entity<StockItems>()
+     .Property(s => s.CreatedOn)
+     .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<StockItems>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
         }
-
-
     }
 }
