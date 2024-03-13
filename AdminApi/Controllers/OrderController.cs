@@ -98,8 +98,6 @@ namespace AdminApi.Controllers
                                 u.TotalDiscount,
                                 u.ServiceCharges,
                                 u.OrderNote,
-                             
-
                                 OrderItems = _context.OrderItems
                                                     .Where(x => x.OrderId == u.OrderId)
                                                     .Select(x => new OrderItemDTO
