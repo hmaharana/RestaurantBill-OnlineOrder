@@ -7,7 +7,7 @@ namespace AdminApi.Models.App.Stock
         public int StockItemsId { get; set; }
         public int StockId { get; set; }
         public string Product {  get; set; }
-        public string Quantity { get; set; }
+        public int Quantity { get; set; }
         public double UnitPrice { get; set; }
         public double SubTotal { get; set; }
         public int CreatedBy { get; set; }
