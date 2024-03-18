@@ -7,6 +7,7 @@ using System;
 using AdminApi.Models.App.Add_To_Cart;
 using AdminApi.DTO.App.AddToCartDTO;
 using System.Linq;
+using AdminApi.DTO.App.ItemDTO;
 
 namespace AdminApi.Controllers
 {
@@ -68,6 +69,7 @@ namespace AdminApi.Controllers
                 var list = (from u in _context.AddToCarts
                             join a in _context.Vendors on u.VendorId equals a.VendorId
                             join b in _context.Items on u.ItemId equals b.ItemId
+                            join c in _context.ItemImage on u.ItemId equals c.ItemId
                             select new
                             {
                                 u.VendorId,
@@ -78,8 +80,17 @@ namespace AdminApi.Controllers
                                 u.Quantity,
                                 u.Price,
                                 u.TotalPrice,
-                                u.IsDeleted
-                            }).Where(x => x.IsDeleted == false);
+                                u.IsDeleted,
+                                 ItemImages = _context.ItemImage
+                                                    .Where(img => img.ItemId == u.ItemId)
+                                                    .Select(img => new ItemImageViewDTO
+                                                    {
+                                                        ItemId = img.ItemId,
+                                                        MainImage = img.MainImage,
+                                                        CreatedOn = img.CreatedOn,
+                                                        CreatedBy = img.CreatedBy
+                                                    }).ToList(),
+                            }).Where(x => x.IsDeleted == false).Distinct().ToList();
                 int totalRecords = list.Count();
                 return Ok(new { data = list, recordsTotal = totalRecords, recordsFiltered = totalRecords });
             }
@@ -93,9 +104,30 @@ namespace AdminApi.Controllers
         {
             try
             {
-                var singlepOSOrderItem = _addToCartRepo.SelectById(AddToCartId);
-
-                return Ok(singlepOSOrderItem);
+                var list = (from u in _context.AddToCarts
+                           
+                            join c in _context.ItemImage on u.ItemId equals c.ItemId
+                            select new
+                            {
+                                u.VendorId,
+                                u.AddToCartId,
+                                u.ItemId,
+                                u.Quantity,
+                                u.Price,
+                                u.TotalPrice,
+                                u.IsDeleted,
+                                ItemImages = _context.ItemImage
+                                                    .Where(img => img.ItemId == u.ItemId)
+                                                    .Select(img => new ItemImageViewDTO
+                                                    {
+                                                        ItemId = img.ItemId,
+                                                        MainImage = img.MainImage,
+                                                        CreatedOn = img.CreatedOn,
+                                                        CreatedBy = img.CreatedBy
+                                                    }).ToList(),
+                            }).Where(x => x.AddToCartId == AddToCartId && x.IsDeleted == false).Distinct().ToList();
+                int totalRecords = list.Count();
+                return Ok(new { data = list, recordsTotal = totalRecords, recordsFiltered = totalRecords });
             }
             catch (Exception ex)
             {
