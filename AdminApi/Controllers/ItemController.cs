@@ -232,6 +232,8 @@ namespace AdminApi.Controllers
                             UpdatedBy = itemUpdateDTO.UpdatedBy,
                             UpdatedOn = DateTime.Now
                         };
+
+                       
                         _context.ItemImage.Add(itemImage);
                     }
 
