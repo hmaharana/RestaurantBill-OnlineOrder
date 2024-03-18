@@ -183,7 +183,7 @@ namespace AdminApi.Controllers
                                                         CreatedOn = img.CreatedOn,
                                                         CreatedBy = img.CreatedBy
                                                     }).ToList(),
-                            }).Where(x => x.IsDeleted == false).Distinct().ToList();
+                            }).Where(x => x.ItemId == ItemId && x.IsDeleted == false).Distinct().ToList();
 
                 int totalRecords = list.Count();
                 return Ok(new { data = list, recordsTotal = totalRecords, recordsFiltered = totalRecords });
