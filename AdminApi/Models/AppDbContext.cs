@@ -1,4 +1,5 @@
-﻿using AdminApi.Models.App;
+﻿using AdminApi.Data;
+using AdminApi.Models.App;
 using AdminApi.Models.App.Add_To_Cart;
 using AdminApi.Models.App.Category;
 using AdminApi.Models.App.CustomerLogin;
@@ -53,9 +54,11 @@ namespace AdminApi.Models
         public virtual DbSet<GST> GSTs { get; set; }
         public virtual DbSet<Purchase> Purchases { get; set; }
         public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
-        public virtual DbSet<POSOrder> POSOrders { get; set; }
         public virtual DbSet<Stock> Stocks { get; set; }
         public virtual DbSet<AddToCart> AddToCarts { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<OrderItem> OrderItems { get; set; }
+        public virtual DbSet<StockItems> StockItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -222,8 +225,37 @@ namespace AdminApi.Models
             .Property(s => s.IsDeleted)
             .HasDefaultValue(false)
             .ValueGeneratedNever();
-        }
+            //Order
 
+            modelBuilder.Entity<Order>()
+      .Property(s => s.CreatedOn)
+      .HasDefaultValue(System.DateTime.Now);
 
+            modelBuilder.Entity<Order>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
+            //OrderItem
+
+            modelBuilder.Entity<OrderItem>()
+      .Property(s => s.CreatedOn)
+      .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<OrderItem>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
+            //stockitems
+
+            modelBuilder.Entity<StockItems>()
+      .Property(s => s.CreatedOn)
+      .HasDefaultValue(System.DateTime.Now);
+
+            modelBuilder.Entity<StockItems>()
+            .Property(s => s.IsDeleted)
+            .HasDefaultValue(false)
+            .ValueGeneratedNever();
+
+        } 
     }
 }

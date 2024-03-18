@@ -2,15 +2,14 @@
 
 namespace AdminApi.Models.App.Stock
 {
-    public class Stock
+    public class StockItems
     {
+        public int StockItemsId { get; set; }
         public int StockId { get; set; }
-        public int LocationId { get; set; }
-        public int SupplierId { get; set; }
-        public string Status { get; set; }
-        public double ShippingCharges { get; set; }
-        public double TotalAmount { get; set; }
-        public string AdditionalNotes { get; set; }
+        public string Product {  get; set; }
+        public int Quantity { get; set; }
+        public double UnitPrice { get; set; }
+        public double SubTotal { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
         public int? UpdatedBy { get; set; }

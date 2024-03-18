@@ -124,6 +124,7 @@ namespace AdminApi.Controllers
                                 u.GSTAmount,
                                 u.Status,
                                 u.Description,
+                                u.CreatedBy,
                                 ItemImages = _context.ItemImage
                                                     .Where(img => img.ItemId == u.ItemId)
                                                     .Select(img => new ItemImageViewDTO
