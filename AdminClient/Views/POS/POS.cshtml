@@ -107,7 +107,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <div class="table-container">
+                    <div class="table-container"id="item-table-body">
                         <table class="table table-bordered table-vcenter text-nowrap">
                             <thead>
                                 <tr>
@@ -214,32 +214,31 @@
             });
         }
     </script>
-  /*  <script>
-        // Fetch data from the API
-        $.ajax({
-            url: '@apiUrl/api/Item/AllItemList',
-            method: 'GET',
-            success: function (data) {
-                console.log(data);
-                var a = '';
-                for (var i = 0; i < data.data.length; i++) {
+      /*   <script>
+               // Fetch data from the API
+               $.ajax({
+                   url: '@apiUrl/api/Item/AllItemList',
+                   method: 'GET',
+                   success: function (data) {
+                       console.log(data);
+                       var a = '';
+                       for (var i = 0; i < data.data.length; i++) {
 
-                    for (var x = 0; x < data.data[i].itemImages.length; x++) {
-                        if (x === 0) {
+                           for (var x = 0; x < data.data[i].itemImages.length; x++) {
+                               if (x === 0) {
 
-                            a += '<div class="col-sm-3 col-md3 col-lg-3 col-xl-3"><div class="card item-card"><div class="card-body"><div><a href="#"><img src=" ' + data.data[i].itemImages[x]["mainImage"] + '"alt = "img"></a></div><div class="product-content text-center"><h4 class="title"><a href="#">' + data.data[i]["itemName"] + '</a></h4><div class="price">' + data.data[i]["salePrice"] + '</div></div></div></div></div>'
+                                   a += '<div class="col-sm-3 col-md3 col-lg-3 col-xl-3"><div class="card item-card"><div class="card-body"><div><a href="#"><img src=" ' + data.data[i].itemImages[x]["mainImage"] + '"alt = "img"" onclick="ItemID(' + data.data[i]["itemId"] + + data.data[i]["vendorId"] + + data.data[i]["salePrice"] + + data.data[i]["mrp"] + + data.data[i].itemImages[x]["createdBy"] + ')"></a></div><div class="product-content text-center"><h4 class="title"><a href="#">' + data.data[i]["itemName"] + '</a></h4><div class="price">' + data.data[i]["salePrice"] + '</div></div></div></div></div>'
 
-                        }
-                    }
-                }
-                $('#items').html(a);
-            },
-            error: function (xhr, status, error) {
-                console.error('Error fetching data:', error); // Use error to get the error message
-            }
-        });
-    </script>*/
-
+                               }
+                           }
+                       }
+                       $('#items').html(a);
+                   },
+                   error: function (xhr, status, error) {
+                       console.error('Error fetching data:', error);
+                   }
+               });
+    </script> */
     <script>
         // Fetch data from the API
         $.ajax({
@@ -247,58 +246,59 @@
             method: 'GET',
             success: function (data) {
                 console.log(data);
-                var itemList = '';
+                var html = '';
                 for (var i = 0; i < data.data.length; i++) {
-                    for (var x = 0; x < data.data[i].itemImages.length; x++) {
+                    var item = data.data[i];
+                    for (var x = 0; x < item.itemImages.length; x++) {
                         if (x === 0) {
-                            itemList += '<div class="col-sm-3 col-md3 col-lg-3 col-xl-3"><div class="card item-card"><div class="card-body"><div><a href="#" class="item-link" data-item-id="' + data.data[i].itemId + '"><img src="' + data.data[i].itemImages[x]["mainImage"] + '" alt="img"></a></div><div class="product-content text-center"><h4 class="title"><a href="#" class="item-link" data-item-id="' + data.data[i].itemId + '">' + data.data[i]["itemName"] + '</a></h4><div class="price">' + data.data[i]["salePrice"] + '</div></div></div></div></div>';
+                            html += '<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">';
+                            html += '<div class="card item-card">';
+                            html += '<div class="card-body">';
+                            html += '<div><a href="#"><img src="' + item.itemImages[x]["mainImage"] + '" alt="img" onclick="addItemToCart(' + item.itemId + ',' + item.vendorId + ',' + item.salePrice + ',' + item.mrp + ',' + item.itemImages[x]["createdBy"] + ')"></a></div>';
+                            html += '<div class="product-content text-center">';
+                            html += '<h4 class="title"><a href="#">' + item.itemName + '</a></h4>';
+                            html += '<div class="price">' + item.salePrice + '</div>';
+                            html += '</div></div></div></div>';
                         }
                     }
                 }
-                $('#items').html(itemList);
-
-                // Add click event listener to item links
-                $('.item-link').click(function (e) {
-                    e.preventDefault();
-                    var itemId = $(this).data('item-id');
-                    addToCart(itemId);
-                });
+                $('#items').html(html);
             },
             error: function (xhr, status, error) {
-                console.error('Error fetching data:', error); // Use error to get the error message
+                console.error('Error fetching data:', error);
             }
         });
 
-        // Function to add item to cart
-        function addToCart(itemId, vendorId, quantity, price, ) {
-            var cartData = {
+        function addItemToCart(itemId, vendorId, salePrice, mrp) {
+            var model = {
                 "vendorId": vendorId,
                 "itemId": itemId,
-                "quantity": quantity, // You can modify quantity as needed
-                "price": price, // Replace with actual price if needed
-                "totalPrice": totalPrice, // Replace with actual total price if needed
-                "createdBy": createdBy // Replace with actual user ID
+                "quantity": 1,
+                "price": salePrice,
+                "totalPrice": 10,
+                "createdBy": @Context.Session.GetInt32("UserId"),
             };
+            //console.log(model)
 
-            // AJAX call to add item to cart
             $.ajax({
+                type: "POST",
                 url: '@apiUrl/api/AddToCart/CreateAddToCart',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(cartData),
-                success: function (response) {
-                    console.log('Item added to cart successfully:', response);
-                    // You can update UI or show a message here if needed
+                contentType: "application/json",
+                data: JSON.stringify(model),
+                success: function (data) {
+                    //console.log(data);
+
                 },
                 error: function (xhr, status, error) {
-                    console.error('Error adding item to cart:', error); // Use error to get the error message
+                    console.error('Error adding item to cart:', error);
+                    // Optionally, you can handle error response here
                 }
             });
         }
     </script>
 
 
-   
+
 
 
 }
