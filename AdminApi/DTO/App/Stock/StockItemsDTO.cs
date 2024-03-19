@@ -5,6 +5,7 @@ namespace AdminApi.DTO.App.Stock
     public class StockItemsDTO
     {
         public int StockId { get; set; }
+        public int ItemId { get; set; }
         public string Product { get; set; }
         public int Quantity { get; set; }
         public double UnitPrice { get; set; }
@@ -15,6 +16,7 @@ namespace AdminApi.DTO.App.Stock
     {
         public int StockItemsId { get; set; }
         public int StockId { get; set; }
+        public int ItemId { get; set; }
         public string Product { get; set; }
         public int Quantity { get; set; }
         public double UnitPrice { get; set; }

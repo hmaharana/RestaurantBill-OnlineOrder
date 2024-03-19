@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System;
 using AdminApi.DTO.App.Stock;
+using AdminApi.DTO.App.ItemDTO;
+using AdminApi.Models.App.Item;
 
 namespace AdminApi.Controllers
 {
@@ -46,15 +48,19 @@ namespace AdminApi.Controllers
                     stock.TotalAmount = stockDTO.TotalAmount;
                     stock.AdditionalNotes = stockDTO.AdditionalNotes;
                     stock.CreatedBy = stockDTO.CreatedBy;
+                    stock.CreatedOn = DateTime.Now;
                     var obj = _stockRepo.Insert(stock);
                 for(int i= 0; i < stockDTO.StockItemsDTOs.Count; i++)
                 {
                     StockItems stockItems = new StockItems();
                     stockItems.StockId = obj.StockId;
+                    stockItems.ItemId = stockDTO.StockItemsDTOs[i].ItemId;
                     stockItems.Product = stockDTO.StockItemsDTOs[i].Product;
                     stockItems.Quantity = stockDTO.StockItemsDTOs[i].Quantity;
                     stockItems.UnitPrice = stockDTO.StockItemsDTOs[i].UnitPrice;
                     stockItems.SubTotal = stockDTO.StockItemsDTOs[i].SubTotal;
+                    stockItems.CreatedBy = stockDTO.CreatedBy;
+                    stockItems.CreatedOn = DateTime.Now;
                     var stocks = _stockItemsRepo.Insert(stockItems);
 
                 }
@@ -91,6 +97,8 @@ namespace AdminApi.Controllers
                                              .Where(x => x.StockId == u.StockId)
                                              .Select(x => new StockItemsDTO
                                              {
+                                                 StockId = x.StockId,
+                                                 ItemId = x.ItemId,
                                                  Product = x.Product,
                                                  Quantity = x.Quantity,
                                                  UnitPrice = x.UnitPrice,
@@ -108,19 +116,49 @@ namespace AdminApi.Controllers
         }
 
         [HttpGet("{stockId}")]
-        public ActionResult GetSingleStockId(int stockId)
+        public ActionResult GetSingleStock(int stockId)
         {
             try
             {
-                var singlestock = _stockRepo.SelectById(stockId);
+                var list = (from u in _context.Stocks
 
-                return Ok(singlestock);
+
+                            join c in _context.StockItems on u.StockId equals c.StockId
+                            select new
+                            {
+                                u.StockId,
+                                u.LocationId,
+                                u.SupplierId,
+                                u.Status,
+                                u.ShippingCharges,
+                                u.TotalAmount,
+                                u.AdditionalNotes,
+                                u.CreatedOn,
+                                u.IsDeleted,
+                                
+                                StockItems = _context.StockItems
+                                                    .Where(stock => stock.StockId == u.StockId)
+                                                    .Select(stock => new StockItemsDTO
+                                                    {
+                                                        StockId = stock.StockId,
+                                                        ItemId = stock.ItemId,
+                                                        Product = stock.Product,
+                                                        Quantity = stock.Quantity,
+                                                        UnitPrice = stock.UnitPrice,
+                                                        SubTotal = stock.SubTotal,
+                                                        CreatedBy = stock.CreatedBy
+                                                    }).ToList(),
+                            }).Where(x => x.StockId == stockId && x.IsDeleted == false).Distinct().ToList();
+
+                int totalRecords = list.Count();
+                return Ok(new { data = list, recordsTotal = totalRecords, recordsFiltered = totalRecords });
             }
             catch (Exception ex)
             {
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
             }
         }
+
 
         [HttpPost]
         public ActionResult UpdateStock(UpdateStockDTO updateStockDTO)
@@ -139,10 +177,28 @@ namespace AdminApi.Controllers
                     stock.AdditionalNotes = updateStockDTO.AdditionalNotes;
                     stock.UpdatedBy = updateStockDTO.UpdatedBy;
                     stock.UpdatedOn = System.DateTime.Now;
-
                     _context.SaveChanges();
 
-                    return Ok(stock);
+                    foreach (var UpdateStockItemsDTO in updateStockDTO.UpdateStockItemsDTOs)
+                    {
+                        var stockItems = new StockItems
+                        {
+                            StockId = updateStockDTO.StockId,
+                            ItemId = UpdateStockItemsDTO.ItemId,
+                            Product = UpdateStockItemsDTO.Product,
+                            Quantity = UpdateStockItemsDTO.Quantity,
+                            UnitPrice = UpdateStockItemsDTO.UnitPrice,
+                            SubTotal = UpdateStockItemsDTO.SubTotal,
+                            UpdatedBy = UpdateStockItemsDTO.UpdatedBy,
+                            UpdatedOn = DateTime.Now
+                        };
+                        _context.StockItems.Add(stockItems);
+
+                    }
+                    _context.SaveChanges();
+
+
+                    return Ok(updateStockDTO);
                 }
                 else
                 {
