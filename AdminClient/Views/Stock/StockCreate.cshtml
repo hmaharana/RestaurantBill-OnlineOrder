@@ -31,9 +31,7 @@
             <div class="card-body">
                 <form action="#" role="form" class="validate" id="formPost">
                     <div class="row">
-                        <div class="col-md-6">
-
-
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label">Location Name &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <div class="input-box">
@@ -41,7 +39,9 @@
                                     </select>
                                 </div>
                             </div>
+                        </div>
 
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label">Item Name &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <div class="input-box">
@@ -49,7 +49,10 @@
                                     </select>
                                 </div>
                             </div>
+                        </div>
 
+
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label">Status &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <select name="" id="status" class="form-control" placeholder="Select Status">
@@ -58,14 +61,18 @@
                                     <option value="completed">Completed</option>
                                 </select>
                             </div>
+                        </div>
+                    </div>
 
+                    <div class="row">
+                       @*  <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label">Additional Notes &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <textarea class="form-control" id="additionalnotes" placeholder="Additional Notes" required></textarea>
                             </div>
-                        </div>
-                        <div class="col-md-6">
+                        </div> *@
 
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label">Supplier Name &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <div class="input-box">
@@ -73,19 +80,26 @@
                                     </select>
                                 </div>
                             </div>
+                        </div>
 
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label">Shipping Charges &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <input type="text" class="form-control" id="shippingcharges" placeholder="Shipping Charges" required>
                             </div>
+                        </div>
+                    </div>
 
+                    <div class="row">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="form-label">Total Amount &nbsp;<span style="color: red;"><b>*</b></span></label>
                                 <input type="text" class="form-control" id="totalamount" placeholder="Total Amount" required>
                             </div>
                         </div>
-
                     </div>
+
+
                     <div class="row">
                         <div class="col-md-12 text-center">
                             <button type="button" id="btnSave" class="btn btn-radius btn-success">Save</button>
