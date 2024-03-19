@@ -124,6 +124,7 @@ namespace AdminApi.Controllers
                                 u.GSTAmount,
                                 u.Status,
                                 u.Description,
+                                u.CreatedBy,
                                 ItemImages = _context.ItemImage
                                                     .Where(img => img.ItemId == u.ItemId)
                                                     .Select(img => new ItemImageViewDTO
@@ -182,7 +183,7 @@ namespace AdminApi.Controllers
                                                         CreatedOn = img.CreatedOn,
                                                         CreatedBy = img.CreatedBy
                                                     }).ToList(),
-                            }).Where(x => x.IsDeleted == false).Distinct().ToList();
+                            }).Where(x => x.ItemId == ItemId && x.IsDeleted == false).Distinct().ToList();
 
                 int totalRecords = list.Count();
                 return Ok(new { data = list, recordsTotal = totalRecords, recordsFiltered = totalRecords });
@@ -231,6 +232,8 @@ namespace AdminApi.Controllers
                             UpdatedBy = itemUpdateDTO.UpdatedBy,
                             UpdatedOn = DateTime.Now
                         };
+
+                       
                         _context.ItemImage.Add(itemImage);
                     }
 
