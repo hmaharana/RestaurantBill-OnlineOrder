@@ -23,5 +23,6 @@ namespace AdminApi.DTO.App.Stock
         public double TotalAmount { get; set; }
         public string AdditionalNotes { get; set; }
         public int? UpdatedBy { get; set; }
+        public List<UpdateStockItemsDTO> UpdateStockItemsDTOs { get; set; }
     }
 }
