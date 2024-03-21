@@ -118,35 +118,8 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <img src="~/images/products/starbucks macchiato.webp" alt="" class="h-8">
-                                    </td>
-                                    <td>Subway Chicken</td>
-                                    <td class="font-weight-semibold number-font1">$568</td>
-                                    <td>
-                                        <div class="input-group input-indec">
-                                            <span class="input-group-btn">
-                                                <button type="button" class="quantity-left-minus btn btn-light btn-number" data-type="minus">
-                                                    <i class="fa fa-minus"></i>
-                                                </button>
-                                            </span>
-                                            <input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="1">
-                                            <span class="input-group-btn">
-                                                <button type="button" class="quantity-right-plus btn btn-light btn-number" data-type="plus">
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="btn btn-info btn-sm mr-3 btn-remove" data-toggle="tooltip" data-placement="top" title="" data-original-title="Remove">
-                                            <i class="icon icon-trash fs-16"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-
+                            <tbody id="itemsTable">
+                               
                             </tbody>
                         </table>
                     </div>
@@ -176,6 +149,7 @@
 </div>
 
 @section scripts {
+
     <script>
         GetCategory("--Select--");
 
@@ -240,7 +214,7 @@
                });
     </script> */
     <script>
-        // Fetch data from the API
+        
         $.ajax({
             url: '@apiUrl/api/Item/AllItemList',
             method: 'GET',
@@ -254,7 +228,7 @@
                             html += '<div class="col-sm-3 col-md-3 col-lg-3 col-xl-3">';
                             html += '<div class="card item-card">';
                             html += '<div class="card-body">';
-                            html += '<div><a href="#"><img src="' + item.itemImages[x]["mainImage"] + '" alt="img" onclick="addItemToCart(' + item.itemId + ',' + item.vendorId + ',' + item.salePrice + ',' + item.mrp + ',' + item.itemImages[x]["createdBy"] + ')"></a></div>';
+                            html += '<div><a href="#"><img src="' + item.itemImages[x]["mainImage"] + '" alt="img" onclick="refreshCheckoutItems(' + item.itemId + ',' + item.vendorId + ',' + item.salePrice + ',' + item.mrp + ',' + item.itemImages[x]["createdBy"] + ')"></a></div>';
                             html += '<div class="product-content text-center">';
                             html += '<h4 class="title"><a href="#">' + item.itemName + '</a></h4>';
                             html += '<div class="price">' + item.salePrice + '</div>';
@@ -269,7 +243,7 @@
             }
         });
 
-        function addItemToCart(itemId, vendorId, salePrice, mrp) {
+        function refreshCheckoutItems(itemId, vendorId, salePrice, mrp) {
             var model = {
                 "vendorId": vendorId,
                 "itemId": itemId,
@@ -278,25 +252,94 @@
                 "totalPrice": 10,
                 "createdBy": @Context.Session.GetInt32("UserId"),
             };
-            //console.log(model)
+
+            function refreshCheckoutItems() {
+                $.ajax({
+                    type: "POST",
+                    url: '@apiUrl/api/AddToCart/CreateAddToCart',
+                    contentType: "application/json",
+                    data: JSON.stringify(model),
+                    success: function (data) {
+                        console.log('Item added to cart:', data);
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error adding item to cart:', error);
+                        // Optionally, you can handle error response here
+                    }
+                });
+            }
+
+            refreshCheckoutItems(); 
+        }
+
+        $(document).ready(function () {
+            setTimeout(function () {
+                location.reload();
+            }, 5 * 60 * 1000); // 30 minutes in milliseconds
+        });
+    </script>
+
+    
+    <script>
+    
+        $.ajax({
+            url: '@apiUrl/api/AddToCart/GetAddToCartList',
+            method: 'GET',
+            success: function (data) {
+                console.log(data);
+                var html = '';
+                for (var i = 0; i < data.data.length; i++) {
+                    var item = data.data[i];
+                    for (var x = 0; x < item.itemImages.length; x++) {  
+                        if (x === 0) {
+                            html += '<tr>';
+                            html += '<td><img src="' + item.itemImages[x]["mainImage"] + '" alt="img" class="h-8"></td>';
+                            html += '<td>' + item.itemName + '</td>';
+                            html += '<td class="font-weight-semibold number-font1">₹' + item.price + '</td>';
+                            html += '<td>';
+                            html += '<div class="input-group input-indec">';
+                            html += '<span class="input-group-btn">';
+                            html += '<button type="button" class="quantity-left-minus btn btn-light btn-number" data-type="minus">';
+                            html += '<i class="fa fa-minus"></i></button></span>';
+                            html += '<input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="1">';
+                            html += '<span class="input-group-btn">';
+                            html += '<button type="button" class="quantity-right-plus btn btn-light btn-number" data-type="plus">';
+                            html += '<i class="fa fa-plus"></i></button></span></div></td>';
+                            html += '<td>';
+                            html += '<a href="#" class="btn btn-info btn-sm mr-3 btn-remove" data-toggle="tooltip" data-placement="top" title="Remove">';
+                            html += '<i class="icon icon-trash fs-16"></i></a>';
+                            html += '</td></tr>';
+                        }
+                    }
+                }
+                $('#itemsTable').html(html);
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+    </script>
+    <script>
+        $(document).on("click", ".btn-remove", function () {
+            var addToCartId = $(this).closest("tr").data("addtocartid");
+            var deletedBy = @Context.Session.GetInt32("UserId"); 
 
             $.ajax({
-                type: "POST",
-                url: '@apiUrl/api/AddToCart/CreateAddToCart',
-                contentType: "application/json",
-                data: JSON.stringify(model),
+                type: "DELETE",
+                url: '@apiUrl/api/AddToCart/DeleteAddToCart/' + addToCartId + '/' + deletedBy,
                 success: function (data) {
-                    //console.log(data);
-
+                    console.log('Item removed from cart:', data);
+                    // Optionally, you can update the UI to reflect the removal of the item
+                    $(this).closest("tr").remove(); // Remove the row from the table
                 },
                 error: function (xhr, status, error) {
-                    console.error('Error adding item to cart:', error);
+                    console.error('Error removing item from cart:', error);
                     // Optionally, you can handle error response here
                 }
             });
-        }
+        });
     </script>
-
 
 
 

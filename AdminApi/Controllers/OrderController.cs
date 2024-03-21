@@ -1,14 +1,13 @@
-﻿using AdminApi.Models.App.Item;
+﻿using AdminApi.DTO.App.OrderDTO;
 using AdminApi.Models;
+using AdminApi.Models.App.Order;
+using AdminApi.Models.Helper;
+using AdminApi.ViewModels.Order;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Hosting;
-using AdminApi.Models.App.Order;
-using AdminApi.DTO.App.OrderDTO;
-using System.Linq;
-using AdminApi.Models.Helper;
 using System;
-using AdminApi.DTO.App.ItemDTO;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AdminApi.Controllers
 {
@@ -44,6 +43,7 @@ namespace AdminApi.Controllers
                 order.CustomerName = orderDTO.CustomerName;
                 order.CustomerEmail = orderDTO.CustomerEmail;
                 order.CustomerMob = orderDTO.CustomerMob;
+                order.CustomerAddress = orderDTO.CustomerAddress;
                 order.TotalDiscount = orderDTO.TotalDiscount;
                 order.TotalAmount = orderDTO.TotalAmount;
                 order.ServiceCharges = orderDTO.ServiceCharges;
@@ -51,7 +51,7 @@ namespace AdminApi.Controllers
                 order.CreatedBy = orderDTO.CreatedBy;
                 order.CreatedOn = System.DateTime.Now;
                 var obj = _orderRepo.Insert(order);
-                for(int i = 0; i < orderDTO.OrderItemDTOs.Count; i++)
+                for (int i = 0; i < orderDTO.OrderItemDTOs.Count; i++)
                 {
                     OrderItem orderItem = new OrderItem();
                     orderItem.OrderId = obj.OrderId;
@@ -70,6 +70,7 @@ namespace AdminApi.Controllers
 
         }
         [HttpGet]
+
         public IActionResult AllOrderList()
         {
             try
@@ -78,14 +79,13 @@ namespace AdminApi.Controllers
                             join a in _context.Vendors on u.VendorId equals a.VendorId
                             join b in _context.Locations on u.LocationId equals b.LocationId
                             join c in _context.PaymentMethods on u.PaymentMethodId equals c.PaymentMethodId
+                            
                             select new
                             {
-                               
+                                u.OrderId,
                                 a.VendorName,
                                 b.LocationName,
                                 c.PaymentMethodName,
-                                u.CreatedOn,
-                                u.IsDeleted,
                                 u.VendorId,
                                 u.LocationId,
                                 u.PaymentMethodId,
@@ -98,15 +98,17 @@ namespace AdminApi.Controllers
                                 u.TotalDiscount,
                                 u.ServiceCharges,
                                 u.OrderNote,
-                                OrderItems = _context.OrderItems
-                                                    .Where(x => x.OrderId == u.OrderId)
-                                                    .Select(x => new OrderItemDTO
-                                                    {
-                                                        OrderId = x.OrderId,
-                                                        ItemId = x.ItemId,
-                                                        Quantity = x.Quantity,
-                                                        CreatedBy = x.CreatedBy
-                                                    }).ToList(),
+                                u.IsDeleted,
+                                 OrderItem = (from r in _context.OrderItems
+                                                   join s in _context.Items on r.ItemId equals s.ItemId
+                                                   where r.OrderId == u.OrderId
+                                                   select new
+                                                   {
+                                                       r.OrderId,
+                                                       s.ItemName,
+                                                       r.Quantity,
+                                                   }).ToList()
+
                             }).Where(x => x.IsDeleted == false).Distinct().ToList();
 
                 int totalRecords = list.Count();
@@ -117,6 +119,11 @@ namespace AdminApi.Controllers
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
             }
         }
+
+
+
+
+
         [HttpGet("{OrderId}")]
         public ActionResult GetSingleOrder(int OrderId)
         {
@@ -126,14 +133,13 @@ namespace AdminApi.Controllers
                             join a in _context.Vendors on u.VendorId equals a.VendorId
                             join b in _context.Locations on u.LocationId equals b.LocationId
                             join c in _context.PaymentMethods on u.PaymentMethodId equals c.PaymentMethodId
-                           
+
                             select new
                             {
+                                u.OrderId,
                                 a.VendorName,
                                 b.LocationName,
                                 c.PaymentMethodName,
-                                u.CreatedOn,
-                                u.IsDeleted,
                                 u.VendorId,
                                 u.LocationId,
                                 u.PaymentMethodId,
@@ -146,6 +152,8 @@ namespace AdminApi.Controllers
                                 u.TotalDiscount,
                                 u.ServiceCharges,
                                 u.OrderNote,
+                                u.CreatedOn,
+                                u.IsDeleted,
                                 OrderItems = _context.OrderItems
                                                     .Where(x => x.OrderId == u.OrderId)
                                                     .Select(x => new OrderItemDTO
@@ -155,7 +163,7 @@ namespace AdminApi.Controllers
                                                         Quantity = x.Quantity,
                                                         CreatedBy = x.CreatedBy
                                                     }).ToList(),
-                            }).Where(x => x.IsDeleted == false).Distinct().ToList();
+                            }).Where(x => x.OrderId == OrderId && x.IsDeleted == false).Distinct().ToList();
 
                 int totalRecords = list.Count();
                 return Ok(new { data = list, recordsTotal = totalRecords, recordsFiltered = totalRecords });
@@ -171,7 +179,7 @@ namespace AdminApi.Controllers
             try
             {
                 var order = _context.Orders.SingleOrDefault(x => x.OrderId == updateOrderDTO.OrderId);
-                if(order != null)
+                if (order != null)
                 {
                     order.VendorId = updateOrderDTO.VendorId;
                     order.LocationId = updateOrderDTO.LocationId;
@@ -195,7 +203,7 @@ namespace AdminApi.Controllers
                         orderItem.Quantity = updateOrderDTO.UpdateOrderItemDTOs[i].Quantity;
                         orderItem.CreatedBy = updateOrderDTO.CreatedBy;
                         orderItem.UpdatedOn = DateTime.Now;
-                       
+
                     }
                     _context.SaveChanges();
                     return Ok(updateOrderDTO);
@@ -228,8 +236,12 @@ namespace AdminApi.Controllers
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
             }
         }
+
+
+      
+
     }
 }
 
-    
+
 
