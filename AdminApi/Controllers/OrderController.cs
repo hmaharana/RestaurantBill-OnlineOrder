@@ -49,7 +49,7 @@ namespace AdminApi.Controllers
                 order.ServiceCharges = orderDTO.ServiceCharges;
                 order.OrderNote = orderDTO.OrderNote;
                 order.CreatedBy = orderDTO.CreatedBy;
-                order.CreatedOn = System.DateTime.Now;
+                order.CreatedOn = DateTime.Now;
                 var obj = _orderRepo.Insert(order);
                 for (int i = 0; i < orderDTO.OrderItemDTOs.Count; i++)
                 {
@@ -58,7 +58,7 @@ namespace AdminApi.Controllers
                     orderItem.ItemId = orderDTO.OrderItemDTOs[i].ItemId;
                     orderItem.Quantity = orderDTO.OrderItemDTOs[i].Quantity;
                     orderItem.CreatedBy = orderDTO.CreatedBy;
-                    orderItem.CreatedOn = System.DateTime.Now;
+                    orderItem.CreatedOn = DateTime.Now;
                     var orderItemObj = _orderItemRepo.Insert(orderItem);
                 }
                 return Ok(orderDTO);
@@ -79,7 +79,6 @@ namespace AdminApi.Controllers
                             join a in _context.Vendors on u.VendorId equals a.VendorId
                             join b in _context.Locations on u.LocationId equals b.LocationId
                             join c in _context.PaymentMethods on u.PaymentMethodId equals c.PaymentMethodId
-                            
                             select new
                             {
                                 u.OrderId,
@@ -119,10 +118,6 @@ namespace AdminApi.Controllers
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
             }
         }
-
-
-
-
 
         [HttpGet("{OrderId}")]
         public ActionResult GetSingleOrder(int OrderId)
@@ -194,7 +189,7 @@ namespace AdminApi.Controllers
                     order.ServiceCharges = updateOrderDTO.ServiceCharges;
                     order.OrderNote = updateOrderDTO.OrderNote;
                     order.UpdatedBy = updateOrderDTO.CreatedBy;
-                    order.UpdatedOn = System.DateTime.Now;
+                    order.UpdatedOn = DateTime.Now;
                     for (int i = 0; i < updateOrderDTO.UpdateOrderItemDTOs.Count; i++)
                     {
                         OrderItem orderItem = new OrderItem();
@@ -227,7 +222,7 @@ namespace AdminApi.Controllers
                 var order = _context.Orders.SingleOrDefault(opt => opt.OrderId == OrderId);
                 order.IsDeleted = true;
                 order.UpdatedBy = DeletedBy;
-                order.UpdatedOn = System.DateTime.Now;
+                order.UpdatedOn = DateTime.Now;
                 _context.SaveChanges();
                 return Ok(order);
             }

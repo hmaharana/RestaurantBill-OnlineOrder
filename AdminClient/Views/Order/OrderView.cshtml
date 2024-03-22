@@ -49,11 +49,131 @@
     <script>
 
         //List
-        loadItem()
+        //loadItem()
+        //function loadItem() {
+        //    var table = $('#Order_Tb').DataTable();
+        //    table.destroy();
+        //    table = $('#Order_Tb').dataTable({
+        //        "paginationType": "full_numbers",
+        //        "dom": 'Bfrtip',
+        //        "buttons": ['copy', 'csv', 'excel', 'pdf', 'print'],
+        //        "searching": true,
+        //        "paging": true,
+        //        "sort": true,
+        //        "info": true,
+        //        "ajax": {
+        //            "url": '@apiUrl/api/Order/AllOrderList',
+        //            "type": "GET",
+        //            "dataType": "json",
+        //            "headers": {
+        //                "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+        //            },
+        //            "error": function (data) {
+        //                if (data.status == 401) {
+        //                    window.location.replace('/Message/TokenExpire');
+        //                } else if (data.status == 403) {
+        //                    window.location.replace('/Message/Unauthorize');
+        //                }
+        //            }
+        //        },
+        //        "order": [],
+        //        "columns": [
+        //            { "data": "vendorName", "orderable": true },
+        //            { "data": "locationName", "orderable": true },
+        //            { "data": "customerName", "orderable": true },
+        //            { "data": "customerMob", "orderable": true },
+        //            { "data": "itemName", "orderable": true },
+        //            { "data": "paymentMethodName", "orderable": true },
+        //            { "data": "orderStatus", "orderable": true },
+        //            { "data": "quantity", "orderable": true },
+        //            { "data": "totalAmount", "orderable": true },
+                   
+        //        ]
+        //    });
+        //}
+        //function loadItem() {
+        //    var table = $('#Order_Tb').DataTable({
+        //        "destroy": true,
+        //        "paginationType": "full_numbers",
+        //        "dom": 'Bfrtip',
+        //        "buttons": ['copy', 'csv', 'excel', 'pdf', 'print'],
+        //        "searching": true,
+        //        "paging": true,
+        //        "sort": true,
+        //        "info": true,
+        //        "ajax": {
+        //            "url": '@apiUrl/api/Order/AllOrderList',
+        //            "type": "GET",
+        //            "dataType": "json",
+        //            "headers": {
+        //                "Authorization": "Bearer " + '@Context.Session.GetString("TokenTxt")'
+        //            },
+        //            "error": function (xhr, errorType, exception) {
+        //                if (xhr.status == 401) {
+        //                    window.location.replace('/Message/TokenExpire');
+        //                } else if (xhr.status == 403) {
+        //                    window.location.replace('/Message/Unauthorize');
+        //                }
+        //            }
+        //        },
+        //        "order": [],
+        //        "columns": [
+        //            { "data": "vendorName", "orderable": true },
+        //            { "data": "locationName", "orderable": true },
+        //            { "data": "customerName", "orderable": true },
+        //            { "data": "customerMob", "orderable": true },
+        //            {
+        //                "data": "orderItem",
+        //                "render": function (data, type, row) {
+        //                    var items = '';
+        //                    if (data) {
+        //                        data.forEach(function (item) {
+        //                            items += item.itemName + ' x' + item.quantity + '<br>';
+        //                        });
+        //                    }
+        //                    return items;
+        //                },
+        //                "orderable": true
+        //            },
+        //            { "data": "paymentMethodName", "orderable": true },
+        //            { "data": "orderStatus", "orderable": true },
+        //            {
+        //                "data": "orderItem",
+        //                "render": function (data, type, row) {
+        //                    var quantity = 0;
+        //                    var totalAmount = 0;
+        //                    if (data) {
+        //                        data.forEach(function (item) {
+        //                            quantity += item.quantity;
+        //                            totalAmount += item.quantity * item.salePrice; // assuming there's a unitPrice property in each item
+        //                        });
+        //                    }
+        //                    return quantity;
+        //                },
+        //                "orderable": true
+        //            },
+        //            {
+        //                "data": "orderItem",
+        //                "render": function (data, type, row) {
+        //                    var totalAmount = 0;
+        //                    if (data) {
+        //                        data.forEach(function (item) {
+        //                            totalAmount += item.quantity * item.salePrice; // assuming there's a unitPrice property in each item
+        //                        });
+        //                    }
+        //                    return totalAmount.toFixed(2); // assuming totalAmount is a floating-point number
+        //                },
+        //                "orderable": true
+        //            }
+        //        ]
+        //    });
+        //}
+
+
+
         function loadItem() {
-            var table = $('#Order_Tb').DataTable();
-            table.destroy();
-            table = $('#Order_Tb').dataTable({
+            var table = $('#Order_Tb').DataTable({
+                "destroy": true,
                 "paginationType": "full_numbers",
                 "dom": 'Bfrtip',
                 "buttons": ['copy', 'csv', 'excel', 'pdf', 'print'],
@@ -68,10 +188,10 @@
                     "headers": {
                         "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
                     },
-                    "error": function (data) {
-                        if (data.status == 401) {
+                    "error": function (xhr, errorType, exception) {
+                        if (xhr.status == 401) {
                             window.location.replace('/Message/TokenExpire');
-                        } else if (data.status == 403) {
+                        } else if (xhr.status == 403) {
                             window.location.replace('/Message/Unauthorize');
                         }
                     }
@@ -82,70 +202,136 @@
                     { "data": "locationName", "orderable": true },
                     { "data": "customerName", "orderable": true },
                     { "data": "customerMob", "orderable": true },
-                    { "data": "itemName", "orderable": true },
+                    {
+                        "data": "orderItem",
+                        "render": function (data, type, row) {
+                            var items = '';
+                            if (data) {
+                                data.forEach(function (item) {
+                                    items += item.itemName + ' x' + item.quantity + '<br>';
+                                });
+                            }
+                            return items;
+                        }
+                    },
                     { "data": "paymentMethodName", "orderable": true },
                     { "data": "orderStatus", "orderable": true },
-                    { "data": "quantity", "orderable": true },
-                    { "data": "totalAmount", "orderable": true },
-                   
-                   
-                    //{
-                    //    "render": function (data, type, row) {
-                    //        return '<a class="btn btn-sm btn-primary" href="../Order/OrderEdit?orderId=' + row.orderId + '"><i class="fa fa-edit"></i></a>' + '&nbsp&nbsp<button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete" data-id="' + row.orderId + '"><i class="fa fa-trash"></i></button>';
-                    //    }
-                    //}
+                    {
+                        "data": "orderItem",
+                        "render": function (data, type, row) {
+                            var totalQuantity = 0;
+                            var totalAmount = 0;
+                            if (data) {
+                                data.forEach(function (item) {
+                                    totalQuantity += item.quantity;
+                                    totalAmount += item.quantity * item.totalAmount;
+                                });
+                            }
+                            return totalQuantity + ' (' + totalAmount + ')';
+                        }
+                    }
                 ]
             });
         }
 
-        //Delete
+        //function loadItem() {
+        //    var table = $('#Order_Tb').DataTable();
+        //    table.destroy();
+        //    table = $('#Order_Tb').dataTable({
+        //        "paginationType": "full_numbers",
+        //        "dom": 'Bfrtip',
+        //        "buttons": ['copy', 'csv', 'excel', 'pdf', 'print'],
+        //        "searching": true,
+        //        "paging": true,
+        //        "sort": true,
+        //        "info": true,
+        //        "ajax": {
+        //            "url": '@apiUrl/api/Order/AllOrderList',
+        //            "type": "GET",
+        //            "dataType": "json",
+        //            "headers": {
+        //                "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
+        //            },
+        //            "error": function (data) {
+        //                if (data.status == 401) {
+        //                    window.location.replace('/Message/TokenExpire');
+        //                } else if (data.status == 403) {
+        //                    window.location.replace('/Message/Unauthorize');
+        //                }
+        //            }
+        //        },
+        //        "order": [],
+        //        "columns": [
+        //            { "data": "vendorName", "orderable": true },
+        //            { "data": "locationName", "orderable": true },
+        //            { "data": "customerName", "orderable": true },
+        //            { "data": "customerMob", "orderable": true },
+        //            {
+        //                "data": "orderItem",
+        //                "render": function (data, type, row) {
+        //                    var items = '';
+        //                    data.forEach(function (item) {
+        //                        items += item.itemName + ' x' + item.quantity + '<br>';
+        //                    });
+        //                    return items;
+        //                }
+        //            },
+        //            { "data": "paymentMethodName", "orderable": true },
+        //            { "data": "orderStatus", "orderable": true }
+        //        ]
+        //    });
+        //}
 
-        $('#Item_Tb tbody').on('click', 'button[data-target="#delete"]', function () {
-            var id = $(this).data('id');
-            swal({
-                html: true,
-                title: "Are you sure?",
-                text: "You will not be able to recover this data!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, confirm it!",
-                closeOnConfirm: false
-            }, function () {
-                $.ajax({
-                    type: "GET",
-                    url: "@apiUrl/api/Item/DeleteItem/" + id + "/" + @Context.Session.GetInt32("UserId"),
-                    contentType: "application/json; charset=utf-8",
-                    headers: {
-                        "authorization": "Bearer @Context.Session.GetString("TokenTxt")"
-                    },
-                    dataType: "json",
-                    success: function (data, statusText, xhr) {
-                        if (xhr.status == 200) {
-                            $('#Item_Tb').DataTable().ajax.reload(null, false);
-                            $('#delete').modal('hide');
-                            sweetAlert({
-                                html: true,
-                                title: "Item",
-                                text: "Successfully deleted!",
-                                type: "success"
-                            });
-                        } else if (xhr.status == 202) {
-                            sweetAlert("Validation Alert!", data.responseMsg, "warning");
-                        } else {
-                            sweetAlert("Validation Alert!", "Something unexpected!", "warning");
-                        }
-                    },
-                    error: function (data) {
-                        if (data.status == 401) {
-                            window.location.replace('/Message/TokenExpire');
-                        } else if (data.status == 403) {
-                            window.location.replace('/Message/Unauthorize');
-                        }
-                    }
-                });
-            });
-        });
+        //function loadItem() {
+        //    var table = $('#Order_Tb').DataTable({
+        //        "destroy": true,
+        //        "paginationType": "full_numbers",
+        //        "dom": 'Bfrtip',
+        //        "buttons": ['copy', 'csv', 'excel', 'pdf', 'print'],
+        //        "searching": true,
+        //        "paging": true,
+        //        "sorting": true,
+        //        "info": true,
+        //        "ajax": {
+        //            "url": '@apiUrl/api/Order/AllOrderList',
+        //            "type": "GET",
+        //            "dataType": "json",
+        //            "headers": {
+        //                "Authorization": "Bearer " + '@Context.Session.GetString("TokenTxt")'
+        //            },
+        //            "error": function (xhr, errorType, exception) {
+        //                if (xhr.status == 401) {
+        //                    window.location.replace('/Message/TokenExpire');
+        //                } else if (xhr.status == 403) {
+        //                    window.location.replace('/Message/Unauthorize');
+        //                }
+        //            }
+        //        },
+        //        "order": [],
+        //        "columns": [
+        //            { "data": "vendorName", "orderable": true },
+        //            { "data": "locationName", "orderable": true },
+        //            { "data": "customerName", "orderable": true },
+        //            { "data": "customerMob", "orderable": true },
+        //            {
+        //                "data": "orderItem",
+        //                "render": function (data, type, row) {
+        //                    var items = '';
+        //                    if (data) {
+        //                        data.forEach(function (item) {
+        //                            items += item.itemName + ' x' + item.quantity + '<br>';
+        //                        });
+        //                    }
+        //                    return items;
+        //                }
+        //            },
+        //            { "data": "paymentMethodName", "orderable": true },
+        //            { "data": "orderStatus", "orderable": true }
+        //        ]
+        //    });
+        //}
+
+
     </script>
 }
 
