@@ -1,5 +1,6 @@
 ﻿using AdminApi.DTO.App.OrderDTO;
 using AdminApi.Models;
+using AdminApi.Models.App.Item;
 using AdminApi.Models.App.Order;
 using AdminApi.Models.Helper;
 using AdminApi.ViewModels.Order;
@@ -19,15 +20,17 @@ namespace AdminApi.Controllers
         private readonly AppDbContext _context;
         private readonly ISqlRepository<Order> _orderRepo;
         private readonly ISqlRepository<OrderItem> _orderItemRepo;
+        private readonly ISqlRepository<Item> _itemRepo;
         public OrderController(IConfiguration config,
                                AppDbContext context,
                               ISqlRepository<Order> orderRepo,
-                               IConfiguration configuration, ISqlRepository<OrderItem> orderItemRepo)
+                               IConfiguration configuration, ISqlRepository<OrderItem> orderItemRepo, ISqlRepository<Item> itemRepo)
         {
             _config = config;
             _context = context;
             _orderRepo = orderRepo;
             _orderItemRepo = orderItemRepo;
+            _itemRepo = itemRepo;
 
         }
         [HttpPost]
@@ -69,6 +72,8 @@ namespace AdminApi.Controllers
             }
 
         }
+
+
         [HttpGet]
 
         public IActionResult AllOrderList()
@@ -79,6 +84,9 @@ namespace AdminApi.Controllers
                             join a in _context.Vendors on u.VendorId equals a.VendorId
                             join b in _context.Locations on u.LocationId equals b.LocationId
                             join c in _context.PaymentMethods on u.PaymentMethodId equals c.PaymentMethodId
+                            join d in _context.OrderItems on u.OrderId equals d.OrderId
+                            join e in _context.Items on d.ItemId equals e.ItemId
+                         
                             select new
                             {
                                 u.OrderId,
@@ -96,17 +104,20 @@ namespace AdminApi.Controllers
                                 u.TotalAmount,
                                 u.TotalDiscount,
                                 u.ServiceCharges,
+                                e.ItemName,
+                                e.ItemId,
+                                d.Quantity,
                                 u.OrderNote,
                                 u.IsDeleted,
-                                 OrderItem = (from r in _context.OrderItems
-                                                   join s in _context.Items on r.ItemId equals s.ItemId
-                                                   where r.OrderId == u.OrderId
-                                                   select new
-                                                   {
-                                                       r.OrderId,
-                                                       s.ItemName,
-                                                       r.Quantity,
-                                                   }).ToList()
+                                //OrderItem = (from r in _context.OrderItems
+                                //             join s in _context.Items on r.ItemId equals s.ItemId
+                                //             where r.OrderId == u.OrderId
+                                //             select new
+                                //             {
+                                //                 r.OrderId,
+                                //                 s.ItemName,
+                                //                 r.Quantity,
+                                //             }).ToList()
 
                             }).Where(x => x.IsDeleted == false).Distinct().ToList();
 
