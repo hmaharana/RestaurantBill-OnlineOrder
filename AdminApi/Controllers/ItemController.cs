@@ -197,6 +197,7 @@ namespace AdminApi.Controllers
 
 
         [HttpPost]
+       
         public ActionResult UpdateItem(ItemUpdateDTO itemUpdateDTO)
         {
             try
@@ -219,25 +220,22 @@ namespace AdminApi.Controllers
                     item.UpdatedBy = itemUpdateDTO.UpdatedBy;
                     item.UpdatedOn = System.DateTime.Now;
 
-
-                    _context.ItemImage.RemoveRange(_context.ItemImage.Where(image => image.ItemId == item.ItemId));
-                    _context.SaveChanges();
-
-
-                    foreach (var updateImage in itemUpdateDTO.UpdateItemImageDTOs)
+                    if (itemUpdateDTO.UpdateItemImageDTOs.Any())
                     {
-                        var itemImage = new ItemImage
+                        _context.ItemImage.RemoveRange(_context.ItemImage.Where(image => image.ItemId == item.ItemId));
+
+                        foreach (var updateImage in itemUpdateDTO.UpdateItemImageDTOs)
                         {
-                            ItemId = itemUpdateDTO.ItemId,
-                            MainImage = updateImage.MainImage,
-                            UpdatedBy = itemUpdateDTO.UpdatedBy,
-                            UpdatedOn = DateTime.Now
-                        };
-
-
-                        _context.ItemImage.Add(itemImage);
+                            var itemImage = new ItemImage
+                            {
+                                ItemId = itemUpdateDTO.ItemId,
+                                MainImage = updateImage.MainImage,
+                                UpdatedBy = itemUpdateDTO.UpdatedBy,
+                                UpdatedOn = DateTime.Now
+                            };
+                            _context.ItemImage.Add(itemImage);
+                        }
                     }
-
                     _context.SaveChanges();
                     return Ok(itemUpdateDTO);
                 }
@@ -251,9 +249,6 @@ namespace AdminApi.Controllers
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
             }
         }
-
-
-       
 
 
         [HttpGet("{ItemId}/{DeletedBy}")]
