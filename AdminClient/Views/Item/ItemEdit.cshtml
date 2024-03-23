@@ -282,6 +282,110 @@
 
        
 
+        //$("#btnupdate").click(function (e) {
+        //    if (!document.getElementById("formPost").checkValidity()) {
+        //        e.preventDefault();
+        //    } else {
+        //        var mainFiles = document.getElementById('MainImage').files;
+        //        var additionalFiles = document.getElementById('Image').files;
+
+               
+        //        var currentImageSrc = '';
+               
+
+               
+        //        if ($('#MainImage').val() != '' && $('#MainImage').val() != 'Choose file') {
+        //            mainUploadPromise = uploadFile(mainFiles[0]);
+        //        }
+
+        //        if (mainFiles.length > 0 || currentImageSrc != '') {
+
+        //            var currentImageSrcadditionalFiles = '';
+        //            currentImageSrcadditionalFiles = $('#additionalImages').attr('src');
+        //            if ($('#Image').val() != '' && $('#Image').val() != 'Choose file') {
+        //                var additionalUploadPromises = [];
+
+        //                for (var i = 0; i < additionalFiles.length; i++) {
+        //                    additionalUploadPromises.push(uploadFile(additionalFiles[i]));
+        //                }
+        //            }
+                  
+        //            Promise.all([mainUploadPromise, ...additionalUploadPromises])
+        //                .then(function (responses) {
+        //                    var mainImage = responses[0];
+        //                    var additionalImages = responses.slice(1);
+
+        //                    var model = {
+        //                        itemId: ItemId,
+                            
+        //                        vendorId: parseInt($("#Selectvendor").val()),
+        //                        categoryId: parseInt($("#Selectcategory").val()),
+        //                        gstId: parseInt($("#gSTId").val()),
+        //                        itemName: $.trim($("#itemName").val()),
+        //                        colorCode: $.trim($("#colorCode").val()),
+        //                        salePrice: parseFloat($("#salePrice").val()),
+        //                        mrp: parseFloat($("#mRP").val()),
+        //                        discountAmount: parseFloat($("#discountAmount").val()),
+        //                        gstAmount: parseFloat($("#gSTAmount").val()),
+        //                        hnsCode: $.trim($("#hNSCode").val()),
+        //                        description: $.trim($("#description").val()),
+        //                        updateItemImageDTOs: [
+        //                            { mainImage: mainImage, updatedBy: @Context.Session.GetInt32("UserId") },
+        //                            ...additionalImages.map(function (path) {
+        //                                return { mainImage: path, updatedBy: @Context.Session.GetInt32("UserId") };
+        //                            })
+        //                        ],
+        //                        updatedBy: @Context.Session.GetInt32("UserId")
+        //                    };
+
+                          
+
+        //                    $.ajax({
+        //                        type: "POST",
+        //                        url: "@apiUrl/api/Item/UpdateItem",
+        //                        data: JSON.stringify(model),
+        //                        contentType: "application/json",
+        //                        dataType: "json",
+        //                        success: function (data, statusText, xhr) {
+        //                            console.log(data);
+        //                            $('#Item_Tb').DataTable().ajax.reload(null, false);
+        //                            if (xhr.status === 200) {
+        //                                sweetAlert({
+        //                                    html: true,
+        //                                    icon: "success",
+        //                                    title: "Item",
+        //                                    text: "Successfully updated!",
+        //                                    type: "success"
+        //                                });
+        //                            } else if (data.status === "duplicate") {
+        //                                sweetAlert("Validation Alert!", data.responseMsg, "warning");
+        //                            } else if (data.status === "error") {
+        //                                sweetAlert("Validation Alert!", data.responseMsg, "warning");
+        //                            } else {
+        //                                sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+        //                            }
+        //                        },
+        //                        error: function (data) {
+        //                            if (data.status == 401) {
+        //                                window.location.replace('/Message/TokenExpire');
+        //                            } else if (data.status == 403) {
+        //                                window.location.replace('/Message/Unauthorize');
+        //                            } else if (data.status == 400) {
+        //                                sweetAlert("Validation Alert!", "Please check input data!", "warning");
+        //                            }
+        //                        }
+        //                    });
+        //                })
+        //                .catch(function (error) {
+        //                    console.error(error);
+        //                    sweetAlert("Validation Alert!", "Error occurred while uploading images!", "error");
+        //                });
+        //        }
+        //    }
+        //});
+
+
+
         $("#btnupdate").click(function (e) {
             if (!document.getElementById("formPost").checkValidity()) {
                 e.preventDefault();
@@ -289,101 +393,87 @@
                 var mainFiles = document.getElementById('MainImage').files;
                 var additionalFiles = document.getElementById('Image').files;
 
-               
-                var currentImageSrc = '';
-               
-
-               
-                if ($('#MainImage').val() != '' && $('#MainImage').val() != 'Choose file') {
-                    mainUploadPromise = uploadFile(mainFiles[0]);
-                }
-
-                if (mainFiles.length > 0 || currentImageSrc != '') {
-
-                    var currentImageSrcadditionalFiles = '';
-                    currentImageSrcadditionalFiles = $('#additionalImages').attr('src');
-                    if ($('#Image').val() != '' && $('#Image').val() != 'Choose file') {
-                        var additionalUploadPromises = [];
-
-                        for (var i = 0; i < additionalFiles.length; i++) {
-                            additionalUploadPromises.push(uploadFile(additionalFiles[i]));
-                        }
+                
+                var mainUploadPromise = mainFiles.length > 0 ? uploadFile(mainFiles[0]) : Promise.resolve('');
+                var additionalUploadPromises = [];
+                if (additionalFiles.length > 0) {
+                    for (var i = 0; i < additionalFiles.length; i++) {
+                        additionalUploadPromises.push(uploadFile(additionalFiles[i]));
                     }
-                  
-                    Promise.all([mainUploadPromise, ...additionalUploadPromises])
-                        .then(function (responses) {
-                            var mainImage = responses[0];
-                            var additionalImages = responses.slice(1);
-
-                            var model = {
-                                itemId: ItemId,
-                            
-                                vendorId: parseInt($("#Selectvendor").val()),
-                                categoryId: parseInt($("#Selectcategory").val()),
-                                gstId: parseInt($("#gSTId").val()),
-                                itemName: $.trim($("#itemName").val()),
-                                colorCode: $.trim($("#colorCode").val()),
-                                salePrice: parseFloat($("#salePrice").val()),
-                                mrp: parseFloat($("#mRP").val()),
-                                discountAmount: parseFloat($("#discountAmount").val()),
-                                gstAmount: parseFloat($("#gSTAmount").val()),
-                                hnsCode: $.trim($("#hNSCode").val()),
-                                description: $.trim($("#description").val()),
-                                updateItemImageDTOs: [
-                                    { mainImage: mainImage, updatedBy: @Context.Session.GetInt32("UserId") },
-                                    ...additionalImages.map(function (path) {
-                                        return { mainImage: path, updatedBy: @Context.Session.GetInt32("UserId") };
-                                    })
-                                ],
-                                updatedBy: @Context.Session.GetInt32("UserId")
-                            };
-
-                          
-
-                            $.ajax({
-                                type: "POST",
-                                url: "@apiUrl/api/Item/UpdateItem",
-                                data: JSON.stringify(model),
-                                contentType: "application/json",
-                                dataType: "json",
-                                success: function (data, statusText, xhr) {
-                                    console.log(data);
-                                    $('#Item_Tb').DataTable().ajax.reload(null, false);
-                                    if (xhr.status === 200) {
-                                        sweetAlert({
-                                            html: true,
-                                            icon: "success",
-                                            title: "Item",
-                                            text: "Successfully updated!",
-                                            type: "success"
-                                        });
-                                    } else if (data.status === "duplicate") {
-                                        sweetAlert("Validation Alert!", data.responseMsg, "warning");
-                                    } else if (data.status === "error") {
-                                        sweetAlert("Validation Alert!", data.responseMsg, "warning");
-                                    } else {
-                                        sweetAlert("Validation Alert!", "Something unexpected!", "warning");
-                                    }
-                                },
-                                error: function (data) {
-                                    if (data.status == 401) {
-                                        window.location.replace('/Message/TokenExpire');
-                                    } else if (data.status == 403) {
-                                        window.location.replace('/Message/Unauthorize');
-                                    } else if (data.status == 400) {
-                                        sweetAlert("Validation Alert!", "Please check input data!", "warning");
-                                    }
-                                }
-                            });
-                        })
-                        .catch(function (error) {
-                            console.error(error);
-                            sweetAlert("Validation Alert!", "Error occurred while uploading images!", "error");
-                        });
                 }
+
+                Promise.all([mainUploadPromise, ...additionalUploadPromises])
+                    .then(function (responses) {
+                        var mainImage = responses[0];
+                        var additionalImages = responses.slice(1);
+
+                        var model = {
+                            itemId: ItemId,
+                            vendorId: parseInt($("#Selectvendor").val()),
+                            categoryId: parseInt($("#Selectcategory").val()),
+                            gstId: parseInt($("#gSTId").val()),
+                            itemName: $.trim($("#itemName").val()),
+                            colorCode: $.trim($("#colorCode").val()),
+                            salePrice: parseFloat($("#salePrice").val()),
+                            mrp: parseFloat($("#mRP").val()),
+                            discountAmount: parseFloat($("#discountAmount").val()),
+                            gstAmount: parseFloat($("#gSTAmount").val()),
+                            hnsCode: $.trim($("#hNSCode").val()),
+                            description: $.trim($("#description").val()),
+                            updateItemImageDTOs: [],
+                            //updatedBy: @Context.Session.GetInt32("UserId")
+                        };
+
+                        if (mainImage !== '') {
+                            model.updateItemImageDTOs.push({ mainImage: mainImage, updatedBy: @Context.Session.GetInt32("UserId") });
+                        }
+                      
+                        additionalImages.forEach(function (path) {
+                            model.updateItemImageDTOs.push({ mainImage: path, updatedBy: @Context.Session.GetInt32("UserId") });
+                        });
+
+                        $.ajax({
+                            type: "POST",
+                            url: "@apiUrl/api/Item/UpdateItem",
+                            data: JSON.stringify(model),
+                            contentType: "application/json",
+                            dataType: "json",
+                            success: function (data, statusText, xhr) {
+                                console.log(data);
+                                $('#Item_Tb').DataTable().ajax.reload(null, false);
+                                if (xhr.status === 200) {
+                                    sweetAlert({
+                                        html: true,
+                                        icon: "success",
+                                        title: "Item",
+                                        text: "Successfully updated!",
+                                        type: "success"
+                                    });
+                                } else if (data.status === "duplicate") {
+                                    sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                                } else if (data.status === "error") {
+                                    sweetAlert("Validation Alert!", data.responseMsg, "warning");
+                                } else {
+                                    sweetAlert("Validation Alert!", "Something unexpected!", "warning");
+                                }
+                            },
+                            error: function (data) {
+                                if (data.status == 401) {
+                                    window.location.replace('/Message/TokenExpire');
+                                } else if (data.status == 403) {
+                                    window.location.replace('/Message/Unauthorize');
+                                } else if (data.status == 400) {
+                                    sweetAlert("Validation Alert!", "Please check input data!", "warning");
+                                }
+                            }
+                        });
+                    })
+                    .catch(function (error) {
+                        console.error(error);
+                        sweetAlert("Validation Alert!", "Error occurred while uploading images!", "error");
+                    });
             }
         });
-
 
         function uploadFile(file) {
             return new Promise(function (resolve, reject) {

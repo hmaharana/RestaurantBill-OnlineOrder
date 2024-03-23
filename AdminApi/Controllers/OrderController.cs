@@ -1,5 +1,6 @@
 ﻿using AdminApi.DTO.App.OrderDTO;
 using AdminApi.Models;
+using AdminApi.Models.App.Item;
 using AdminApi.Models.App.Order;
 using AdminApi.Models.Helper;
 using AdminApi.ViewModels.Order;
@@ -19,15 +20,17 @@ namespace AdminApi.Controllers
         private readonly AppDbContext _context;
         private readonly ISqlRepository<Order> _orderRepo;
         private readonly ISqlRepository<OrderItem> _orderItemRepo;
+        private readonly ISqlRepository<Item> _itemRepo;
         public OrderController(IConfiguration config,
                                AppDbContext context,
                               ISqlRepository<Order> orderRepo,
-                               IConfiguration configuration, ISqlRepository<OrderItem> orderItemRepo)
+                               IConfiguration configuration, ISqlRepository<OrderItem> orderItemRepo, ISqlRepository<Item> itemRepo)
         {
             _config = config;
             _context = context;
             _orderRepo = orderRepo;
             _orderItemRepo = orderItemRepo;
+            _itemRepo = itemRepo;
 
         }
         [HttpPost]
@@ -49,7 +52,7 @@ namespace AdminApi.Controllers
                 order.ServiceCharges = orderDTO.ServiceCharges;
                 order.OrderNote = orderDTO.OrderNote;
                 order.CreatedBy = orderDTO.CreatedBy;
-                order.CreatedOn = System.DateTime.Now;
+                order.CreatedOn = DateTime.Now;
                 var obj = _orderRepo.Insert(order);
                 for (int i = 0; i < orderDTO.OrderItemDTOs.Count; i++)
                 {
@@ -58,7 +61,7 @@ namespace AdminApi.Controllers
                     orderItem.ItemId = orderDTO.OrderItemDTOs[i].ItemId;
                     orderItem.Quantity = orderDTO.OrderItemDTOs[i].Quantity;
                     orderItem.CreatedBy = orderDTO.CreatedBy;
-                    orderItem.CreatedOn = System.DateTime.Now;
+                    orderItem.CreatedOn = DateTime.Now;
                     var orderItemObj = _orderItemRepo.Insert(orderItem);
                 }
                 return Ok(orderDTO);
@@ -69,6 +72,8 @@ namespace AdminApi.Controllers
             }
 
         }
+
+
         [HttpGet]
 
         public IActionResult AllOrderList()
@@ -79,7 +84,9 @@ namespace AdminApi.Controllers
                             join a in _context.Vendors on u.VendorId equals a.VendorId
                             join b in _context.Locations on u.LocationId equals b.LocationId
                             join c in _context.PaymentMethods on u.PaymentMethodId equals c.PaymentMethodId
-                            
+                            join d in _context.OrderItems on u.OrderId equals d.OrderId
+                            join e in _context.Items on d.ItemId equals e.ItemId
+                         
                             select new
                             {
                                 u.OrderId,
@@ -97,17 +104,20 @@ namespace AdminApi.Controllers
                                 u.TotalAmount,
                                 u.TotalDiscount,
                                 u.ServiceCharges,
+                                e.ItemName,
+                                e.ItemId,
+                                d.Quantity,
                                 u.OrderNote,
                                 u.IsDeleted,
-                                 OrderItem = (from r in _context.OrderItems
-                                                   join s in _context.Items on r.ItemId equals s.ItemId
-                                                   where r.OrderId == u.OrderId
-                                                   select new
-                                                   {
-                                                       r.OrderId,
-                                                       s.ItemName,
-                                                       r.Quantity,
-                                                   }).ToList()
+                                //OrderItem = (from r in _context.OrderItems
+                                //             join s in _context.Items on r.ItemId equals s.ItemId
+                                //             where r.OrderId == u.OrderId
+                                //             select new
+                                //             {
+                                //                 r.OrderId,
+                                //                 s.ItemName,
+                                //                 r.Quantity,
+                                //             }).ToList()
 
                             }).Where(x => x.IsDeleted == false).Distinct().ToList();
 
@@ -119,10 +129,6 @@ namespace AdminApi.Controllers
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
             }
         }
-
-
-
-
 
         [HttpGet("{OrderId}")]
         public ActionResult GetSingleOrder(int OrderId)
@@ -194,7 +200,7 @@ namespace AdminApi.Controllers
                     order.ServiceCharges = updateOrderDTO.ServiceCharges;
                     order.OrderNote = updateOrderDTO.OrderNote;
                     order.UpdatedBy = updateOrderDTO.CreatedBy;
-                    order.UpdatedOn = System.DateTime.Now;
+                    order.UpdatedOn = DateTime.Now;
                     for (int i = 0; i < updateOrderDTO.UpdateOrderItemDTOs.Count; i++)
                     {
                         OrderItem orderItem = new OrderItem();
@@ -227,7 +233,7 @@ namespace AdminApi.Controllers
                 var order = _context.Orders.SingleOrDefault(opt => opt.OrderId == OrderId);
                 order.IsDeleted = true;
                 order.UpdatedBy = DeletedBy;
-                order.UpdatedOn = System.DateTime.Now;
+                order.UpdatedOn = DateTime.Now;
                 _context.SaveChanges();
                 return Ok(order);
             }

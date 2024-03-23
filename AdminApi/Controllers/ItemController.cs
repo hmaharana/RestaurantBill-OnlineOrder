@@ -13,6 +13,7 @@ using AdminApi.DTO.App.ItemDTO;
 using System.Collections.Generic;
 using AdminApi.DTO.App.Vendor;
 using AdminApi.Models.App.Vendor;
+using Microsoft.EntityFrameworkCore;
 
 namespace AdminApi.Controllers
 {
@@ -194,7 +195,7 @@ namespace AdminApi.Controllers
             }
         }
 
-       
+
         [HttpPost]
         public ActionResult UpdateItem(ItemUpdateDTO itemUpdateDTO)
         {
@@ -218,11 +219,11 @@ namespace AdminApi.Controllers
                     item.UpdatedBy = itemUpdateDTO.UpdatedBy;
                     item.UpdatedOn = System.DateTime.Now;
 
-                   
+
                     _context.ItemImage.RemoveRange(_context.ItemImage.Where(image => image.ItemId == item.ItemId));
                     _context.SaveChanges();
 
-                    
+
                     foreach (var updateImage in itemUpdateDTO.UpdateItemImageDTOs)
                     {
                         var itemImage = new ItemImage
@@ -233,7 +234,7 @@ namespace AdminApi.Controllers
                             UpdatedOn = DateTime.Now
                         };
 
-                       
+
                         _context.ItemImage.Add(itemImage);
                     }
 
@@ -242,7 +243,7 @@ namespace AdminApi.Controllers
                 }
                 else
                 {
-                    return NotFound(); 
+                    return NotFound();
                 }
             }
             catch (Exception ex)
@@ -250,6 +251,10 @@ namespace AdminApi.Controllers
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
             }
         }
+
+
+       
+
 
         [HttpGet("{ItemId}/{DeletedBy}")]
         public ActionResult DeleteItem(int ItemId, int DeletedBy)
@@ -268,9 +273,9 @@ namespace AdminApi.Controllers
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
             }
         }
-       
 
 
+      
     }
 }
 
