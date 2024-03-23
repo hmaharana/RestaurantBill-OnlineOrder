@@ -72,11 +72,22 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                </br>
-                                </br>
-                                <button type="button" id="add" class="btn btn-radius btn-success">Add</button>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table" id="itemTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl No.</th>
+                                            <th>Product</th>
+                                            <th>Quantity</th>
+                                            <th>Unit Price</th>
+                                            <th>Sub Total</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
 
@@ -94,6 +105,59 @@
     </div>
 </div>
 @section scripts{
+
+    <script>
+
+        $(document).ready(function () {
+            // Function to add a new row to the table
+            function addTableRow(itemName) {
+                var newRow = $("<tr>" +
+                    "<td class='serial-number'></td>" +
+                    "<td>" + itemName + "</td>" +
+                    "<td><input type='number' class='form-control quantity'></td>" +
+                    "<td><input type='number' class='form-control unit-price'></td>" +
+                    "<td class='subtotal-box'><span class='subtotal'></span></td>" +
+                    "<td><button type='button' class='btn btn-danger btn-delete'>Remove</button></td>" +
+                    "</tr>");
+                $("#itemTable tbody").append(newRow);
+                updateSerialNumbers();
+            }
+
+            // On change event for the select dropdown
+            $("#Selectitem").change(function () {
+                var selectedItem = $(this).val();
+                var selectedText = $(this).find("option:selected").text();
+                if (selectedItem !== "") {
+                    addTableRow(selectedText);
+                    $(this).val(""); // Reset select dropdown after adding row
+                }
+            });
+
+            // Function to update serial numbers
+            function updateSerialNumbers() {
+                $("#itemTable tbody tr").each(function (index) {
+                    $(this).find(".serial-number").text(index + 1);
+                });
+            }
+
+            // Event delegation for delete button click
+            $("#itemTable").on("click", ".btn-delete", function () {
+                $(this).closest("tr").remove();
+                updateSerialNumbers();
+            });
+
+            // Event listener for change in quantity or unit price
+            $("#itemTable").on("input", ".quantity, .unit-price", function () {
+                var row = $(this).closest("tr");
+                var quantity = parseFloat(row.find(".quantity").val()) || 0;
+                var unitPrice = parseFloat(row.find(".unit-price").val()) || 0;
+                var subtotal = quantity * unitPrice;
+                row.find(".subtotal").text(subtotal.toFixed(2));
+            });
+        });
+
+    </script>
+
     <script>
         GetLocation()
         function GetLocation(Id) {
