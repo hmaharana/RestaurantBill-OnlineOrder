@@ -393,7 +393,7 @@
                 var mainFiles = document.getElementById('MainImage').files;
                 var additionalFiles = document.getElementById('Image').files;
 
-               
+                
                 var mainUploadPromise = mainFiles.length > 0 ? uploadFile(mainFiles[0]) : Promise.resolve('');
                 var additionalUploadPromises = [];
                 if (additionalFiles.length > 0) {

@@ -251,9 +251,9 @@ namespace AdminApi.Controllers
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
             }
         }
-     
 
 
+       
 
 
         [HttpGet("{ItemId}/{DeletedBy}")]
@@ -273,9 +273,9 @@ namespace AdminApi.Controllers
                 return Accepted(new Confirmation { Status = "error", ResponseMsg = ex.Message });
             }
         }
-       
 
 
+      
     }
 }
 
