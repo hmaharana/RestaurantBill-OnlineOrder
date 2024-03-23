@@ -107,7 +107,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <div class="table-container"id="item-table-body">
+                    <div class="table-container" id="item-table-body">
                         <table class="table table-bordered table-vcenter text-nowrap">
                             <thead>
                                 <tr>
@@ -119,7 +119,6 @@
                                 </tr>
                             </thead>
                             <tbody id="itemsTable">
-                               
                             </tbody>
                         </table>
                     </div>
@@ -188,33 +187,46 @@
             });
         }
     </script>
-      /*   <script>
-               // Fetch data from the API
-               $.ajax({
-                   url: '@apiUrl/api/Item/AllItemList',
-                   method: 'GET',
-                   success: function (data) {
-                       console.log(data);
-                       var a = '';
-                       for (var i = 0; i < data.data.length; i++) {
 
-                           for (var x = 0; x < data.data[i].itemImages.length; x++) {
-                               if (x === 0) {
 
-                                   a += '<div class="col-sm-3 col-md3 col-lg-3 col-xl-3"><div class="card item-card"><div class="card-body"><div><a href="#"><img src=" ' + data.data[i].itemImages[x]["mainImage"] + '"alt = "img"" onclick="ItemID(' + data.data[i]["itemId"] + + data.data[i]["vendorId"] + + data.data[i]["salePrice"] + + data.data[i]["mrp"] + + data.data[i].itemImages[x]["createdBy"] + ')"></a></div><div class="product-content text-center"><h4 class="title"><a href="#">' + data.data[i]["itemName"] + '</a></h4><div class="price">' + data.data[i]["salePrice"] + '</div></div></div></div></div>'
+              /*   <script>
+                       // Fetch data from the API
+                       $.ajax({
+                           url: '@apiUrl/api/Item/AllItemList',
+                           method: 'GET',
+                           success: function (data) {
+                               console.log(data);
+                               var a = '';
+                               for (var i = 0; i < data.data.length; i++) {
 
+                                   for (var x = 0; x < data.data[i].itemImages.length; x++) {
+                                       if (x === 0) {
+
+                                           a += '<div class="col-sm-3 col-md3 col-lg-3 col-xl-3"><div class="card item-card"><div class="card-body"><div><a href="#"><img src=" ' + data.data[i].itemImages[x]["mainImage"] + '"alt = "img"" onclick="ItemID(' + data.data[i]["itemId"] + + data.data[i]["vendorId"] + + data.data[i]["salePrice"] + + data.data[i]["mrp"] + + data.data[i].itemImages[x]["createdBy"] + ')"></a></div><div class="product-content text-center"><h4 class="title"><a href="#">' + data.data[i]["itemName"] + '</a></h4><div class="price">' + data.data[i]["salePrice"] + '</div></div></div></div></div>'
+
+                                       }
+                                   }
                                }
+                               $('#items').html(a);
+                           },
+                           error: function (xhr, status, error) {
+                               console.error('Error fetching data:', error);
                            }
-                       }
-                       $('#items').html(a);
-                   },
-                   error: function (xhr, status, error) {
-                       console.error('Error fetching data:', error);
-                   }
-               });
+                       });
     </script> */
+
+
     <script>
-        
+        $(document).ready(function () {
+            setTimeout(function () {
+                location.reload();
+            }, 5 * 60 * 1000); // 30 minutes in milliseconds
+        });
+    </script>
+
+
+    <script>
+
         $.ajax({
             url: '@apiUrl/api/Item/AllItemList',
             method: 'GET',
@@ -270,78 +282,123 @@
                 });
             }
 
-            refreshCheckoutItems(); 
+            refreshCheckoutItems();
         }
 
-        $(document).ready(function () {
-            setTimeout(function () {
-                location.reload();
-            }, 5 * 60 * 1000); // 30 minutes in milliseconds
-        });
     </script>
 
-    
+
     <script>
-    
-        $.ajax({
-            url: '@apiUrl/api/AddToCart/GetAddToCartList',
-            method: 'GET',
-            success: function (data) {
-                console.log(data);
-                var html = '';
-                for (var i = 0; i < data.data.length; i++) {
-                    var item = data.data[i];
-                    for (var x = 0; x < item.itemImages.length; x++) {  
-                        if (x === 0) {
-                            html += '<tr>';
-                            html += '<td><img src="' + item.itemImages[x]["mainImage"] + '" alt="img" class="h-8"></td>';
-                            html += '<td>' + item.itemName + '</td>';
-                            html += '<td class="font-weight-semibold number-font1">₹' + item.price + '</td>';
-                            html += '<td>';
-                            html += '<div class="input-group input-indec">';
-                            html += '<span class="input-group-btn">';
-                            html += '<button type="button" class="quantity-left-minus btn btn-light btn-number" data-type="minus">';
-                            html += '<i class="fa fa-minus"></i></button></span>';
-                            html += '<input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="1">';
-                            html += '<span class="input-group-btn">';
-                            html += '<button type="button" class="quantity-right-plus btn btn-light btn-number" data-type="plus">';
-                            html += '<i class="fa fa-plus"></i></button></span></div></td>';
-                            html += '<td>';
-                            html += '<a href="#" class="btn btn-info btn-sm mr-3 btn-remove" data-toggle="tooltip" data-placement="top" title="Remove">';
-                            html += '<i class="icon icon-trash fs-16"></i></a>';
-                            html += '</td></tr>';
+        Addtocart()
+        function Addtocart() {
+            $.ajax({
+                url: '@apiUrl/api/AddToCart/GetAddToCartList',
+                method: 'GET',
+                success: function (data) {
+                    console.log(data);
+                    var html = '';
+                    for (var i = 0; i < data.data.length; i++) {
+                        var item = data.data[i];
+                        for (var x = 0; x < item.itemImages.length; x++) {
+                            if (x === 0) {
+                                html += '<tr>';
+                                html += '<td><img src="' + item.itemImages[x]["mainImage"] + '" alt="img" class="h-8"></td>';
+                                html += '<td>' + item.itemName + '</td>';
+                                html += '<td class="font-weight-semibold number-font1">₹' + item.price + '</td>';
+                                html += '<td>';
+                                html += '<div class="input-group input-indec">';
+                                html += '<span class="input-group-btn">';
+                                html += '<button type="button" class="quantity-left-minus btn btn-light btn-number" data-type="minus"onclick="MinusQuantity(' + item.addToCartId + ')">';
+                                html += '<i class="fa fa-minus"></i></button></span>';
+                                html += '<input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="' + item.quantity + '">';
+                                html += '<span class="input-group-btn">';
+                                html += '<button type="button" class="quantity-right-plus btn btn-light btn-number" data-type="plus" onclick="PlusQuantity(' + item.addToCartId + ')">';
+                                html += '<i class="fa fa-plus"></i></button></span></div></td>';
+                                html += '<td>';
+                                html += '<a href="#" class="btn btn-info btn-sm mr-3 btn-remove" data-toggle="tooltip" data-placement="top"title="Remove"onclick="DeletQuantity(' + item.addToCartId + ')">';
+                                html += '<i class="icon icon-trash fs-16"></i></a>';
+                                html += '</td></tr>';
+                            }
                         }
                     }
-                }
-                $('#itemsTable').html(html);
-            },
-            error: function (xhr, status, error) {
-                console.error('Error fetching data:', error);
-            }
-        });
-    </script>
-    <script>
-        $(document).on("click", ".btn-remove", function () {
-            var addToCartId = $(this).closest("tr").data("addtocartid");
-            var deletedBy = @Context.Session.GetInt32("UserId"); 
-
-            $.ajax({
-                type: "DELETE",
-                url: '@apiUrl/api/AddToCart/DeleteAddToCart/' + addToCartId + '/' + deletedBy,
-                success: function (data) {
-                    console.log('Item removed from cart:', data);
-                    // Optionally, you can update the UI to reflect the removal of the item
-                    $(this).closest("tr").remove(); // Remove the row from the table
+                    $('#itemsTable').html(html);
                 },
                 error: function (xhr, status, error) {
-                    console.error('Error removing item from cart:', error);
-                    // Optionally, you can handle error response here
+                    console.error('Error fetching data:', error);
                 }
             });
-        });
+        }
+
     </script>
 
 
+    <script>
+        function PlusQuantity(addToCartId) {
 
+            var cartId = addToCartId;
 
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl​/api/AddToCart/UpdatePlusQuantity/" + cartId + "/" + @Context.Session.GetInt32("UserId"),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    Addtocart()
+
+                },
+                error: function (xhr, status, error) {
+                    console.error(status);
+                }
+            });
+        }
+    </script>
+    <script>
+        function MinusQuantity(addToCartId) {
+
+            var cartId = addToCartId;
+
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl/api/AddToCart/UpdateMinusQuantity/" + cartId + "/" + @Context.Session.GetInt32("UserId"),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                    Addtocart()
+
+                },
+                error: function (xhr, status, error) {
+                    console.error(status);
+                }
+            });
+        }
+    </script>
+    <script>
+        /*Delete Quantity*/
+        function DeletQuantity(addToCartId) {
+
+            var cartId = addToCartId;
+
+            $.ajax({
+                type: "GET",
+                url: "@apiUrl​/api​/AddToCart​/DeleteAddToCart​/" + cartId + "/" + @Context.Session.GetInt32("MarketUserId"),
+
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data, statusText, xhr) {
+                    console.log(data);
+                    Addtocart()
+                },
+                error: function (data) {
+                    if (data.status == 401) {
+                        alert("401");
+                    } else if (data.status == 403) {
+                        alert("403");
+                    }
+                }
+            });
+        }
+
+    </script>
 }
